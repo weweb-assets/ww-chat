@@ -41,7 +41,7 @@ export function formatTime(timestamp, options = {}) {
     return format(date, options.timeFormat || 'h:mm a', { locale });
 }
 
-function isSameDay(date1, date2) {
+export function isSameDay(date1, date2) {
     return (
         date1.getFullYear() === date2.getFullYear() &&
         date1.getMonth() === date2.getMonth() &&

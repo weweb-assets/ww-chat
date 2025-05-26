@@ -1,82 +1,64 @@
 <template>
-    <div class="ww-chat-input-area">
+    <div class="ww-chat-input-area" :style="{ borderTop: inputBorder }">
         <!-- Pending Attachments Display -->
-        <div v-if="pendingAttachments.length > 0" class="ww-chat-input-area__attachments">
-            <div
-                v-for="(attachment, index) in pendingAttachments"
-                :key="attachment.id"
-                class="ww-chat-input-area__attachment"
-            >
-                <!-- Simple file name display -->
-                <div class="ww-chat-input-area__attachment-name">
-                    {{ attachment.name }}
-                </div>
-
-                <!-- Remove button -->
+        <div v-if="pendingAttachments.length > 0" class="pending-attachments">
+            <div v-for="(attachment, index) in pendingAttachments" :key="attachment.id" class="attachment-item">
+                <div class="attachment-name">{{ attachment.name }}</div>
                 <button
-                    class="ww-chat-input-area__attachment-remove"
+                    class="attachment-remove"
                     @click.stop="removeAttachment(index)"
                     :title="'Remove ' + attachment.name"
-                    :style="{ color: removeIconColor }"
                 >
                     <span
-                        class="ww-chat-input-area__icon"
-                        :style="{ width: removeIconSize, height: removeIconSize }"
+                        class="icon"
+                        :style="{ width: removeIconSize, height: removeIconSize, color: removeIconColor }"
                         v-html="removeIconHtml"
                     ></span>
                 </button>
             </div>
         </div>
 
-        <div class="ww-chat-input-area__input-row">
-            <!-- Attachment button -->
-            <label
-                v-if="allowAttachments"
-                class="ww-chat-input-area__attachment-btn"
-                :style="{ color: attachmentIconColor }"
-            >
-                <input
-                    type="file"
-                    class="ww-chat-input-area__attachment-input"
-                    multiple
-                    @change="handleAttachment"
-                    :disabled="isDisabled"
-                />
-                <span
-                    class="ww-chat-input-area__icon"
-                    :style="{ width: attachmentIconSize, height: attachmentIconSize }"
-                    v-html="attachmentIconHtml"
-                ></span>
-            </label>
+        <!-- Input Container -->
+        <div class="input-container">
+            <textarea
+                ref="textareaRef"
+                v-model="inputValue"
+                class="message-input"
+                :placeholder="placeholder"
+                :disabled="isDisabled"
+                :style="inputStyles"
+                @keydown.enter.prevent="onEnterPress"
+                @input="resizeTextarea"
+            ></textarea>
 
-            <!-- Input field -->
-            <div class="ww-chat-input-area__input-container">
-                <textarea
-                    ref="textareaRef"
-                    v-model="inputValue"
-                    class="ww-chat-input-area__input"
-                    :placeholder="placeholder"
-                    :disabled="isDisabled"
-                    @keydown.enter.prevent="onEnterPress"
-                    @input="resizeTextarea"
-                ></textarea>
-            </div>
-
-            <!-- Send button -->
-            <button
-                type="button"
-                class="ww-chat-input-area__send-btn"
-                :class="{ 'ww-chat-input-area__send-btn--disabled': !canSend || isDisabled }"
-                :disabled="!canSend || isDisabled"
-                :style="{ color: sendIconColor }"
-                @click="sendMessage"
-            >
-                <span
-                    class="ww-chat-input-area__icon"
-                    :style="{ width: sendIconSize, height: sendIconSize }"
-                    v-html="sendIconHtml"
-                ></span>
-            </button>
+            <!-- Action Button (Send/Attachment) -->
+            <transition name="fade">
+                <button
+                    v-if="canSend && !isDisabled"
+                    type="button"
+                    class="action-button send-button"
+                    :style="{ color: sendIconColor }"
+                    @click="sendMessage"
+                >
+                    <span
+                        class="icon"
+                        :style="{ width: sendIconSize, height: sendIconSize }"
+                        v-html="sendIconHtml"
+                    ></span>
+                </button>
+                <label
+                    v-else-if="allowAttachments && !isDisabled"
+                    class="action-button attachment-button"
+                    :style="{ color: attachmentIconColor }"
+                >
+                    <input type="file" class="file-input" multiple @change="handleAttachment" :disabled="isDisabled" />
+                    <span
+                        class="icon"
+                        :style="{ width: attachmentIconSize, height: attachmentIconSize }"
+                        v-html="attachmentIconHtml"
+                    ></span>
+                </label>
+            </transition>
         </div>
     </div>
 </template>
@@ -361,13 +343,13 @@ export default {
                 borderTop: props.inputBorder,
             })),
             inputStyles: computed(() => ({
-                backgroundColor: props.inputBgColor,
                 color: props.inputTextColor,
                 border: props.inputBorder,
                 '--placeholder-color': props.inputPlaceholderColor,
                 maxHeight: props.inputMaxHeight,
                 minHeight: props.inputMinHeight,
                 borderRadius: props.inputBorderRadius,
+                backgroundColor: props.inputBgColor === 'transparent' ? '#ffffff' : props.inputBgColor,
             })),
             iconBtnStyles: computed(() => ({
                 color: props.inputTextColor,
@@ -387,155 +369,167 @@ export default {
 
 <style lang="scss" scoped>
 .ww-chat-input-area {
-    display: flex;
-    flex-direction: column;
-    padding: 12px 16px;
-    gap: 8px;
-    border-top: v-bind('inputBorder');
+    padding: 16px;
     width: 100%;
-    flex-shrink: 0;
     background-color: v-bind('inputBgColor');
-    position: relative;
+}
 
-    &__input-row {
-        display: flex;
-        align-items: flex-end;
-        gap: 8px;
-        width: 100%;
+.pending-attachments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+    max-height: 120px;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
     }
 
-    &__attachments {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 8px;
-        max-height: 120px;
-        overflow-y: auto;
-        padding: 4px;
-    }
-
-    &__attachment {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-radius: 16px;
-        background-color: rgba(0, 0, 0, 0.05);
-        padding: 4px 4px 4px 4px;
-        height: 28px;
-        max-width: 200px;
-        flex-shrink: 0;
-        border: 1px solid rgba(0, 0, 0, 0.08);
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    }
-
-    &__attachment-name {
-        display: block;
-        font-size: 0.75rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 150px;
-    }
-
-    &__attachment-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 6px;
-        color: var(--ww-color-content-secondary, #64748b);
-    }
-
-    &__attachment-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        cursor: pointer;
-        transition: background-color 0.2s;
-        flex-shrink: 0;
-
-        &:hover {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
-    }
-
-    &__attachment-input {
-        position: absolute;
-        width: 0;
-        height: 0;
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    &__icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        :deep(svg) {
-            width: 100%;
-            height: 100%;
-        }
-    }
-
-    &__input-container {
-        position: relative;
-        flex: 1;
-    }
-
-    &__input {
-        width: 100%;
-        resize: none;
-        min-height: v-bind('inputMinHeight');
-        max-height: v-bind('inputMaxHeight');
-        padding: 8px 12px;
-        border-radius: v-bind('inputBorderRadius');
-        font-size: 0.9375rem;
-        line-height: 1.4;
-        overflow-y: auto;
-        transition: border-color 0.2s;
-        background-color: v-bind('inputBgColor');
-        color: v-bind('inputTextColor');
-        border: v-bind('inputBorder');
-
-        &::placeholder {
-            color: v-bind('inputPlaceholderColor');
-        }
-
-        &:focus {
-            outline: none;
-        }
-
-        &:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-    }
-
-    &__send-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        border: none;
+    &::-webkit-scrollbar-track {
         background: transparent;
-        cursor: pointer;
-        transition: background-color 0.2s;
-        flex-shrink: 0;
-
-        &:hover:not(:disabled) {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
-
-        &:disabled {
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
     }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: var(--ww-color-border-tertiary, #cbd5e1);
+        border-radius: 2px;
+    }
+}
+
+.attachment-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 16px;
+    background-color: var(--ww-color-bg-secondary, rgba(0, 0, 0, 0.05));
+    padding: 4px 10px;
+    height: 28px;
+    max-width: 200px;
+    flex-shrink: 0;
+    border: 1px solid var(--ww-color-border-tertiary, rgba(0, 0, 0, 0.08));
+    box-shadow: var(--ww-shadow-small, 0 1px 2px rgba(0, 0, 0, 0.05));
+}
+
+.attachment-name {
+    font-size: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+
+.attachment-remove {
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.input-container {
+    position: relative;
+    width: 100%;
+}
+
+.message-input {
+    width: 100%;
+    resize: none;
+    min-height: v-bind('inputMinHeight');
+    max-height: v-bind('inputMaxHeight');
+    padding: 10px 16px;
+    padding-right: 45px; /* Make space for the action button */
+    padding-bottom: 12px; /* Ensure enough space at the bottom for the button */
+    border-radius: v-bind('inputBorderRadius');
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    overflow-y: auto;
+    transition: border-color 0.2s;
+    background-color: v-bind('inputBgColor');
+    color: v-bind('inputTextColor');
+    border: v-bind('inputBorder');
+
+    &::placeholder {
+        color: v-bind('inputPlaceholderColor');
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    /* Scrollbar styling */
+    &::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: var(--ww-color-border-tertiary, #cbd5e1);
+        border-radius: 2px;
+    }
+
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: var(--ww-color-border-tertiary, #cbd5e1) transparent; /* For Firefox */
+}
+
+.action-button {
+    position: absolute;
+    right: 8px;
+    bottom: 8px; /* Position at the bottom instead of top */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    z-index: 1; /* Ensure button stays above textarea content */
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+}
+
+.file-input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    :deep(svg) {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
 }
 </style>
