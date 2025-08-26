@@ -3,15 +3,7 @@ export default {
         label: { en: 'Chat' },
         icon: 'chat',
         customStylePropertiesOrder: [
-            // Container styles
-            [
-                'containerTitle',
-                'backgroundColor',
-                'containerBorder',
-                'containerBorderRadius',
-                'containerShadow',
-                'fontFamily',
-            ],
+            'fontFamily',
             // Header styles
             [
                 'headerTitle',
@@ -19,7 +11,6 @@ export default {
                 'headerBgColor',
                 'headerTextColor',
                 'headerBorder',
-                'headerBoxShadow',
                 'headerPadding',
                 'headerNameFontSize',
                 'headerNameFontWeight',
@@ -51,10 +42,16 @@ export default {
                 'messageTitle',
                 'messageBgColor',
                 'messageTextColor',
+                'messageFontSize',
+                'messageFontWeight',
+                'messageFontFamily',
                 'messageBorder',
                 'ownMessageTitle',
                 'ownMessageBgColor',
                 'ownMessageTextColor',
+                'ownMessageFontSize',
+                'ownMessageFontWeight',
+                'ownMessageFontFamily',
                 'ownMessageBorder',
             ],
             // Input styles
@@ -62,6 +59,9 @@ export default {
                 'inputAreaTitle',
                 'inputBgColor',
                 'inputTextColor',
+                'inputFontSize',
+                'inputFontWeight',
+                'inputFontFamily',
                 'inputPlaceholderColor',
                 'inputBorder',
                 'inputMaxHeight',
@@ -214,68 +214,14 @@ export default {
         // ======== APPEARANCE ========
 
         // Container styles
-        containerTitle: {
-            type: 'Title',
-            label: { en: 'Container' },
-            section: 'style',
-        },
-        backgroundColor: {
-            label: { en: 'Background Color' },
-            type: 'Color',
-            section: 'style',
-            bindable: true,
-            defaultValue: '#f5f7fb',
-            /* wwEditor:start */
-            bindingValidation: {
-                type: 'string',
-                tooltip: 'Background color of the chat container',
-            },
-            /* wwEditor:end */
-        },
-        containerBorder: {
-            label: { en: 'Border' },
-            type: 'Border',
-            section: 'style',
-            bindable: true,
-            defaultValue: '1px solid #e2e8f0',
-            /* wwEditor:start */
-            bindingValidation: {
-                type: 'string',
-                tooltip: 'Border of the chat container',
-            },
-            /* wwEditor:end */
-        },
-        containerBorderRadius: {
-            label: { en: 'Border Radius' },
-            type: 'Length',
-            section: 'style',
-            bindable: true,
-            defaultValue: '8px',
-            /* wwEditor:start */
-            bindingValidation: {
-                type: 'string',
-                tooltip: 'Border radius of the chat container',
-            },
-            /* wwEditor:end */
-        },
-        containerShadow: {
-            label: { en: 'Shadow' },
-            type: 'Shadows',
-            section: 'style',
-            bindable: true,
-            defaultValue: '0 2px 8px rgba(0, 0, 0, 0.05)',
-            /* wwEditor:start */
-            bindingValidation: {
-                type: 'string',
-                tooltip: 'Box shadow of the chat container',
-            },
-            /* wwEditor:end */
-        },
         fontFamily: {
             label: { en: 'Font Family' },
             type: 'FontFamily',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: 'inherit',
             /* wwEditor:start */
             bindingValidation: {
@@ -296,6 +242,9 @@ export default {
             type: 'OnOff',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: true,
             /* wwEditor:start */
             bindingValidation: {
@@ -313,6 +262,9 @@ export default {
             type: 'Color',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '#ffffff',
             /* wwEditor:start */
             bindingValidation: {
@@ -320,12 +272,16 @@ export default {
                 tooltip: 'Background color of the chat header',
             },
             /* wwEditor:end */
+            hidden: content => content.displayHeader === false,
         },
         headerTextColor: {
             label: { en: 'Text Color' },
             type: 'Color',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '#1e293b',
             /* wwEditor:start */
             bindingValidation: {
@@ -333,12 +289,16 @@ export default {
                 tooltip: 'Text color in the chat header',
             },
             /* wwEditor:end */
+            hidden: content => content.displayHeader === false,
         },
         headerBorder: {
-            label: { en: 'Border' },
+            label: { en: 'Border Bottom' },
             type: 'Border',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '1px solid #e2e8f0',
             /* wwEditor:start */
             bindingValidation: {
@@ -346,38 +306,41 @@ export default {
                 tooltip: 'Border of the chat header',
             },
             /* wwEditor:end */
+            hidden: content => content.displayHeader === false,
         },
-        headerBoxShadow: {
-            label: { en: 'Shadow' },
-            type: 'Shadows',
-            section: 'style',
-            bindable: true,
-            defaultValue: '0 1px 2px rgba(0, 0, 0, 0.05)',
-            /* wwEditor:start */
-            bindingValidation: {
-                type: 'string',
-                tooltip: 'Box shadow of the chat header',
-            },
-            /* wwEditor:end */
-        },
+
         headerPadding: {
             label: { en: 'Padding' },
-            type: 'Length',
+            type: 'Spacing',
             section: 'style',
-            bindable: true,
             defaultValue: '12px 16px',
+            classes: true,
+            states: true,
+            responsive: true,
+            bindable: true,
             /* wwEditor:start */
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Padding of the chat header',
             },
             /* wwEditor:end */
+            hidden: content => content.displayHeader === false,
         },
         headerNameFontSize: {
             label: { en: 'Name Font Size' },
             type: 'Length',
+            options: {
+                unitChoices: [
+                    { value: 'px', label: 'px', min: 8, max: 100 },
+                    { value: 'em', label: 'em', min: 0.5, max: 5, digits: 3, step: 0.1 },
+                    { value: 'rem', label: 'rem', min: 0.5, max: 5, digits: 3, step: 0.1 },
+                ],
+            },
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '1rem',
             /* wwEditor:start */
             bindingValidation: {
@@ -385,12 +348,29 @@ export default {
                 tooltip: 'Font size of the user name in header',
             },
             /* wwEditor:end */
+            hidden: content => content.displayHeader === false,
         },
         headerNameFontWeight: {
             label: { en: 'Name Font Weight' },
-            type: 'TextWeight',
+            type: 'TextSelect',
+            options: {
+                options: [
+                    { value: '100', label: { en: '100 - Thin' } },
+                    { value: '200', label: { en: '200 - Extra Light' } },
+                    { value: '300', label: { en: '300 - Light' } },
+                    { value: '400', label: { en: '400 - Normal' } },
+                    { value: '500', label: { en: '500 - Medium' } },
+                    { value: '600', label: { en: '600 - Semi Bold' } },
+                    { value: '700', label: { en: '700 - Bold' } },
+                    { value: '800', label: { en: '800 - Extra Bold' } },
+                    { value: '900', label: { en: '900 - Black' } },
+                ],
+            },
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '600',
             /* wwEditor:start */
             bindingValidation: {
@@ -398,12 +378,23 @@ export default {
                 tooltip: 'Font weight of the user name in header',
             },
             /* wwEditor:end */
+            hidden: content => content.displayHeader === false,
         },
         headerLocationFontSize: {
             label: { en: 'Location Font Size' },
             type: 'Length',
+            options: {
+                unitChoices: [
+                    { value: 'px', label: 'px', min: 8, max: 100 },
+                    { value: 'em', label: 'em', min: 0.5, max: 5, digits: 3, step: 0.1 },
+                    { value: 'rem', label: 'rem', min: 0.5, max: 5, digits: 3, step: 0.1 },
+                ],
+            },
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '0.875rem',
             /* wwEditor:start */
             bindingValidation: {
@@ -411,6 +402,7 @@ export default {
                 tooltip: 'Font size of the location text in header',
             },
             /* wwEditor:end */
+            hidden: content => content.displayHeader === false,
         },
         headerLocationOpacity: {
             label: { en: 'Location Opacity' },
@@ -422,6 +414,9 @@ export default {
             },
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: 0.7,
             /* wwEditor:start */
             bindingValidation: {
@@ -429,12 +424,16 @@ export default {
                 tooltip: 'Opacity of the location text in header',
             },
             /* wwEditor:end */
+            hidden: content => content.displayHeader === false,
         },
         headerCloseButtonColor: {
             label: { en: 'Close Button Color' },
             type: 'Color',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '',
             /* wwEditor:start */
             bindingValidation: {
@@ -442,12 +441,16 @@ export default {
                 tooltip: 'Color of the close button (leave empty to inherit from header text color)',
             },
             /* wwEditor:end */
+            hidden: content => content.displayHeader === false,
         },
         headerCloseButtonBgHover: {
             label: { en: 'Close Button Hover BG' },
             type: 'Color',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: 'rgba(0, 0, 0, 0.05)',
             /* wwEditor:start */
             bindingValidation: {
@@ -455,6 +458,7 @@ export default {
                 tooltip: 'Background color of the close button on hover',
             },
             /* wwEditor:end */
+            hidden: content => content.displayHeader === false,
         },
 
         // Messages area styles
@@ -468,6 +472,9 @@ export default {
             type: 'Color',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '#ffffff',
             /* wwEditor:start */
             bindingValidation: {
@@ -478,10 +485,13 @@ export default {
         },
         messagesAreaPadding: {
             label: { en: 'Padding' },
-            type: 'Length',
+            type: 'Spacing',
             section: 'style',
-            bindable: true,
             defaultValue: '16px',
+            classes: true,
+            states: true,
+            responsive: true,
+            bindable: true,
             /* wwEditor:start */
             bindingValidation: {
                 type: 'string',
@@ -494,6 +504,9 @@ export default {
             type: 'Length',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: 'auto',
             /* wwEditor:start */
             bindingValidation: {
@@ -507,6 +520,9 @@ export default {
             type: 'Length',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '100px',
             /* wwEditor:start */
             bindingValidation: {
@@ -520,6 +536,9 @@ export default {
             type: 'Text',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: 'No messages yet',
             /* wwEditor:start */
             bindingValidation: {
@@ -533,6 +552,9 @@ export default {
             type: 'Color',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '#64748b',
             /* wwEditor:start */
             bindingValidation: {
@@ -551,6 +573,9 @@ export default {
             type: 'Color',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '#64748b',
             /* wwEditor:start */
             bindingValidation: {
@@ -564,6 +589,9 @@ export default {
             type: 'Color',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '#e2e8f0',
             /* wwEditor:start */
             bindingValidation: {
@@ -577,6 +605,9 @@ export default {
             type: 'Color',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '#ffffff',
             /* wwEditor:start */
             bindingValidation: {
@@ -590,6 +621,9 @@ export default {
             type: 'Length',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '4px',
             /* wwEditor:start */
             bindingValidation: {
@@ -610,6 +644,9 @@ export default {
             type: 'Color',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '#f1f5f9',
             /* wwEditor:start */
             bindingValidation: {
@@ -623,6 +660,9 @@ export default {
             type: 'Color',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '#334155',
             /* wwEditor:start */
             bindingValidation: {
@@ -631,11 +671,82 @@ export default {
             },
             /* wwEditor:end */
         },
+        messageFontSize: {
+            label: { en: 'Font Size' },
+            type: 'Length',
+            options: {
+                unitChoices: [
+                    { value: 'px', label: 'px', min: 8, max: 100 },
+                    { value: 'em', label: 'em', min: 0.5, max: 5, digits: 3, step: 0.1 },
+                    { value: 'rem', label: 'rem', min: 0.5, max: 5, digits: 3, step: 0.1 },
+                ],
+            },
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '0.875rem',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'Font size of messages from others',
+            },
+            /* wwEditor:end */
+        },
+        messageFontWeight: {
+            label: { en: 'Font Weight' },
+            type: 'TextSelect',
+            options: {
+                options: [
+                    { value: '100', label: { en: '100 - Thin' } },
+                    { value: '200', label: { en: '200 - Extra Light' } },
+                    { value: '300', label: { en: '300 - Light' } },
+                    { value: '400', label: { en: '400 - Normal' } },
+                    { value: '500', label: { en: '500 - Medium' } },
+                    { value: '600', label: { en: '600 - Semi Bold' } },
+                    { value: '700', label: { en: '700 - Bold' } },
+                    { value: '800', label: { en: '800 - Extra Bold' } },
+                    { value: '900', label: { en: '900 - Black' } },
+                ],
+            },
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '400',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'Font weight of messages from others',
+            },
+            /* wwEditor:end */
+        },
+        messageFontFamily: {
+            label: { en: 'Font Family' },
+            type: 'FontFamily',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: 'inherit',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'Font family of messages from others',
+            },
+            /* wwEditor:end */
+        },
         messageBorder: {
             label: { en: 'Border' },
             type: 'Border',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '1px solid #e2e8f0',
             /* wwEditor:start */
             bindingValidation: {
@@ -656,6 +767,9 @@ export default {
             type: 'Color',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '#dbeafe',
             /* wwEditor:start */
             bindingValidation: {
@@ -669,6 +783,9 @@ export default {
             type: 'Color',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '#1e40af',
             /* wwEditor:start */
             bindingValidation: {
@@ -677,11 +794,82 @@ export default {
             },
             /* wwEditor:end */
         },
+        ownMessageFontSize: {
+            label: { en: 'Font Size' },
+            type: 'Length',
+            options: {
+                unitChoices: [
+                    { value: 'px', label: 'px', min: 8, max: 100 },
+                    { value: 'em', label: 'em', min: 0.5, max: 5, digits: 3, step: 0.1 },
+                    { value: 'rem', label: 'rem', min: 0.5, max: 5, digits: 3, step: 0.1 },
+                ],
+            },
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '0.875rem',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'Font size of your own messages',
+            },
+            /* wwEditor:end */
+        },
+        ownMessageFontWeight: {
+            label: { en: 'Font Weight' },
+            type: 'TextSelect',
+            options: {
+                options: [
+                    { value: '100', label: { en: '100 - Thin' } },
+                    { value: '200', label: { en: '200 - Extra Light' } },
+                    { value: '300', label: { en: '300 - Light' } },
+                    { value: '400', label: { en: '400 - Normal' } },
+                    { value: '500', label: { en: '500 - Medium' } },
+                    { value: '600', label: { en: '600 - Semi Bold' } },
+                    { value: '700', label: { en: '700 - Bold' } },
+                    { value: '800', label: { en: '800 - Extra Bold' } },
+                    { value: '900', label: { en: '900 - Black' } },
+                ],
+            },
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '400',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'Font weight of your own messages',
+            },
+            /* wwEditor:end */
+        },
+        ownMessageFontFamily: {
+            label: { en: 'Font Family' },
+            type: 'FontFamily',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: 'inherit',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'Font family of your own messages',
+            },
+            /* wwEditor:end */
+        },
         ownMessageBorder: {
             label: { en: 'Border' },
             type: 'Border',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '1px solid #bfdbfe',
             /* wwEditor:start */
             bindingValidation: {
@@ -702,6 +890,9 @@ export default {
             type: 'Color',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '#ffffff',
             /* wwEditor:start */
             bindingValidation: {
@@ -715,6 +906,9 @@ export default {
             type: 'Color',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '#334155',
             /* wwEditor:start */
             bindingValidation: {
@@ -723,11 +917,82 @@ export default {
             },
             /* wwEditor:end */
         },
+        inputFontSize: {
+            label: { en: 'Font Size' },
+            type: 'Length',
+            options: {
+                unitChoices: [
+                    { value: 'px', label: 'px', min: 8, max: 100 },
+                    { value: 'em', label: 'em', min: 0.5, max: 5, digits: 3, step: 0.1 },
+                    { value: 'rem', label: 'rem', min: 0.5, max: 5, digits: 3, step: 0.1 },
+                ],
+            },
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '0.875rem',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'Font size of the message input',
+            },
+            /* wwEditor:end */
+        },
+        inputFontWeight: {
+            label: { en: 'Font Weight' },
+            type: 'TextSelect',
+            options: {
+                options: [
+                    { value: '100', label: { en: '100 - Thin' } },
+                    { value: '200', label: { en: '200 - Extra Light' } },
+                    { value: '300', label: { en: '300 - Light' } },
+                    { value: '400', label: { en: '400 - Normal' } },
+                    { value: '500', label: { en: '500 - Medium' } },
+                    { value: '600', label: { en: '600 - Semi Bold' } },
+                    { value: '700', label: { en: '700 - Bold' } },
+                    { value: '800', label: { en: '800 - Extra Bold' } },
+                    { value: '900', label: { en: '900 - Black' } },
+                ],
+            },
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '400',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'Font weight of the message input',
+            },
+            /* wwEditor:end */
+        },
+        inputFontFamily: {
+            label: { en: 'Font Family' },
+            type: 'FontFamily',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: 'inherit',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'Font family of the message input',
+            },
+            /* wwEditor:end */
+        },
         inputPlaceholderColor: {
             label: { en: 'Placeholder Color' },
             type: 'Color',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '#94a3b8',
             /* wwEditor:start */
             bindingValidation: {
@@ -741,6 +1006,9 @@ export default {
             type: 'Border',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '1px solid #e2e8f0',
             /* wwEditor:start */
             bindingValidation: {
@@ -754,6 +1022,9 @@ export default {
             type: 'Length',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '120px',
             /* wwEditor:start */
             bindingValidation: {
@@ -767,6 +1038,9 @@ export default {
             type: 'Length',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '38px',
             /* wwEditor:start */
             bindingValidation: {
@@ -780,6 +1054,9 @@ export default {
             type: 'Length',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '20px',
             /* wwEditor:start */
             bindingValidation: {
@@ -800,6 +1077,9 @@ export default {
             type: 'SystemIcon',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: 'send',
             /* wwEditor:start */
             bindingValidation: {
@@ -813,6 +1093,9 @@ export default {
             type: 'Color',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '#334155',
             /* wwEditor:start */
             bindingValidation: {
@@ -826,6 +1109,9 @@ export default {
             type: 'Length',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '20px',
             /* wwEditor:start */
             bindingValidation: {
@@ -839,6 +1125,9 @@ export default {
             type: 'SystemIcon',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: 'paperclip',
             /* wwEditor:start */
             bindingValidation: {
@@ -852,6 +1141,9 @@ export default {
             type: 'Color',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '#334155',
             /* wwEditor:start */
             bindingValidation: {
@@ -865,6 +1157,9 @@ export default {
             type: 'Length',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '20px',
             /* wwEditor:start */
             bindingValidation: {
@@ -878,6 +1173,9 @@ export default {
             type: 'SystemIcon',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: 'x',
             /* wwEditor:start */
             bindingValidation: {
@@ -891,6 +1189,9 @@ export default {
             type: 'Color',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '#334155',
             /* wwEditor:start */
             bindingValidation: {
@@ -904,6 +1205,9 @@ export default {
             type: 'Length',
             section: 'style',
             bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
             defaultValue: '16px',
             /* wwEditor:start */
             bindingValidation: {

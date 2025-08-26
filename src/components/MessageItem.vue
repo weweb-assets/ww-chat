@@ -116,6 +116,18 @@ export default {
             type: String,
             default: '#334155',
         },
+        messageFontSize: {
+            type: String,
+            default: '0.875rem',
+        },
+        messageFontWeight: {
+            type: String,
+            default: '400',
+        },
+        messageFontFamily: {
+            type: String,
+            default: 'inherit',
+        },
         messageBorder: {
             type: String,
             default: '1px solid #e2e8f0',
@@ -127,6 +139,18 @@ export default {
         ownMessageTextColor: {
             type: String,
             default: '#1e40af',
+        },
+        ownMessageFontSize: {
+            type: String,
+            default: '0.875rem',
+        },
+        ownMessageFontWeight: {
+            type: String,
+            default: '400',
+        },
+        ownMessageFontFamily: {
+            type: String,
+            default: 'inherit',
         },
         ownMessageBorder: {
             type: String,
@@ -150,12 +174,18 @@ export default {
                 return {
                     backgroundColor: props.ownMessageBgColor,
                     color: props.ownMessageTextColor,
+                    fontSize: props.ownMessageFontSize,
+                    fontWeight: props.ownMessageFontWeight,
+                    fontFamily: props.ownMessageFontFamily,
                     border: props.ownMessageBorder,
                 };
             } else {
                 return {
                     backgroundColor: props.messageBgColor,
                     color: props.messageTextColor,
+                    fontSize: props.messageFontSize,
+                    fontWeight: props.messageFontWeight,
+                    fontFamily: props.messageFontFamily,
                     border: props.messageBorder,
                 };
             }
@@ -262,7 +292,6 @@ export default {
     }
 
     &__text {
-        font-size: 0.9375rem;
         line-height: 1.4;
         word-break: break-word;
     }

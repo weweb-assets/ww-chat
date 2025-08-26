@@ -131,6 +131,18 @@ export default {
             type: String,
             default: '#334155',
         },
+        inputFontSize: {
+            type: String,
+            default: '0.875rem',
+        },
+        inputFontWeight: {
+            type: String,
+            default: '400',
+        },
+        inputFontFamily: {
+            type: String,
+            default: 'inherit',
+        },
         inputPlaceholderColor: {
             type: String,
             default: '#94a3b8',
@@ -605,7 +617,9 @@ export default {
         max-height: v-bind('inputMaxHeight');
         padding: 12px 16px;
         border-radius: v-bind('inputBorderRadius');
-        font-size: 0.9375rem;
+        font-size: v-bind('inputFontSize');
+        font-weight: v-bind('inputFontWeight');
+        font-family: v-bind('inputFontFamily');
         line-height: 1.5;
         overflow-y: auto;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);

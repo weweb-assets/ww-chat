@@ -13,10 +13,6 @@ keywords:
 
 Container Properties:
 
--   `backgroundColor`: `string` - Background color of the chat container. Default: `#f5f7fb`
--   `containerBorder`: `string` - Border of the chat container. Default: `1px solid #e2e8f0`
--   `containerBorderRadius`: `string` - Border radius of the chat container. Default: `8px`
--   `containerShadow`: `string` - Box shadow of the chat container. Default: `0 2px 8px rgba(0, 0, 0, 0.05)`
 -   `fontFamily`: `string` - Font family used throughout the chat. Default: `inherit`
 
 Header Style Properties:
@@ -25,11 +21,10 @@ Header Style Properties:
 -   `headerBgColor`: `string` - Background color of the chat header. Default: `#ffffff`
 -   `headerTextColor`: `string` - Text color in the chat header. Default: `#1e293b`
 -   `headerBorder`: `string` - Border of the chat header. Default: `1px solid #e2e8f0`
--   `headerBoxShadow`: `string` - Box shadow of the chat header. Default: `0 1px 2px rgba(0, 0, 0, 0.05)`
--   `headerPadding`: `string` - Padding of the chat header. Default: `12px 16px`
--   `headerNameFontSize`: `string` - Font size of the user name in header. Default: `1rem`
--   `headerNameFontWeight`: `string` - Font weight of the user name in header. Default: `600`
--   `headerLocationFontSize`: `string` - Font size of the location text in header. Default: `0.875rem`
+-   `headerPadding`: `string` - Padding of the chat header using Spacing type. Default: `12px 16px`
+-   `headerNameFontSize`: `string` - Font size of the user name in header. Supports px, em, and rem units. Default: `1rem`
+-   `headerNameFontWeight`: `string` - Font weight of the user name in header (100-900). Default: `600`
+-   `headerLocationFontSize`: `string` - Font size of the location text in header. Supports px, em, and rem units. Default: `0.875rem`
 -   `headerLocationOpacity`: `number` - Opacity of the location text in header. Default: `0.7`
 -   `headerCloseButtonColor`: `string` - Color of the close button (leave empty to inherit). Default: ``
 -   `headerCloseButtonBgHover`: `string` - Background color of the close button on hover. Default: `rgba(0, 0, 0, 0.05)`
@@ -37,8 +32,9 @@ Header Style Properties:
 Messages Area Properties:
 
 -   `messagesAreaBgColor`: `string` - Background color of the messages area. Default: `#ffffff`
--   `messagesAreaPadding`: `string` - Padding inside the messages area. Default: `16px`
+-   `messagesAreaPadding`: `string` - Padding inside the messages area using Spacing type. Default: `16px`
 -   `messagesAreaHeight`: `string` - Height of the messages area. Use 'auto' to fill available space. Default: `auto`
+-   `messagesAreaMinHeight`: `string` - Minimum height of the messages area. Default: `auto`
 -   `emptyMessageText`: `string` - Text to display when there are no messages. Default: `No messages yet`
 -   `emptyMessageColor`: `string` - Color of the empty message text. Default: `#64748b`
 
@@ -54,9 +50,15 @@ Message Style Properties:
 -   `messageBgColor`: `string` - Background color of messages from others. Default: `#f1f5f9`
 -   `messageTextColor`: `string` - Text color of messages from others. Default: `#334155`
 -   `messageBorder`: `string` - Border of messages from others. Default: `1px solid #e2e8f0`
+-   `messageFontSize`: `string` - Font size of messages from others. Supports px, em, and rem units. Default: `0.9375rem`
+-   `messageFontWeight`: `string` - Font weight of messages from others (100-900). Default: `400`
+-   `messageFontFamily`: `string` - Font family of messages from others. Default: `inherit`
 -   `ownMessageBgColor`: `string` - Background color of your own messages. Default: `#dbeafe`
 -   `ownMessageTextColor`: `string` - Text color of your own messages. Default: `#1e40af`
 -   `ownMessageBorder`: `string` - Border of your own messages. Default: `1px solid #bfdbfe`
+-   `ownMessageFontSize`: `string` - Font size of your own messages. Supports px, em, and rem units. Default: `0.9375rem`
+-   `ownMessageFontWeight`: `string` - Font weight of your own messages (100-900). Default: `400`
+-   `ownMessageFontFamily`: `string` - Font family of your own messages. Default: `inherit`
 
 Input Area Properties:
 
@@ -67,6 +69,9 @@ Input Area Properties:
 -   `inputMaxHeight`: `string` - Maximum height of the input area before scrolling. Default: `120px`
 -   `inputMinHeight`: `string` - Minimum height of the input area. Default: `38px`
 -   `inputBorderRadius`: `string` - Border radius of the input field. Default: `20px`
+-   `inputFontSize`: `string` - Font size of the input text. Supports px, em, and rem units. Default: `0.875rem`
+-   `inputFontWeight`: `string` - Font weight of the input text (100-900). Default: `400`
+-   `inputFontFamily`: `string` - Font family of the input text. Default: `inherit`
 -   `inputPlaceholder`: `string` - Placeholder text for the message input. Default: `Type a message...`
 
 Icon Properties:
@@ -182,6 +187,14 @@ Important Implementation Notes:
 -   Right-click events provide coordinates for showing custom context menus at the correct position
 -   Responsive design adapts to container size but may need additional styling for small screens
 
+Enhanced Styling Capabilities:
+
+-   **Classes, States & Responsive Support**: All style properties now support CSS classes, pseudo-states (hover, focus, etc.), and responsive breakpoints for advanced styling control
+-   **Advanced Font Control**: Comprehensive font properties for messages and input area including size, weight (100-900), and family
+-   **Flexible Unit Support**: Font size properties support px, em, and rem units with appropriate value ranges and step controls
+-   **Spacing Type Integration**: Padding properties use the advanced Spacing type for more sophisticated layout control
+-   **Typography Consistency**: Font weight properties use standardized numeric values (100-900) for consistent typography across the component
+
 Example Basic Implementation:
 
 ```json
@@ -216,15 +229,18 @@ Example Styled Implementation:
         "userAvatar": "https://example.com/avatars/john.jpg",
         "userStatus": "online",
         "currentUserId": "john-doe",
-        "backgroundColor": "#f0f4f8",
-        "containerBorder": "1px solid #d0d7de",
-        "containerBorderRadius": "12px",
         "messageBgColor": "#ffffff",
         "messageTextColor": "#24292f",
         "messageBorder": "1px solid #d0d7de",
+        "messageFontSize": "1rem",
+        "messageFontWeight": "400",
+        "messageFontFamily": "Inter, sans-serif",
         "ownMessageBgColor": "#ddf4ff",
         "ownMessageTextColor": "#0969da",
         "ownMessageBorder": "1px solid #54aeff",
+        "ownMessageFontSize": "1rem",
+        "ownMessageFontWeight": "500",
+        "ownMessageFontFamily": "Inter, sans-serif",
         "emptyMessageText": "No conversations yet. Start chatting!",
         "emptyMessageColor": "#6e7781",
         "dateSeparatorTextColor": "#57606a",
@@ -233,7 +249,12 @@ Example Styled Implementation:
         "dateSeparatorBorderRadius": "12px",
         "inputBgColor": "#ffffff",
         "inputTextColor": "#24292f",
-        "inputBorder": "1px solid #d0d7de"
+        "inputBorder": "1px solid #d0d7de",
+        "inputFontSize": "0.9rem",
+        "inputFontWeight": "400",
+        "inputFontFamily": "Inter, sans-serif",
+        "headerNameFontSize": "1.1rem",
+        "headerNameFontWeight": "600"
     }
 }
 ```

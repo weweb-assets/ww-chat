@@ -24,9 +24,15 @@
                     :same-sender-as-next="isSameSenderAsNext(index)"
                     :message-bg-color="messageBgColor"
                     :message-text-color="messageTextColor"
+                    :message-font-size="messageFontSize"
+                    :message-font-weight="messageFontWeight"
+                    :message-font-family="messageFontFamily"
                     :message-border="messageBorder"
                     :own-message-bg-color="ownMessageBgColor"
                     :own-message-text-color="ownMessageTextColor"
+                    :own-message-font-size="ownMessageFontSize"
+                    :own-message-font-weight="ownMessageFontWeight"
+                    :own-message-font-family="ownMessageFontFamily"
                     :own-message-border="ownMessageBorder"
                     @attachment-click="handleAttachmentClick"
                     @right-click="handleRightClick"
@@ -63,6 +69,18 @@ export default {
             type: String,
             default: '#334155',
         },
+        messageFontSize: {
+            type: String,
+            default: '0.875rem',
+        },
+        messageFontWeight: {
+            type: String,
+            default: '400',
+        },
+        messageFontFamily: {
+            type: String,
+            default: 'inherit',
+        },
         messageBorder: {
             type: String,
             default: '1px solid #e2e8f0',
@@ -74,6 +92,18 @@ export default {
         ownMessageTextColor: {
             type: String,
             default: '#1e40af',
+        },
+        ownMessageFontSize: {
+            type: String,
+            default: '0.875rem',
+        },
+        ownMessageFontWeight: {
+            type: String,
+            default: '400',
+        },
+        ownMessageFontFamily: {
+            type: String,
+            default: 'inherit',
         },
         ownMessageBorder: {
             type: String,

@@ -75,10 +75,7 @@ export default {
             type: String,
             default: '1px solid #e2e8f0',
         },
-        headerBoxShadow: {
-            type: String,
-            default: '0 1px 2px rgba(0, 0, 0, 0.05)',
-        },
+
         headerPadding: {
             type: String,
             default: '12px 16px',
@@ -138,7 +135,6 @@ export default {
             backgroundColor: props.headerBgColor,
             color: props.textColor,
             borderBottom: props.headerBorder,
-            boxShadow: props.headerBoxShadow,
             padding: props.headerPadding,
         }));
 

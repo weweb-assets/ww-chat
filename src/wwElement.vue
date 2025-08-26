@@ -10,7 +10,6 @@
             :header-bg-color="headerBgColor"
             :text-color="headerTextColor"
             :header-border="headerBorder"
-            :header-box-shadow="headerBoxShadow"
             :header-padding="headerPadding"
             :name-font-size="headerNameFontSize"
             :name-font-weight="headerNameFontWeight"
@@ -29,9 +28,15 @@
                 :current-user-id="currentUserId"
                 :message-bg-color="messageBgColor"
                 :message-text-color="messageTextColor"
+                :message-font-size="messageFontSize"
+                :message-font-weight="messageFontWeight"
+                :message-font-family="messageFontFamily"
                 :message-border="messageBorder"
                 :own-message-bg-color="ownMessageBgColor"
                 :own-message-text-color="ownMessageTextColor"
+                :own-message-font-size="ownMessageFontSize"
+                :own-message-font-weight="ownMessageFontWeight"
+                :own-message-font-family="ownMessageFontFamily"
                 :own-message-border="ownMessageBorder"
                 :empty-message-text="emptyMessageText"
                 :empty-message-color="emptyMessageColor"
@@ -52,6 +57,9 @@
             :pending-attachments="pendingAttachments"
             :input-bg-color="inputBgColor"
             :input-text-color="inputTextColor"
+            :input-font-size="inputFontSize"
+            :input-font-weight="inputFontWeight"
+            :input-font-family="inputFontFamily"
             :input-placeholder-color="inputPlaceholderColor"
             :input-border="inputBorder"
             :input-max-height="inputMaxHeight"
@@ -224,10 +232,6 @@ export default {
 
         // Style properties
         const containerStyles = computed(() => ({
-            backgroundColor: props.content?.backgroundColor || '#f5f7fb',
-            border: props.content?.containerBorder || '1px solid #e2e8f0',
-            borderRadius: props.content?.containerBorderRadius || '8px',
-            boxShadow: props.content?.containerShadow || '0 2px 8px rgba(0, 0, 0, 0.05)',
             fontFamily: props.content?.fontFamily || 'inherit',
         }));
 
@@ -246,7 +250,7 @@ export default {
         const headerBgColor = computed(() => props.content?.headerBgColor || '#ffffff');
         const headerTextColor = computed(() => props.content?.headerTextColor || '#1e293b');
         const headerBorder = computed(() => props.content?.headerBorder || '1px solid #e2e8f0');
-        const headerBoxShadow = computed(() => props.content?.headerBoxShadow || '0 1px 2px rgba(0, 0, 0, 0.05)');
+
         const headerPadding = computed(() => props.content?.headerPadding || '16px');
         const headerNameFontSize = computed(() => props.content?.headerNameFontSize || '18px');
         const headerNameFontWeight = computed(() => props.content?.headerNameFontWeight || '600');
@@ -258,15 +262,24 @@ export default {
         // Message styles
         const messageBgColor = computed(() => props.content?.messageBgColor || '#f1f5f9');
         const messageTextColor = computed(() => props.content?.messageTextColor || '#334155');
+        const messageFontSize = computed(() => props.content?.messageFontSize || '0.875rem');
+        const messageFontWeight = computed(() => props.content?.messageFontWeight || '400');
+        const messageFontFamily = computed(() => props.content?.messageFontFamily || 'inherit');
         const messageBorder = computed(() => props.content?.messageBorder || '1px solid #e2e8f0');
 
         const ownMessageBgColor = computed(() => props.content?.ownMessageBgColor || '#dbeafe');
         const ownMessageTextColor = computed(() => props.content?.ownMessageTextColor || '#1e40af');
+        const ownMessageFontSize = computed(() => props.content?.ownMessageFontSize || '0.875rem');
+        const ownMessageFontWeight = computed(() => props.content?.ownMessageFontWeight || '400');
+        const ownMessageFontFamily = computed(() => props.content?.ownMessageFontFamily || 'inherit');
         const ownMessageBorder = computed(() => props.content?.ownMessageBorder || '1px solid #bfdbfe');
 
         // Input styles
         const inputBgColor = computed(() => props.content?.inputBgColor || '#ffffff');
         const inputTextColor = computed(() => props.content?.inputTextColor || '#334155');
+        const inputFontSize = computed(() => props.content?.inputFontSize || '0.875rem');
+        const inputFontWeight = computed(() => props.content?.inputFontWeight || '400');
+        const inputFontFamily = computed(() => props.content?.inputFontFamily || 'inherit');
         const inputPlaceholderColor = computed(() => props.content?.inputPlaceholderColor || '#94a3b8');
         const inputBorder = computed(() => props.content?.inputBorder || '1px solid #e2e8f0');
         const inputMaxHeight = computed(() => props.content?.inputMaxHeight || '120px');
@@ -610,7 +623,7 @@ export default {
             headerBgColor,
             headerTextColor,
             headerBorder,
-            headerBoxShadow,
+
             headerPadding,
             headerNameFontSize,
             headerNameFontWeight,
@@ -620,15 +633,24 @@ export default {
             headerCloseButtonBgHover,
             messageBgColor,
             messageTextColor,
+            messageFontSize,
+            messageFontWeight,
+            messageFontFamily,
             messageBorder,
             messagesAreaPadding,
             messagesAreaHeight,
             messagesAreaMinHeight,
             ownMessageBgColor,
             ownMessageTextColor,
+            ownMessageFontSize,
+            ownMessageFontWeight,
+            ownMessageFontFamily,
             ownMessageBorder,
             inputBgColor,
             inputTextColor,
+            inputFontSize,
+            inputFontWeight,
+            inputFontFamily,
             inputPlaceholderColor,
             inputBorder,
             inputMaxHeight,
@@ -682,16 +704,12 @@ export default {
 
 <style lang="scss" scoped>
 .ww-chat {
-    --ww-chat-bg-color: v-bind('containerStyles.backgroundColor');
-    --ww-chat-border: v-bind('containerStyles.border');
-    --ww-chat-border-radius: v-bind('containerStyles.borderRadius');
-    --ww-chat-shadow: v-bind('containerStyles.boxShadow');
     --ww-chat-font-family: v-bind('containerStyles.fontFamily');
 
     --ww-chat-header-bg: v-bind('headerBgColor');
     --ww-chat-header-text: v-bind('headerTextColor');
     --ww-chat-header-border: v-bind('headerBorder');
-    --ww-chat-header-shadow: v-bind('headerBoxShadow');
+
     --ww-chat-header-padding: v-bind('headerPadding');
     --ww-chat-header-name-font-size: v-bind('headerNameFontSize');
     --ww-chat-header-name-font-weight: v-bind('headerNameFontWeight');
@@ -704,10 +722,16 @@ export default {
 
     --ww-chat-message-bg: v-bind('messageBgColor');
     --ww-chat-message-text: v-bind('messageTextColor');
+    --ww-chat-message-font-size: v-bind('messageFontSize');
+    --ww-chat-message-font-weight: v-bind('messageFontWeight');
+    --ww-chat-message-font-family: v-bind('messageFontFamily');
     --ww-chat-message-border: v-bind('messageBorder');
 
     --ww-chat-own-message-bg: v-bind('ownMessageBgColor');
     --ww-chat-own-message-text: v-bind('ownMessageTextColor');
+    --ww-chat-own-message-font-size: v-bind('ownMessageFontSize');
+    --ww-chat-own-message-font-weight: v-bind('ownMessageFontWeight');
+    --ww-chat-own-message-font-family: v-bind('ownMessageFontFamily');
     --ww-chat-own-message-border: v-bind('ownMessageBorder');
 
     --ww-chat-empty-message-text: v-bind('emptyMessageText');
@@ -720,6 +744,9 @@ export default {
 
     --ww-chat-input-bg: v-bind('inputBgColor');
     --ww-chat-input-text: v-bind('inputTextColor');
+    --ww-chat-input-font-size: v-bind('inputFontSize');
+    --ww-chat-input-font-weight: v-bind('inputFontWeight');
+    --ww-chat-input-font-family: v-bind('inputFontFamily');
     --ww-chat-input-placeholder: v-bind('inputPlaceholderColor');
     --ww-chat-input-border: v-bind('inputBorder');
     --ww-chat-input-max-height: v-bind('inputMaxHeight');
@@ -736,10 +763,6 @@ export default {
     min-height: 300px;
     overflow: hidden;
 
-    background-color: var(--ww-chat-bg-color);
-    border: var(--ww-chat-border);
-    border-radius: var(--ww-chat-border-radius);
-    box-shadow: var(--ww-chat-shadow);
     font-family: var(--ww-chat-font-family);
 
     &--disabled {
