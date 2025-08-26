@@ -293,10 +293,6 @@ export default {
         background-color: rgba(255, 255, 255, 0.1);
         cursor: pointer;
 
-        &:hover {
-            opacity: 0.9;
-        }
-
         &--own {
             align-self: flex-end;
         }
@@ -328,6 +324,10 @@ export default {
         background-color: rgba(255, 255, 255, 0.15);
         border-radius: 6px;
         max-width: 200px;
+
+        &:hover {
+            opacity: 0.9;
+        }
 
         &--own {
             flex-direction: row-reverse;

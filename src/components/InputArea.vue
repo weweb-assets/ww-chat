@@ -421,29 +421,32 @@ export default {
 .ww-chat-input-area {
     display: flex;
     flex-direction: column;
-    padding: 12px 16px;
-    gap: 8px;
+    padding: 16px 20px;
+    gap: 12px;
     border-top: v-bind('inputBorder');
     width: 100%;
     flex-shrink: 0;
     background-color: v-bind('inputBgColor');
     position: relative;
+    box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.06);
 
     &__input-row {
         display: flex;
         align-items: flex-end;
-        gap: 8px;
+        gap: 12px;
         width: 100%;
     }
 
     &__attachments {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 8px;
+        gap: 10px;
+        margin-bottom: 4px;
         max-height: 120px;
         overflow-y: auto;
-        padding: 4px;
+        padding: 6px;
+        border-radius: 12px;
+        background-color: rgba(0, 0, 0, 0.02);
     }
 
     &__attachment {
@@ -451,20 +454,26 @@ export default {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-radius: 8px;
-        background-color: rgba(0, 0, 0, 0.05);
-        padding: 4px;
-        max-width: 200px;
+        border-radius: 12px;
+        background-color: #f8fafc;
+        padding: 8px 10px;
+        max-width: 220px;
         flex-shrink: 0;
-        border: 1px solid rgba(0, 0, 0, 0.08);
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        gap: 4px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+        gap: 8px;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
     }
 
     &__attachment-file {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
         flex: 1;
         min-width: 0;
     }
@@ -477,46 +486,60 @@ export default {
     }
 
     &__attachment-name {
-        font-size: 0.75rem;
-        font-weight: 500;
+        font-size: 0.8125rem;
+        font-weight: 600;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        line-height: 1.2;
+        line-height: 1.3;
+        color: #334155;
     }
 
     &__attachment-size {
-        font-size: 0.6875rem;
-        opacity: 0.7;
+        font-size: 0.75rem;
+        opacity: 0.65;
         line-height: 1.2;
+        color: #64748b;
+        font-weight: 500;
     }
 
     &__attachment-icon {
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--ww-color-content-secondary, #64748b);
+        color: #64748b;
         flex-shrink: 0;
+        width: 18px;
+        height: 18px;
+        border-radius: 4px;
+        background-color: #f1f5f9;
     }
 
     &__attachment-remove {
         position: absolute;
-        top: -4px;
-        right: -4px;
-        width: 20px;
-        height: 20px;
+        top: -6px;
+        right: -6px;
+        width: 22px;
+        height: 22px;
         border-radius: 50%;
-        border: none;
-        background-color: rgba(255, 255, 255, 0.9);
+        border: 2px solid #ffffff;
+        background: linear-gradient(135deg, #f87171, #ef4444);
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        transition: background-color 0.2s;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        color: white;
 
         &:hover {
-            background-color: rgba(255, 255, 255, 1);
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        &:active {
+            transform: scale(0.95);
         }
     }
 
@@ -524,15 +547,27 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
         cursor: pointer;
-        transition: background-color 0.2s;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         flex-shrink: 0;
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        color: #64748b;
+        align-self: flex-end;
 
         &:hover {
-            background-color: rgba(0, 0, 0, 0.05);
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        &:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
     }
 
@@ -558,6 +593,9 @@ export default {
     &__input-container {
         position: relative;
         flex: 1;
+        align-self: flex-end;
+        display: flex;
+        align-items: flex-end;
     }
 
     &__input {
@@ -565,27 +603,36 @@ export default {
         resize: none;
         min-height: v-bind('inputMinHeight');
         max-height: v-bind('inputMaxHeight');
-        padding: 8px 12px;
+        padding: 12px 16px;
         border-radius: v-bind('inputBorderRadius');
         font-size: 0.9375rem;
-        line-height: 1.4;
+        line-height: 1.5;
         overflow-y: auto;
-        transition: border-color 0.2s;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         background-color: v-bind('inputBgColor');
         color: v-bind('inputTextColor');
         border: v-bind('inputBorder');
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        vertical-align: bottom;
+        align-self: flex-end;
+        margin: 0;
 
         &::placeholder {
             color: v-bind('inputPlaceholderColor');
+            font-weight: 400;
         }
 
         &:focus {
             outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
         }
 
         &:disabled {
-            opacity: 0.7;
+            opacity: 0.6;
             cursor: not-allowed;
+            background-color: #f8fafc;
         }
     }
 
@@ -593,22 +640,41 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
         border: none;
-        background: transparent;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
         cursor: pointer;
-        transition: background-color 0.2s;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         flex-shrink: 0;
+        color: white;
+        box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+        align-self: flex-end;
 
         &:hover:not(:disabled) {
-            background-color: rgba(0, 0, 0, 0.05);
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+        }
+
+        &:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
         }
 
         &:disabled {
             cursor: not-allowed;
-            opacity: 0.5;
+            opacity: 0.4;
+            background: #94a3b8;
+            box-shadow: none;
+            transform: none;
+        }
+
+        &--disabled {
+            background: #e2e8f0;
+            color: #94a3b8;
+            box-shadow: none;
         }
     }
 }
