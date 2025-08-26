@@ -34,6 +34,7 @@ export default {
                 'messagesAreaBgColor',
                 'messagesAreaPadding',
                 'messagesAreaHeight',
+                'messagesAreaMinHeight',
                 'emptyMessageText',
                 'emptyMessageColor',
             ],
@@ -498,6 +499,19 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Specific height for the messages area (use "auto" to fill available space)',
+            },
+            /* wwEditor:end */
+        },
+        messagesAreaMinHeight: {
+            label: { en: 'Min Height' },
+            type: 'Length',
+            section: 'style',
+            bindable: true,
+            defaultValue: '100px',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'Minimum height for the messages area',
             },
             /* wwEditor:end */
         },

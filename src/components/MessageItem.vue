@@ -34,15 +34,24 @@
                     v-for="attachment in message.attachments"
                     :key="attachment.id"
                     class="ww-message-item__attachment"
+                    :class="{ 'ww-message-item__attachment--own': isOwnMessage }"
                     @click="handleAttachmentClick(attachment)"
                 >
                     <!-- Image preview for image files -->
-                    <div v-if="isImageFile(attachment)" class="ww-message-item__attachment-preview">
+                    <div
+                        v-if="isImageFile(attachment)"
+                        class="ww-message-item__attachment-preview"
+                        :class="{ 'ww-message-item__attachment-preview--own': isOwnMessage }"
+                    >
                         <img :src="attachment.url" :alt="attachment.name" />
                     </div>
 
                     <!-- File icon for non-image files -->
-                    <div v-else class="ww-message-item__attachment-file">
+                    <div
+                        v-else
+                        class="ww-message-item__attachment-file"
+                        :class="{ 'ww-message-item__attachment-file--own': isOwnMessage }"
+                    >
                         <div class="ww-message-item__attachment-icon">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -271,6 +280,11 @@ export default {
         display: flex;
         flex-direction: column;
         gap: 8px;
+        align-items: flex-start;
+
+        .ww-message-item--own & {
+            align-items: flex-end;
+        }
     }
 
     &__attachment {
@@ -282,6 +296,10 @@ export default {
         &:hover {
             opacity: 0.9;
         }
+
+        &--own {
+            align-self: flex-end;
+        }
     }
 
     &__attachment-preview {
@@ -291,10 +309,15 @@ export default {
         align-items: center;
         justify-content: center;
 
+        &--own {
+            justify-content: flex-end;
+        }
+
         img {
             max-width: 100%;
             max-height: 200px;
             object-fit: contain;
+            border-radius: 6px;
         }
     }
 
@@ -304,6 +327,20 @@ export default {
         padding: 8px;
         background-color: rgba(255, 255, 255, 0.15);
         border-radius: 6px;
+        max-width: 200px;
+
+        &--own {
+            flex-direction: row-reverse;
+
+            .ww-message-item__attachment-icon {
+                margin-right: 0;
+                margin-left: 8px;
+            }
+
+            .ww-message-item__attachment-info {
+                text-align: right;
+            }
+        }
     }
 
     &__attachment-icon {

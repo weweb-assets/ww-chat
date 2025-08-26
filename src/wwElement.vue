@@ -233,6 +233,7 @@ export default {
 
         const messagesAreaPadding = computed(() => props.content?.messagesAreaPadding || '16px');
         const messagesAreaHeight = computed(() => props.content?.messagesAreaHeight || 'auto');
+        const messagesAreaMinHeight = computed(() => props.content?.messagesAreaMinHeight || '100px');
 
         const messagesContainerStyles = computed(() => ({
             backgroundColor: props.content?.messagesAreaBgColor || '#ffffff',
@@ -245,7 +246,7 @@ export default {
         const headerBgColor = computed(() => props.content?.headerBgColor || '#ffffff');
         const headerTextColor = computed(() => props.content?.headerTextColor || '#1e293b');
         const headerBorder = computed(() => props.content?.headerBorder || '1px solid #e2e8f0');
-        const headerBoxShadow = computed(() => props.content?.headerBoxShadow || '0 2px 8px rgba(0, 0, 0, 0.05)');
+        const headerBoxShadow = computed(() => props.content?.headerBoxShadow || '0 1px 2px rgba(0, 0, 0, 0.05)');
         const headerPadding = computed(() => props.content?.headerPadding || '16px');
         const headerNameFontSize = computed(() => props.content?.headerNameFontSize || '18px');
         const headerNameFontWeight = computed(() => props.content?.headerNameFontWeight || '600');
@@ -622,6 +623,7 @@ export default {
             messageBorder,
             messagesAreaPadding,
             messagesAreaHeight,
+            messagesAreaMinHeight,
             ownMessageBgColor,
             ownMessageTextColor,
             ownMessageBorder,
@@ -752,7 +754,7 @@ export default {
 
     &__messages {
         flex: v-bind("messagesAreaHeight === 'auto' ? '1' : '0 0 auto'");
-        min-height: 100px;
+        min-height: v-bind('messagesAreaMinHeight');
         height: var(--ww-chat-messages-height);
         overflow-y: auto;
         scroll-behavior: smooth;

@@ -7,9 +7,29 @@
                 :key="attachment.id"
                 class="ww-chat-input-area__attachment"
             >
-                <!-- Simple file name display -->
-                <div class="ww-chat-input-area__attachment-name">
-                    {{ attachment.name }}
+                <!-- File info display (for all file types) -->
+                <div class="ww-chat-input-area__attachment-file">
+                    <div class="ww-chat-input-area__attachment-icon">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                        </svg>
+                    </div>
+                    <div class="ww-chat-input-area__attachment-info">
+                        <div class="ww-chat-input-area__attachment-name">{{ attachment.name }}</div>
+                        <div class="ww-chat-input-area__attachment-size">{{ formatFileSize(attachment.size) }}</div>
+                    </div>
                 </div>
 
                 <!-- Remove button -->
@@ -297,7 +317,19 @@ export default {
 
             textarea.style.height = 'auto';
 
-            const newHeight = Math.min(textarea.scrollHeight, parseInt(props.inputMaxHeight));
+            // Parse the max height value, handling units like px, rem, etc.
+            const maxHeightValue = parseFloat(props.inputMaxHeight);
+            const maxHeightUnit = props.inputMaxHeight.replace(/[\d.]/g, '') || 'px';
+
+            // For simplicity, convert everything to pixels for comparison
+            let maxHeightInPx = maxHeightValue;
+            if (maxHeightUnit === 'rem') {
+                maxHeightInPx = maxHeightValue * 16; // Assume 1rem = 16px
+            } else if (maxHeightUnit === 'em') {
+                maxHeightInPx = maxHeightValue * 16; // Assume 1em = 16px for this context
+            }
+
+            const newHeight = Math.min(textarea.scrollHeight, maxHeightInPx);
             textarea.style.height = `${newHeight}px`;
         };
 
@@ -419,31 +451,73 @@ export default {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-radius: 16px;
+        border-radius: 8px;
         background-color: rgba(0, 0, 0, 0.05);
-        padding: 4px 4px 4px 4px;
-        height: 28px;
+        padding: 4px;
         max-width: 200px;
         flex-shrink: 0;
         border: 1px solid rgba(0, 0, 0, 0.08);
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        gap: 4px;
+    }
+
+    &__attachment-file {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__attachment-info {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        flex: 1;
     }
 
     &__attachment-name {
-        display: block;
         font-size: 0.75rem;
+        font-weight: 500;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 150px;
+        line-height: 1.2;
+    }
+
+    &__attachment-size {
+        font-size: 0.6875rem;
+        opacity: 0.7;
+        line-height: 1.2;
     }
 
     &__attachment-icon {
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-right: 6px;
         color: var(--ww-color-content-secondary, #64748b);
+        flex-shrink: 0;
+    }
+
+    &__attachment-remove {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: none;
+        background-color: rgba(255, 255, 255, 0.9);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.2s;
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
     }
 
     &__attachment-btn {
