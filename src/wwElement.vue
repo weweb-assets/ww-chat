@@ -1100,9 +1100,8 @@ export default {
         z-index: 2;
     }
     &__messages {
-        flex: 1 1 0;
+        flex: 1;
         min-height: 0;
-        overflow-y: auto;
         overflow-y: auto;
         scroll-behavior: smooth;
         padding: var(--ww-chat-messages-padding);
