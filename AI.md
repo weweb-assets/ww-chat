@@ -172,10 +172,7 @@ Events:
 
 User Settings Events:
 
--   `userNameChanged`: {userName} - Triggered when a user's name changes
--   `userAvatarChanged`: {userAvatar} - Triggered when a user's avatar changes
--   `userLocationChanged`: {userLocation} - Triggered when a user's location changes
--   `userStatusChanged`: {userStatus} - Triggered when a user's status changes
+-   `userSettingsChanged`: {userName, userAvatar, userLocation, userStatus} - Triggered when any user setting changes, contains all user properties
 
 Actions:
 
@@ -376,24 +373,12 @@ Example with usersSettings Management:
 -   **Event Examples**:
 
     ```javascript
-    // userNameChanged
+    // userSettingsChanged
     {
-        userName: 'John Doe';
-    }
-
-    // userAvatarChanged
-    {
-        userAvatar: 'https://example.com/avatar.jpg';
-    }
-
-    // userLocationChanged
-    {
-        userLocation: 'New York, USA';
-    }
-
-    // userStatusChanged
-    {
-        userStatus: 'away';
+        userName: 'John Doe',
+        userAvatar: 'https://example.com/avatar.jpg',
+        userLocation: 'New York, USA',
+        userStatus: 'away'
     }
     ```
 

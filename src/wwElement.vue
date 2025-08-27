@@ -377,40 +377,22 @@ export default {
                     status: newUserStatus || 'online',
                 };
 
-                // Check for changes and emit specific events
+                // Check for changes and emit consolidated event
                 if (!isEditing.value && oldSettings.name !== undefined) {
                     // Skip initial load
-                    if (oldSettings.name !== currentSettings.name) {
+                    const hasChanges =
+                        oldSettings.name !== currentSettings.name ||
+                        oldSettings.avatar !== currentSettings.avatar ||
+                        oldSettings.location !== currentSettings.location ||
+                        oldSettings.status !== currentSettings.status;
+
+                    if (hasChanges) {
                         emit('trigger-event', {
-                            name: 'userNameChanged',
+                            name: 'userSettingsChanged',
                             event: {
                                 userName: currentSettings.name,
-                            },
-                        });
-                    }
-
-                    if (oldSettings.avatar !== currentSettings.avatar) {
-                        emit('trigger-event', {
-                            name: 'userAvatarChanged',
-                            event: {
                                 userAvatar: currentSettings.avatar,
-                            },
-                        });
-                    }
-
-                    if (oldSettings.location !== currentSettings.location) {
-                        emit('trigger-event', {
-                            name: 'userLocationChanged',
-                            event: {
                                 userLocation: currentSettings.location,
-                            },
-                        });
-                    }
-
-                    if (oldSettings.status !== currentSettings.status) {
-                        emit('trigger-event', {
-                            name: 'userStatusChanged',
-                            event: {
                                 userStatus: currentSettings.status,
                             },
                         });
