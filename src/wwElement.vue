@@ -472,6 +472,7 @@ export default {
                 attachments: attachments.length > 0 ? attachments : undefined,
             };
 
+            // To keep in mind
             // const updatedMessages = [...(chatState.value?.messages || []), message];
             // setChatState({
             //     ...chatState.value,
@@ -484,8 +485,6 @@ export default {
                 name: 'messageSent',
                 event: { message },
             });
-
-            scrollToBottom();
         };
 
         const handleAttachment = files => {
