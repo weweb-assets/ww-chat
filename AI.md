@@ -33,8 +33,6 @@ Messages Area Properties:
 
 -   `messagesAreaBgColor`: `string` - Background color of the messages area. Default: `#ffffff`
 -   `messagesAreaPadding`: `string` - Padding inside the messages area using Spacing type. Default: `16px`
--   `messagesAreaHeight`: `string` - Height of the messages area. Use 'auto' to fill available space. Default: `auto`
--   `messagesAreaMinHeight`: `string` - Minimum height of the messages area. Default: `auto`
 -   `emptyMessageText`: `string` - Text to display when there are no messages. Default: `No messages yet`
 -   `emptyMessageColor`: `string` - Color of the empty message text. Default: `#64748b`
 

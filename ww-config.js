@@ -24,8 +24,6 @@ export default {
                 'messagesAreaTitle',
                 'messagesAreaBgColor',
                 'messagesAreaPadding',
-                'messagesAreaHeight',
-                'messagesAreaMinHeight',
                 'emptyMessageText',
                 'emptyMessageColor',
             ],
@@ -499,38 +497,7 @@ export default {
             },
             /* wwEditor:end */
         },
-        messagesAreaHeight: {
-            label: { en: 'Height' },
-            type: 'Length',
-            section: 'style',
-            bindable: true,
-            classes: true,
-            states: true,
-            responsive: true,
-            defaultValue: 'auto',
-            /* wwEditor:start */
-            bindingValidation: {
-                type: 'string',
-                tooltip: 'Specific height for the messages area (use "auto" to fill available space)',
-            },
-            /* wwEditor:end */
-        },
-        messagesAreaMinHeight: {
-            label: { en: 'Min Height' },
-            type: 'Length',
-            section: 'style',
-            bindable: true,
-            classes: true,
-            states: true,
-            responsive: true,
-            defaultValue: '100px',
-            /* wwEditor:start */
-            bindingValidation: {
-                type: 'string',
-                tooltip: 'Minimum height for the messages area',
-            },
-            /* wwEditor:end */
-        },
+
         emptyMessageText: {
             label: { en: 'Empty Message Text' },
             type: 'Text',
