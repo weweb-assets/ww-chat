@@ -1,4 +1,5 @@
 <template>
+    <!-- <div class="ww-chat-container"> -->
     <div class="ww-chat" :class="{ 'ww-chat--disabled': isDisabled }" :style="containerStyles">
         <!-- Chat Header -->
         <ChatHeader
@@ -82,6 +83,7 @@
             @remove-attachment="handleRemoveAttachment"
         />
     </div>
+    <!-- </div> -->
 </template>
 
 <script>
@@ -749,6 +751,15 @@ export default {
             };
         });
 
+        const setUserSettings = (userId, userSettings) => {
+            usersSettings.value[userId] = {
+                name: userSettings.userName,
+                avatar: userSettings.userAvatar,
+                location: userSettings.userLocation,
+                status: userSettings.userStatus,
+            };
+        };
+
         const headerUserName = computed(() => chatPartners.value?.name || '');
         const headerUserAvatar = computed(() => chatPartners.value?.avatar || '');
         const headerUserLocation = computed(() => chatPartners.value?.location || '');
@@ -759,7 +770,94 @@ export default {
         const currentLocalContext = ref({});
 
         const registerChatLocalContext = ({ data, markdown }) => {
-            wwLib.wwElement.useRegisterElementLocalContext('chat', data, {}, markdown);
+            wwLib.wwElement.useRegisterElementLocalContext(
+                'chat',
+                data,
+                {
+                    scrollToBottom: {
+                        method: scrollToBottom,
+                        editor: {
+                            elementName: 'Chat',
+                            label: 'Scroll to Bottom',
+                            description: 'Scroll the chat to the bottom.',
+                            args: [
+                                {
+                                    name: 'Smooth',
+                                    type: 'boolean',
+                                    label: { en: 'Smooth scrolling' },
+                                    defaultValue: false,
+                                },
+                            ],
+                        },
+                    },
+                    addMessage: {
+                        method: addMessage,
+                        editor: {
+                            elementName: 'Chat',
+                            label: 'Add Message',
+                            description: 'Add a new message to the chat.',
+                            args: [
+                                {
+                                    name: 'Message',
+                                    type: 'object',
+                                    label: { en: 'Message object' },
+                                    description: 'Message object with id, text, senderId, userName, timestamp, etc.',
+                                },
+                            ],
+                        },
+                    },
+                    clearMessages: {
+                        method: clearMessages,
+                        editor: {
+                            elementName: 'Chat',
+                            label: 'Clear Messages',
+                            description: 'Clear all messages from the chat.',
+                        },
+                    },
+                    setUserSettings: {
+                        method: setUserSettings,
+                        editor: {
+                            elementName: 'Chat',
+                            label: 'Set User Settings',
+                            description: 'Update user settings for a specific user ID.',
+                            args: [
+                                {
+                                    name: 'User id',
+                                    type: 'string',
+                                    label: { en: 'User id' },
+                                },
+                                {
+                                    name: 'User name',
+                                    type: 'string',
+                                    label: { en: 'User name' },
+                                },
+                                {
+                                    name: 'User avatar',
+                                    type: 'string',
+                                    label: { en: 'User avatar' },
+                                },
+                                {
+                                    name: 'User location',
+                                    type: 'string',
+                                    label: { en: 'User location' },
+                                },
+                                {
+                                    name: 'User status',
+                                    type: 'select',
+                                    options: [
+                                        { value: 'online', label: 'Online' },
+                                        { value: 'offline', label: 'Offline' },
+                                        { value: 'away', label: 'Away' },
+                                        { value: 'busy', label: 'Busy' },
+                                    ],
+                                    label: { en: 'User status' },
+                                },
+                            ],
+                        },
+                    },
+                },
+                markdown
+            );
             currentLocalContext.value = { data, markdown };
         };
 
@@ -1090,9 +1188,10 @@ export default {
         flex-shrink: 0;
         z-index: 2;
     }
-
     &__messages {
-        flex: 1;
+        flex: 1 1 0;
+        min-height: 0;
+        overflow-y: auto;
         overflow-y: auto;
         scroll-behavior: smooth;
         padding: var(--ww-chat-messages-padding);

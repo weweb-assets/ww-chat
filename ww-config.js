@@ -237,6 +237,43 @@ export default {
                 },
             ],
         },
+        {
+            label: 'Set user settings',
+            action: 'actionSetUserSettings',
+            args: [
+                {
+                    name: 'User id',
+                    type: 'string',
+                    label: { en: 'User id' },
+                },
+                {
+                    name: 'User name',
+                    type: 'string',
+                    label: { en: 'User name' },
+                },
+                {
+                    name: 'User avatar',
+                    type: 'string',
+                    label: { en: 'User avatar' },
+                },
+                {
+                    name: 'User location',
+                    type: 'string',
+                    label: { en: 'User location' },
+                },
+                {
+                    name: 'User status',
+                    type: 'select',
+                    options: [
+                        { value: 'online', label: { en: 'Online' } },
+                        { value: 'offline', label: { en: 'Offline' } },
+                        { value: 'away', label: { en: 'Away' } },
+                        { value: 'busy', label: { en: 'Busy' } },
+                    ],
+                    label: { en: 'User status' },
+                },
+            ],
+        },
     ],
     properties: {
         // ======== APPEARANCE ========
