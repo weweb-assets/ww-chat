@@ -177,8 +177,6 @@ User Settings Events:
 Actions:
 
 -   `scrollToBottom`: Scrolls the message area to the bottom. Args: `smooth` (boolean, optional) - Whether to use smooth scrolling animation. Default: `false`
--   `clearMessages`: Clears all messages from the chat history
--   `addMessage`: Adds a new message to the chat. Args: message (object with text, senderId, and userName properties)
 
 Variables:
 

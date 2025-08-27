@@ -105,10 +105,9 @@ export default {
             // Localization settings
             ['localizationTitle', 'locale', 'timeFormat', 'todayText', 'yesterdayText', 'justNowText'],
             // Chat data
-            ['chatDataTitle', 'chatHistory'],
-            // Message data mapping
             [
-                'messageDataTitle',
+                'chatDataTitle',
+                'chatHistory',
                 'mappingMessageId',
                 'mappingMessageText',
                 'mappingSenderId',
@@ -200,28 +199,6 @@ export default {
                     name: 'smooth',
                     type: 'boolean',
                     label: { en: 'Smooth scroll' },
-                },
-            ],
-        },
-        {
-            action: 'clearMessages',
-            label: { en: 'Clear messages' },
-        },
-        {
-            action: 'addMessage',
-            label: { en: 'Add message' },
-            args: [
-                {
-                    name: 'message',
-                    type: 'object',
-                    label: { en: 'Message' },
-                    options: {
-                        item: {
-                            text: { type: 'string', label: { en: 'Text' } },
-                            senderId: { type: 'string', label: { en: 'Sender ID' } },
-                            userName: { type: 'string', label: { en: 'Sender Name' } },
-                        },
-                    },
                 },
             ],
         },
@@ -1718,11 +1695,6 @@ export default {
                     'An array of message objects that represent the conversation history.\n\nEach message should include id, text, senderId, userName, and timestamp properties. Optionally can include attachments.\n\n**Example**: \n```json\n[{ \n  "id": "msg-1", \n  "text": "Hello!", \n  "senderId": "user-1", \n  "userName": "John", \n  "timestamp": "2023-06-01T10:30:00Z" \n}]\n```',
             },
             /* wwEditor:end */
-        },
-        messageDataTitle: {
-            type: 'Title',
-            label: { en: 'Message Data Mapping' },
-            section: 'settings',
         },
         mappingMessageId: {
             label: { en: 'Message ID Mapping' },

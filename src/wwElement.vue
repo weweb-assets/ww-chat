@@ -339,44 +339,48 @@ export default {
         // Store the latest user settings for event emission
         const latestUserSettings = ref(null);
 
+        // Non-debounced function to immediately update all current user messages with new settings
+        const updateUserMessagesImmediate = (
+            newUserId,
+            oldUserId,
+            newUserName,
+            newUserAvatar,
+            newUserLocation,
+            newUserStatus
+        ) => {
+            if (chatState.value?.messages) {
+                const updatedMessages = chatState.value.messages.map(message => {
+                    if (message.senderId === newUserId || (message.senderId === oldUserId && oldUserId !== newUserId)) {
+                        return {
+                            ...message,
+                            userSettings: {
+                                userName: newUserName || 'User',
+                                userAvatar: newUserAvatar || '',
+                                userLocation: newUserLocation || '',
+                                userStatus: newUserStatus || 'online',
+                            },
+                        };
+                    }
+                    return message;
+                });
+
+                setChatState({
+                    ...chatState.value,
+                    messages: updatedMessages,
+                });
+
+                // Store settings for immediate event emission
+                latestUserSettings.value = {
+                    userName: newUserName,
+                    userAvatar: newUserAvatar,
+                    userLocation: newUserLocation,
+                    userStatus: newUserStatus,
+                };
+            }
+        };
+
         // Debounced function to update all current user messages with new settings
-        const updateUserMessages = debounce(
-            (newUserId, oldUserId, newUserName, newUserAvatar, newUserLocation, newUserStatus) => {
-                if (chatState.value?.messages) {
-                    const updatedMessages = chatState.value.messages.map(message => {
-                        if (
-                            message.senderId === newUserId ||
-                            (message.senderId === oldUserId && oldUserId !== newUserId)
-                        ) {
-                            return {
-                                ...message,
-                                userSettings: {
-                                    userName: newUserName || 'User',
-                                    userAvatar: newUserAvatar || '',
-                                    userLocation: newUserLocation || '',
-                                    userStatus: newUserStatus || 'online',
-                                },
-                            };
-                        }
-                        return message;
-                    });
-
-                    setChatState({
-                        ...chatState.value,
-                        messages: updatedMessages,
-                    });
-
-                    // Store settings for immediate event emission
-                    latestUserSettings.value = {
-                        userName: newUserName,
-                        userAvatar: newUserAvatar,
-                        userLocation: newUserLocation,
-                        userStatus: newUserStatus,
-                    };
-                }
-            },
-            1000
-        );
+        const updateUserMessages = debounce(updateUserMessagesImmediate, 1000);
 
         watch(
             latestUserSettings,
@@ -648,15 +652,6 @@ export default {
 
         provide('dateTimeOptions', dateTimeOptions);
 
-        const clearMessages = () => {
-            if (isEditing.value) return;
-
-            setChatState({
-                ...chatState.value,
-                messages: [],
-            });
-        };
-
         const chatPartners = computed(() => {
             // If no messages, return current user info as fallback
             if (messages.value.length === 0) {
@@ -895,6 +890,16 @@ export default {
         provide('_wwChat:localContext', currentLocalContext);
 
         onMounted(() => {
+            // Initialize all messages with current user settings immediately (bypass debounce)
+            updateUserMessagesImmediate(
+                currentUserId.value,
+                currentUserId.value, // Use same ID for old and new since this is initial setup
+                userName.value,
+                userAvatar.value,
+                userLocation.value,
+                userStatus.value
+            );
+
             scrollToBottom();
         });
 
@@ -987,19 +992,12 @@ export default {
             handleMessageRightClick,
             handleClose,
             addMessage,
-            clearMessages,
             currentLocalContext,
         };
     },
     methods: {
         actionScrollToBottom(smooth = false) {
             this.scrollToBottom(smooth);
-        },
-        actionClearMessages() {
-            this.clearMessages();
-        },
-        actionAddMessage(message) {
-            return this.addMessage(message);
         },
     },
 };
