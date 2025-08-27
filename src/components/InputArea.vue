@@ -77,8 +77,8 @@
                     class="ww-chat-input-area__input"
                     :placeholder="placeholder"
                     :disabled="isDisabled"
+                    :style="inputStyles"
                     @keydown.enter.prevent="onEnterPress"
-                    @input="resizeTextarea"
                 ></textarea>
             </div>
 
@@ -147,15 +147,23 @@ export default {
             type: String,
             default: '#94a3b8',
         },
-        inputBorder: {
+        inputAreaBorder: {
             type: String,
             default: '1px solid #e2e8f0',
         },
-        inputMaxHeight: {
+        textareaBorder: {
             type: String,
-            default: '120px',
+            default: '1px solid #e2e8f0',
         },
-        inputMinHeight: {
+        textareaBorderHover: {
+            type: String,
+            default: '1px solid #cbd5e1',
+        },
+        textareaBorderFocus: {
+            type: String,
+            default: '1px solid #3b82f6',
+        },
+        inputHeight: {
             type: String,
             default: '38px',
         },
@@ -324,25 +332,8 @@ export default {
         });
 
         const resizeTextarea = () => {
-            const textarea = textareaRef.value;
-            if (!textarea) return;
-
-            textarea.style.height = 'auto';
-
-            // Parse the max height value, handling units like px, rem, etc.
-            const maxHeightValue = parseFloat(props.inputMaxHeight);
-            const maxHeightUnit = props.inputMaxHeight.replace(/[\d.]/g, '') || 'px';
-
-            // For simplicity, convert everything to pixels for comparison
-            let maxHeightInPx = maxHeightValue;
-            if (maxHeightUnit === 'rem') {
-                maxHeightInPx = maxHeightValue * 16; // Assume 1rem = 16px
-            } else if (maxHeightUnit === 'em') {
-                maxHeightInPx = maxHeightValue * 16; // Assume 1em = 16px for this context
-            }
-
-            const newHeight = Math.min(textarea.scrollHeight, maxHeightInPx);
-            textarea.style.height = `${newHeight}px`;
+            // No longer needed since we use fixed height
+            // The textarea will maintain its fixed height
         };
 
         const onEnterPress = event => {
@@ -350,9 +341,8 @@ export default {
 
             if (!event.shiftKey && canSend.value && !props.isDisabled) {
                 sendMessage();
-            } else if (event.shiftKey) {
-                nextTick(resizeTextarea);
             }
+            // Note: Shift+Enter still works for new lines, just without resizing
         };
 
         const sendMessage = () => {
@@ -360,10 +350,6 @@ export default {
 
             emit('send');
             inputValue.value = '';
-
-            if (textareaRef.value) {
-                textareaRef.value.style.height = 'auto';
-            }
         };
 
         const handleAttachment = event => {
@@ -402,16 +388,17 @@ export default {
             attachmentIconHtml,
             removeIconHtml,
             inputAreaStyles: computed(() => ({
-                borderTop: props.inputBorder,
+                borderTop: props.inputAreaBorder,
             })),
             inputStyles: computed(() => ({
                 backgroundColor: props.inputBgColor,
                 color: props.inputTextColor,
-                border: props.inputBorder,
                 '--placeholder-color': props.inputPlaceholderColor,
-                maxHeight: props.inputMaxHeight,
-                minHeight: props.inputMinHeight,
+                height: props.inputHeight,
                 borderRadius: props.inputBorderRadius,
+                '--textarea-border': props.textareaBorder,
+                '--textarea-border-hover': props.textareaBorderHover,
+                '--textarea-border-focus': props.textareaBorderFocus,
             })),
             iconBtnStyles: computed(() => ({
                 color: props.inputTextColor,
@@ -419,7 +406,7 @@ export default {
             })),
             isImageFile,
             formatFileSize,
-            resizeTextarea,
+
             onEnterPress,
             sendMessage,
             handleAttachment,
@@ -435,7 +422,7 @@ export default {
     flex-direction: column;
     padding: 16px 20px;
     gap: 12px;
-    border-top: v-bind('inputBorder');
+    border-top: v-bind('inputAreaBorder');
     width: 100%;
     flex-shrink: 0;
     background-color: v-bind('inputBgColor');
@@ -613,8 +600,7 @@ export default {
     &__input {
         width: 100%;
         resize: none;
-        min-height: v-bind('inputMinHeight');
-        max-height: v-bind('inputMaxHeight');
+        height: v-bind('inputHeight');
         padding: 12px 16px;
         border-radius: v-bind('inputBorderRadius');
         font-size: v-bind('inputFontSize');
@@ -625,7 +611,7 @@ export default {
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         background-color: v-bind('inputBgColor');
         color: v-bind('inputTextColor');
-        border: v-bind('inputBorder');
+        border: var(--textarea-border);
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
         vertical-align: bottom;
         align-self: flex-end;
@@ -636,9 +622,13 @@ export default {
             font-weight: 400;
         }
 
+        &:hover {
+            border: var(--textarea-border-hover);
+        }
+
         &:focus {
             outline: none;
-            border-color: #3b82f6;
+            border: var(--textarea-border-focus);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
             transform: translateY(-1px);
         }

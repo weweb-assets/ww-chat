@@ -56,26 +56,28 @@ export default {
             [
                 'inputAreaTitle',
                 'inputBgColor',
+                'inputAreaBorder',
+                'textAreaTitle',
+                'textareaBorder',
+                'textareaBorderHover',
+                'textareaBorderFocus',
                 'inputTextColor',
                 'inputFontSize',
                 'inputFontWeight',
                 'inputFontFamily',
                 'inputPlaceholderColor',
-                'inputBorder',
-                'inputMaxHeight',
-                'inputMinHeight',
+                'inputHeight',
                 'inputBorderRadius',
                 'inputPlaceholder',
-            ],
-            // Icons
-            [
-                'iconsTitle',
+                'sendTitle',
                 'sendIcon',
                 'sendIconColor',
                 'sendIconSize',
+                'attachmentTitle',
                 'attachmentIcon',
                 'attachmentIconColor',
                 'attachmentIconSize',
+                'removeTitle',
                 'removeIcon',
                 'removeIconColor',
                 'removeIconSize',
@@ -93,7 +95,7 @@ export default {
                 'showSelfInHeader',
             ],
             // Chat settings
-            ['chatSettingsTitle', 'groupChatTemplate', 'allowAttachments', 'disabled'],
+            ['chatSettingsTitle', 'groupChatText', 'allowAttachments', 'disabled'],
             // Localization settings
             ['localizationTitle', 'locale', 'timeFormat', 'todayText', 'yesterdayText', 'justNowText'],
             // Chat data
@@ -868,6 +870,75 @@ export default {
             },
             /* wwEditor:end */
         },
+        inputAreaBorder: {
+            label: { en: 'Input Area Border Top' },
+            type: 'Border',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '1px solid #e2e8f0',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'Border top of the input area container',
+            },
+            /* wwEditor:end */
+        },
+        textAreaTitle: {
+            type: 'Title',
+            label: { en: 'Text Area' },
+            section: 'style',
+        },
+        textareaBorder: {
+            label: { en: 'Border' },
+            type: 'Border',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '1px solid #e2e8f0',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'Border of the textarea',
+            },
+            /* wwEditor:end */
+        },
+        textareaBorderHover: {
+            label: { en: 'Border (Hover)' },
+            type: 'Border',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '1px solid #cbd5e1',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'Border of the textarea on hover',
+            },
+            /* wwEditor:end */
+        },
+        textareaBorderFocus: {
+            label: { en: 'Border (Focus)' },
+            type: 'Border',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '1px solid #3b82f6',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'Border of the textarea when focused',
+            },
+            /* wwEditor:end */
+        },
         inputTextColor: {
             label: { en: 'Text Color' },
             type: 'Color',
@@ -968,40 +1039,8 @@ export default {
             },
             /* wwEditor:end */
         },
-        inputBorder: {
-            label: { en: 'Border' },
-            type: 'Border',
-            section: 'style',
-            bindable: true,
-            classes: true,
-            states: true,
-            responsive: true,
-            defaultValue: '1px solid #e2e8f0',
-            /* wwEditor:start */
-            bindingValidation: {
-                type: 'string',
-                tooltip: 'Border of the message input',
-            },
-            /* wwEditor:end */
-        },
-        inputMaxHeight: {
-            label: { en: 'Input Max Height' },
-            type: 'Length',
-            section: 'style',
-            bindable: true,
-            classes: true,
-            states: true,
-            responsive: true,
-            defaultValue: '120px',
-            /* wwEditor:start */
-            bindingValidation: {
-                type: 'string',
-                tooltip: 'Maximum height of the input area before scrolling',
-            },
-            /* wwEditor:end */
-        },
-        inputMinHeight: {
-            label: { en: 'Input Min Height' },
+        inputHeight: {
+            label: { en: 'Height' },
             type: 'Length',
             section: 'style',
             bindable: true,
@@ -1012,13 +1051,20 @@ export default {
             /* wwEditor:start */
             bindingValidation: {
                 type: 'string',
-                tooltip: 'Minimum height of the input area',
+                tooltip: 'Fixed height of the input area',
             },
             /* wwEditor:end */
         },
         inputBorderRadius: {
-            label: { en: 'Input Border Radius' },
-            type: 'Length',
+            label: { en: 'Border Radius' },
+            type: 'Spacing',
+            options: {
+                isCorner: true,
+                unitChoices: [
+                    { value: 'px', label: 'px', min: 0, max: 50, default: true },
+                    { value: '%', label: '%', min: 0, max: 100, digits: 2, step: 1 },
+                ],
+            },
             section: 'style',
             bindable: true,
             classes: true,
@@ -1027,20 +1073,21 @@ export default {
             defaultValue: '20px',
             /* wwEditor:start */
             bindingValidation: {
+                markdown: 'border-radius',
                 type: 'string',
-                tooltip: 'Border radius of the input field',
+                cssSupports: 'border-radius',
             },
             /* wwEditor:end */
         },
 
         // Icon properties
-        iconsTitle: {
+        sendTitle: {
             type: 'Title',
-            label: { en: 'Icons' },
+            label: { en: 'Send Icon' },
             section: 'style',
         },
         sendIcon: {
-            label: { en: 'Send Icon' },
+            label: { en: 'Icon' },
             type: 'SystemIcon',
             section: 'style',
             bindable: true,
@@ -1056,7 +1103,7 @@ export default {
             /* wwEditor:end */
         },
         sendIconColor: {
-            label: { en: 'Send Icon Color' },
+            label: { en: 'Color' },
             type: 'Color',
             section: 'style',
             bindable: true,
@@ -1072,7 +1119,7 @@ export default {
             /* wwEditor:end */
         },
         sendIconSize: {
-            label: { en: 'Send Icon Size' },
+            label: { en: 'Size' },
             type: 'Length',
             section: 'style',
             bindable: true,
@@ -1087,8 +1134,13 @@ export default {
             },
             /* wwEditor:end */
         },
-        attachmentIcon: {
+        attachmentTitle: {
+            type: 'Title',
             label: { en: 'Attachment Icon' },
+            section: 'style',
+        },
+        attachmentIcon: {
+            label: { en: 'Icon' },
             type: 'SystemIcon',
             section: 'style',
             bindable: true,
@@ -1104,7 +1156,7 @@ export default {
             /* wwEditor:end */
         },
         attachmentIconColor: {
-            label: { en: 'Attachment Icon Color' },
+            label: { en: 'Color' },
             type: 'Color',
             section: 'style',
             bindable: true,
@@ -1120,7 +1172,7 @@ export default {
             /* wwEditor:end */
         },
         attachmentIconSize: {
-            label: { en: 'Attachment Icon Size' },
+            label: { en: 'Size' },
             type: 'Length',
             section: 'style',
             bindable: true,
@@ -1135,8 +1187,13 @@ export default {
             },
             /* wwEditor:end */
         },
-        removeIcon: {
+        removeTitle: {
+            type: 'Title',
             label: { en: 'Remove Attachment Icon' },
+            section: 'style',
+        },
+        removeIcon: {
+            label: { en: 'Icon' },
             type: 'SystemIcon',
             section: 'style',
             bindable: true,
@@ -1152,7 +1209,7 @@ export default {
             /* wwEditor:end */
         },
         removeIconColor: {
-            label: { en: 'Remove Icon Color' },
+            label: { en: 'Color' },
             type: 'Color',
             section: 'style',
             bindable: true,
@@ -1168,7 +1225,7 @@ export default {
             /* wwEditor:end */
         },
         removeIconSize: {
-            label: { en: 'Remove Icon Size' },
+            label: { en: 'Size' },
             type: 'Length',
             section: 'style',
             bindable: true,
@@ -1293,23 +1350,24 @@ export default {
             label: { en: 'Chat Settings' },
             section: 'settings',
         },
-        groupChatTemplate: {
+        groupChatText: {
             label: { en: 'Group Chat Text' },
             type: 'Text',
             section: 'settings',
             bindable: true,
-            defaultValue: 'Group Chat ({count} participants)',
+            defaultValue: '',
             /* wwEditor:start */
             bindingValidation: {
                 type: 'string',
-                tooltip: 'Template for group chat header text. Use {count} as placeholder for number of participants.',
+                tooltip: 'Custom text for group chat header. If empty, shows default format with participant count.',
             },
             propertyHelp: {
                 tooltip:
-                    'The text displayed in the header when there are multiple chat participants.\n\nUse {count} as a placeholder which will be replaced with the actual number of participants in the conversation.\n\n**Examples**: Group Conversation ({count}), Chat Room - {count} people, Team Discussion',
+                    'Custom text displayed in the header when there are multiple chat participants.\n\nIf this field is empty or null, the system will show "Group Chat (X participants)" where X is the number of participants.\n\n**Examples**: Team Discussion, Project Chat, Meeting Room',
             },
             /* wwEditor:end */
         },
+
         allowAttachments: {
             label: { en: 'Allow Attachments' },
             type: 'OnOff',

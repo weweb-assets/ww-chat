@@ -61,9 +61,11 @@
             :input-font-weight="inputFontWeight"
             :input-font-family="inputFontFamily"
             :input-placeholder-color="inputPlaceholderColor"
-            :input-border="inputBorder"
-            :input-max-height="inputMaxHeight"
-            :input-min-height="inputMinHeight"
+            :input-area-border="inputAreaBorder"
+            :textarea-border="textareaBorder"
+            :textarea-border-hover="textareaBorderHover"
+            :textarea-border-focus="textareaBorderFocus"
+            :input-height="inputHeight"
             :input-border-radius="inputBorderRadius"
             :placeholder="inputPlaceholder"
             :send-icon="sendIcon"
@@ -176,11 +178,22 @@ export default {
         const isScrolling = ref(false);
         const pendingAttachments = ref([]);
 
-        const { value: chatHistory, setValue: setChatHistory } = wwLib.wwVariable.useComponentVariable({
+        const { value: chatState, setValue: setChatState } = wwLib.wwVariable.useComponentVariable({
             uid: props.uid,
-            name: 'chatHistory',
-            type: 'array',
-            defaultValue: [],
+            name: 'chatState',
+            type: 'object',
+            defaultValue: {
+                messages: [],
+                conversation: {
+                    type: 'private',
+                    participantCount: 1,
+                    otherParticipantCount: 0,
+                    participants: [],
+                    allParticipants: [],
+                },
+                currentUser: { id: '', name: '', avatar: '', location: '', status: 'online' },
+                utils: { messageCount: 0, isDisabled: false, allowAttachments: false, displayHeader: true },
+            },
         });
 
         const { resolveMappingFormula } = wwLib.wwFormula.useFormula();
@@ -199,7 +212,7 @@ export default {
         });
 
         const currentUserId = computed(() => props.content?.currentUserId || 'current-user');
-        const rawMessages = computed(() => props.content?.chatHistory || chatHistory.value || []);
+        const rawMessages = computed(() => props.content?.chatHistory || chatState.value?.messages || []);
 
         const messages = computed(() => {
             return rawMessages.value.map(message => {
@@ -277,9 +290,11 @@ export default {
         const inputFontWeight = computed(() => props.content?.inputFontWeight || '400');
         const inputFontFamily = computed(() => props.content?.inputFontFamily || 'inherit');
         const inputPlaceholderColor = computed(() => props.content?.inputPlaceholderColor || '#94a3b8');
-        const inputBorder = computed(() => props.content?.inputBorder || '1px solid #e2e8f0');
-        const inputMaxHeight = computed(() => props.content?.inputMaxHeight || '120px');
-        const inputMinHeight = computed(() => props.content?.inputMinHeight || '40px');
+        const inputAreaBorder = computed(() => props.content?.inputAreaBorder || '1px solid #e2e8f0');
+        const textareaBorder = computed(() => props.content?.textareaBorder || '1px solid #e2e8f0');
+        const textareaBorderHover = computed(() => props.content?.textareaBorderHover || '1px solid #cbd5e1');
+        const textareaBorderFocus = computed(() => props.content?.textareaBorderFocus || '1px solid #3b82f6');
+        const inputHeight = computed(() => props.content?.inputHeight || '38px');
         const inputBorderRadius = computed(() => props.content?.inputBorderRadius || '8px');
 
         // Empty message styles
@@ -333,8 +348,11 @@ export default {
                 attachments: attachments.length > 0 ? attachments : undefined,
             };
 
-            const updatedHistory = [...chatHistory.value, message];
-            setChatHistory(updatedHistory);
+            const updatedMessages = [...(chatState.value?.messages || []), message];
+            setChatState({
+                ...chatState.value,
+                messages: updatedMessages,
+            });
 
             newMessage.value = '';
 
@@ -412,8 +430,11 @@ export default {
                 ...message,
             };
 
-            const updatedHistory = [...chatHistory.value, newMessageRaw];
-            setChatHistory(updatedHistory);
+            const updatedMessages = [...(chatState.value?.messages || []), newMessageRaw];
+            setChatState({
+                ...chatState.value,
+                messages: updatedMessages,
+            });
 
             scrollToBottom();
 
@@ -514,11 +535,15 @@ export default {
         const clearMessages = () => {
             if (isEditing.value) return;
 
-            setChatHistory([]);
+            setChatState({
+                ...chatState.value,
+                messages: [],
+            });
         };
 
         const chatPartners = computed(() => {
-            if (messages.value.length === 0 || props.content?.showSelfInHeader) {
+            // If no messages, return current user info as fallback
+            if (messages.value.length === 0) {
                 return {
                     name: userName.value,
                     avatar: userAvatar.value,
@@ -529,10 +554,18 @@ export default {
                 };
             }
 
-            const otherSenderIds = [
-                ...new Set(messages.value.filter(msg => msg.senderId !== currentUserId.value).map(msg => msg.senderId)),
-            ];
+            // Get all unique sender IDs from messages
+            const allSenderIds = [...new Set(messages.value.map(msg => msg.senderId))];
+            const otherSenderIds = allSenderIds.filter(id => id !== currentUserId.value);
 
+            const participants = otherSenderIds.map(senderId => {
+                const msg = messages.value.find(m => m.senderId === senderId);
+                return msg ? msg.userName : 'Unknown User';
+            });
+
+            const participantsString = participants.join(', ');
+
+            // If no other participants (only current user messages), show current user
             if (otherSenderIds.length === 0) {
                 return {
                     name: userName.value,
@@ -544,35 +577,36 @@ export default {
                 };
             }
 
-            const participants = otherSenderIds.map(senderId => {
-                const msg = messages.value.find(m => m.senderId === senderId);
-                return msg ? msg.userName : 'Unknown User';
-            });
-
-            const participantsString = participants.join(', ');
-
-            if (otherSenderIds.length === 1) {
+            // Two participants total (current user + 1 other) - show recipient info
+            if (allSenderIds.length === 2 || (otherSenderIds.length === 1 && !props.content?.showSelfInHeader)) {
                 const otherUser = messages.value.find(msg => msg.senderId === otherSenderIds[0]);
                 return {
-                    name: otherUser.userName,
-                    avatar: otherUser.avatar || otherUser.avatarUrl || '',
-                    location: '',
-                    status: 'online',
+                    name: otherUser?.userName || 'Unknown User',
+                    avatar: otherUser?.avatar || otherUser?.avatarUrl || '',
+                    location: otherUser?.location || '',
+                    status: otherUser?.status || 'online',
                     participants,
                     participantsString,
                 };
             }
 
+            // Multiple participants (3+) - show group chat info
             const lastOtherMsg = [...messages.value]
                 .filter(msg => msg.senderId !== currentUserId.value)
                 .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
 
-            const template = props.content?.groupChatTemplate || 'Group Chat ({count} participants)';
-            const groupChatName = template.replace('{count}', otherSenderIds.length);
+            // Use groupChatText if defined, otherwise use default template
+            let groupChatName;
+            if (props.content?.groupChatText && props.content.groupChatText.trim() !== '') {
+                groupChatName = props.content.groupChatText;
+            } else {
+                const totalParticipants = allSenderIds.length;
+                groupChatName = `Group Chat (${totalParticipants} participants)`;
+            }
 
             return {
                 name: groupChatName,
-                avatar: '',
+                avatar: props.content?.groupChatAvatar || '',
                 location: lastOtherMsg ? `Last message from ${lastOtherMsg.userName}` : '',
                 status: 'online',
                 participants,
@@ -580,13 +614,143 @@ export default {
             };
         });
 
-        const headerUserName = computed(() => chatPartners.value.name);
-        const headerUserAvatar = computed(() => chatPartners.value.avatar);
-        const headerUserLocation = computed(() => chatPartners.value.location);
-        const headerUserStatus = computed(() => chatPartners.value.status);
-        const headerParticipants = computed(() => chatPartners.value.participantsString);
+        const headerUserName = computed(() => chatPartners.value?.name || '');
+        const headerUserAvatar = computed(() => chatPartners.value?.avatar || '');
+        const headerUserLocation = computed(() => chatPartners.value?.location || '');
+        const headerUserStatus = computed(() => chatPartners.value?.status || 'online');
+        const headerParticipants = computed(() => chatPartners.value?.participantsString || '');
+
+        // Local context functionality
+        const currentLocalContext = ref({});
+
+        const registerChatLocalContext = ({ data, markdown }) => {
+            wwLib.wwElement.useRegisterElementLocalContext('chat', data, {}, markdown);
+            currentLocalContext.value = { data, markdown };
+        };
+
+        // Chat local context data
+        const conversationData = computed(() => {
+            const allSenderIds = [...new Set(messages.value.map(msg => msg.senderId))];
+            const otherSenderIds = allSenderIds.filter(id => id !== currentUserId.value);
+
+            return {
+                type: allSenderIds.length <= 2 ? 'private' : 'group',
+                participantCount: allSenderIds.length,
+                otherParticipantCount: otherSenderIds.length,
+                participants: otherSenderIds.map(senderId => {
+                    const msg = messages.value.find(m => m.senderId === senderId);
+                    return {
+                        id: senderId,
+                        name: msg ? msg.userName : 'Unknown User',
+                        avatar: msg?.avatar || msg?.avatarUrl || '',
+                        lastMessageTime: messages.value
+                            .filter(m => m.senderId === senderId)
+                            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0]?.timestamp,
+                    };
+                }),
+                allParticipants: allSenderIds.map(senderId => {
+                    const msg = messages.value.find(m => m.senderId === senderId);
+                    const isCurrentUser = senderId === currentUserId.value;
+                    return {
+                        id: senderId,
+                        name: isCurrentUser ? userName.value : msg ? msg.userName : 'Unknown User',
+                        avatar: isCurrentUser ? userAvatar.value : msg?.avatar || msg?.avatarUrl || '',
+                        isCurrentUser,
+                        lastMessageTime: messages.value
+                            .filter(m => m.senderId === senderId)
+                            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0]?.timestamp,
+                    };
+                }),
+            };
+        });
+
+        const chatData = computed(() => ({
+            messages: messages.value.map((message, index) => ({
+                ...message,
+                isOwn: message.senderId === currentUserId.value,
+                isFirst: index === 0 || messages.value[index - 1].senderId !== message.senderId,
+                isLast: index === messages.value.length - 1 || messages.value[index + 1].senderId !== message.senderId,
+                participantInfo: conversationData.value.allParticipants.find(p => p.id === message.senderId) || {
+                    id: message.senderId,
+                    name: 'Unknown User',
+                    avatar: '',
+                    isCurrentUser: false,
+                },
+            })),
+            conversation: conversationData.value,
+            currentUser: {
+                id: currentUserId.value,
+                name: userName.value || '',
+                avatar: userAvatar.value || '',
+                location: userLocation.value || '',
+                status: userStatus.value || 'online',
+            },
+            utils: {
+                messageCount: messages.value.length,
+                isDisabled: isDisabled.value,
+                allowAttachments: allowAttachments.value,
+                displayHeader: displayHeader.value,
+            },
+        }));
+
+        const chatMarkdown = `### Chat local information
+
+        #### messages
+        Array of all messages in the conversation. Each message contains:
+        - \`id\`: Unique message identifier
+        - \`text\`: Message content
+        - \`senderId\`: ID of the message sender
+        - \`userName\`: Name of the message sender
+        - \`timestamp\`: Message timestamp (ISO string)
+        - \`attachments\`: Message attachments (if any)
+        - \`isOwn\`: Boolean indicating if message is from current user
+        - \`isFirst\`: Boolean indicating if this is first message in a group from this sender
+        - \`isLast\`: Boolean indicating if this is last message in a group from this sender
+        - \`participantInfo\`: Information about the sender (id, name, avatar, isCurrentUser)
+
+        #### conversation
+        Information about the conversation:
+        - \`type\`: Conversation type ('private' for 2 participants, 'group' for 3+)
+        - \`participantCount\`: Total number of participants including current user
+        - \`otherParticipantCount\`: Number of other participants (excluding current user)
+        - \`participants\`: Array of other participants (excluding current user)
+        - \`allParticipants\`: Array of all participants including current user
+
+        #### currentUser
+        Information about the current user:
+        - \`id\`: Current user ID
+        - \`name\`: Current user name
+        - \`avatar\`: Current user avatar URL
+        - \`location\`: Current user location
+        - \`status\`: Current user status
+
+        #### utils
+        Component state information:
+        - \`messageCount\`: Total number of messages
+        - \`isDisabled\`: Boolean indicating if chat is disabled
+        - \`allowAttachments\`: Boolean indicating if attachments are allowed
+        - \`displayHeader\`: Boolean indicating if header is displayed`;
+
+        // Sync chatState with local context data
+        watch(
+            chatData,
+            newChatData => {
+                // Only sync if using internal state (not external chatHistory prop)
+                // if (!props.content?.chatHistory) {
+                //     setChatState(newChatData);
+                // }
+                setChatState(newChatData);
+            },
+            { deep: true, immediate: true }
+        );
+
+        registerChatLocalContext({
+            data: chatData,
+            markdown: chatMarkdown,
+        });
 
         provide('isEditing', isEditing);
+        provide('_wwChat:localContext', currentLocalContext);
 
         onMounted(() => {
             scrollToBottom();
@@ -646,9 +810,11 @@ export default {
             inputFontWeight,
             inputFontFamily,
             inputPlaceholderColor,
-            inputBorder,
-            inputMaxHeight,
-            inputMinHeight,
+            inputAreaBorder,
+            textareaBorder,
+            textareaBorderHover,
+            textareaBorderFocus,
+            inputHeight,
             inputBorderRadius,
 
             emptyMessageText,
@@ -680,6 +846,7 @@ export default {
             handleClose,
             addMessage,
             clearMessages,
+            currentLocalContext,
         };
     },
     methods: {
@@ -742,9 +909,11 @@ export default {
     --ww-chat-input-font-weight: v-bind('inputFontWeight');
     --ww-chat-input-font-family: v-bind('inputFontFamily');
     --ww-chat-input-placeholder: v-bind('inputPlaceholderColor');
-    --ww-chat-input-border: v-bind('inputBorder');
-    --ww-chat-input-max-height: v-bind('inputMaxHeight');
-    --ww-chat-input-min-height: v-bind('inputMinHeight');
+    --ww-chat-input-area-border: v-bind('inputAreaBorder');
+    --ww-chat-textarea-border: v-bind('textareaBorder');
+    --ww-chat-textarea-border-hover: v-bind('textareaBorderHover');
+    --ww-chat-textarea-border-focus: v-bind('textareaBorderFocus');
+    --ww-chat-input-height: v-bind('inputHeight');
     --ww-chat-input-border-radius: v-bind('inputBorderRadius');
 
     --ww-chat-messages-padding: v-bind('messagesAreaPadding');

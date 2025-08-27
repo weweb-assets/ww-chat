@@ -60,13 +60,18 @@ Message Style Properties:
 
 Input Area Properties:
 
--   `inputBgColor`: `string` - Background color of the message input. Default: `#ffffff`
+-   `inputBgColor`: `string` - Background color of the input area container. Default: `#ffffff`
+-   `inputAreaBorder`: `string` - Border top of the input area container (separates from messages area). Default: `1px solid #e2e8f0`
+
+Text Area Properties:
+
+-   `textareaBorder`: `string` - Default border of the textarea input field. Default: `1px solid #e2e8f0`
+-   `textareaBorderHover`: `string` - Border of the textarea when user hovers over it. Default: `1px solid #cbd5e1`
+-   `textareaBorderFocus`: `string` - Border of the textarea when focused/active. Default: `1px solid #3b82f6`
 -   `inputTextColor`: `string` - Text color of the message input. Default: `#334155`
 -   `inputPlaceholderColor`: `string` - Placeholder text color in the message input. Default: `#94a3b8`
--   `inputBorder`: `string` - Border of the message input. Default: `1px solid #e2e8f0`
--   `inputMaxHeight`: `string` - Maximum height of the input area before scrolling. Default: `120px`
--   `inputMinHeight`: `string` - Minimum height of the input area. Default: `38px`
--   `inputBorderRadius`: `string` - Border radius of the input field. Default: `20px`
+-   `inputHeight`: `string` - Fixed height of the textarea (content scrolls if exceeds height). Default: `38px`
+-   `inputBorderRadius`: `Spacing` - Border radius of the input field with advanced corner control (supports px and % units). Default: `20px`
 -   `inputFontSize`: `string` - Font size of the input text. Supports px, em, and rem units. Default: `0.875rem`
 -   `inputFontWeight`: `string` - Font weight of the input text (100-900). Default: `400`
 -   `inputFontFamily`: `string` - Font family of the input text. Default: `inherit`
@@ -170,7 +175,7 @@ Special Features:
 -   File attachments with image preview support
 -   Auto-scrolling to latest messages
 -   Context menu support via right-click events on messages
--   Responsive input that expands as user types
+-   Fixed-height textarea with scroll support and hover/focus state styling
 -   Shift+Enter support for multiline messages
 -   Customizable styling for all elements
 -   Formula-based data mapping for flexible message structure
@@ -184,13 +189,17 @@ Important Implementation Notes:
 -   The header will automatically display the chat partner's information based on message history
 -   Right-click events provide coordinates for showing custom context menus at the correct position
 -   Responsive design adapts to container size but may need additional styling for small screens
+-   The `inputBorderRadius` property supports advanced corner control - you can set individual corner radii using the Spacing type interface
+-   Textarea border states (default/hover/focus) are completely separate from the input area container border for precise styling control
 
 Enhanced Styling Capabilities:
 
--   **Classes, States & Responsive Support**: All style properties now support CSS classes, pseudo-states (hover, focus, etc.), and responsive breakpoints for advanced styling control
+-   **Classes, States & Responsive Support**: All style properties support CSS classes, pseudo-states (hover, focus, etc.), and responsive breakpoints for advanced styling control
 -   **Advanced Font Control**: Comprehensive font properties for messages and input area including size, weight (100-900), and family
 -   **Flexible Unit Support**: Font size properties support px, em, and rem units with appropriate value ranges and step controls
--   **Spacing Type Integration**: Padding properties use the advanced Spacing type for more sophisticated layout control
+-   **Spacing Type Integration**: Padding properties and `inputBorderRadius` use the advanced Spacing type with corner control and multiple unit options (px, %)
+-   **Interactive Border States**: Textarea supports separate styling for default, hover, and focus states with dedicated border properties
+-   **Fixed-Height Input Control**: Textarea maintains consistent height with internal scrolling, eliminating dynamic resizing behavior
 -   **Typography Consistency**: Font weight properties use standardized numeric values (100-900) for consistent typography across the component
 
 Example Basic Implementation:
@@ -246,8 +255,13 @@ Example Styled Implementation:
         "dateSeparatorBgColor": "#f0f4f8",
         "dateSeparatorBorderRadius": "12px",
         "inputBgColor": "#ffffff",
+        "inputAreaBorder": "1px solid #d0d7de",
+        "textareaBorder": "1px solid #d0d7de",
+        "textareaBorderHover": "1px solid #a3a8b0",
+        "textareaBorderFocus": "1px solid #0969da",
         "inputTextColor": "#24292f",
-        "inputBorder": "1px solid #d0d7de",
+        "inputHeight": "42px",
+        "inputBorderRadius": "12px",
         "inputFontSize": "0.9rem",
         "inputFontWeight": "400",
         "inputFontFamily": "Inter, sans-serif",
@@ -266,3 +280,5 @@ Troubleshooting:
 -   **Right-click event not firing:** Make sure the component is not in editing mode
 -   **Group chat header not showing correctly:** Check that you have messages from multiple different senders
 -   **messageReceived event not triggering:** Verify that the incoming message has a different senderId than currentUserId
+-   **Textarea border states not working:** Ensure all three border properties (`textareaBorder`, `textareaBorderHover`, `textareaBorderFocus`) are properly configured
+-   **Input height not consistent:** The textarea now uses fixed height with internal scrolling - adjust `inputHeight` property instead of expecting auto-resize behavior
