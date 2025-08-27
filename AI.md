@@ -172,7 +172,7 @@ Events:
 
 User Settings Events:
 
--   `userSettingsChanged`: {userName, userAvatar, userLocation, userStatus} - Triggered when any user setting changes, contains all user properties
+-   No separate user settings events - user settings are now stored directly with each message in the `userSettings` property
 
 Actions:
 
@@ -186,7 +186,7 @@ Variables:
     -   `messages`: array - The full conversation history as an array of message objects
     -   `conversation`: object - Information about the conversation (type, participants, etc.)
     -   `currentUser`: object - Current user information (id, name, avatar, location, status)
-    -   `usersSettings`: object - User settings by user ID (priority source for user information)
+    -   `messages`: array - Each message includes user settings in the `userSettings` property
     -   `utils`: object - Component state information (messageCount, isDisabled, etc.)
 
 Local Context Data:
@@ -196,15 +196,14 @@ The component provides rich local context data for use in formulas and bindings:
 -   `messages`: array - Enhanced message objects with display information and participant details
 -   `conversation`: object - Conversation metadata including type (private/group), participant counts, and participant lists
 -   `currentUser`: object - Current user information
--   `usersSettings`: object - **Key feature** - User settings storage by user ID, automatically updated when user properties change
+-   `messages`: array - Each message includes a `userSettings` object containing user information for that message
 -   `utils`: object - Component state utilities (message count, disabled state, etc.)
 
 Special Features:
 
--   **Smart User Settings Management** - `usersSettings` object automatically stores and prioritizes user information by user ID
--   **Priority Display System** - User information from `usersSettings` takes precedence over direct props for consistent display
--   **Real-time User Updates** - Changes to user settings immediately reflect across messages, headers, and participant lists
--   **Multi-user Support** - Store settings for current user and all chat participants in a single object
+-   **Message-Based User Settings** - Each message contains a `userSettings` object with user information (userName, userAvatar, userLocation, userStatus)
+-   **Debounced Updates** - When user settings change, all messages from the current user are automatically updated with the new settings after a 1-second delay to prevent excessive updates
+-   **Self-Contained Messages** - Each message is self-contained with user information, eliminating dependency on external user storage
 -   User status indicator (online, offline, away, busy) with automatic fallback handling
 -   Chat partner detection that automatically updates the header based on conversation participants
 -   Group chat support with customizable display template and participant count
@@ -369,31 +368,17 @@ Example with usersSettings Management:
 
 -   **Simple & Clean**: Each event only contains the changed value (e.g., `{userName: 'New Name'}`)
 -   **Focused Data**: No complex data structures - just the new value for easy access
--   **Real-time Integration**: Use these events to sync user changes with external systems or trigger workflows
--   **Event Examples**:
-
-    ```javascript
-    // userSettingsChanged
-    {
-        userName: 'John Doe',
-        userAvatar: 'https://example.com/avatar.jpg',
-        userLocation: 'New York, USA',
-        userStatus: 'away'
-    }
-    ```
+-   **Message-Based Storage**: User settings are stored directly with each message in the `userSettings` property, eliminating the need for separate events
 
 Troubleshooting:
 
--   **User information not updating:** Ensure you're updating `usersSettings` object rather than individual props (`userName`, `userAvatar`, etc.) for priority display
--   **Inconsistent user display:** Check that `usersSettings` contains complete information for all relevant user IDs
--   **User settings events not firing:** Events only fire when properties change through props, not during initial load. Ensure the component is not in editing mode.
--   **Event data access:** Each event contains only the changed value. Use the `usersSettings` local context data to access complete user information if needed.
+-   **User information not updating:** User settings are automatically updated across all current user's messages when props change (with a 1-second debounce delay)
+-   **Inconsistent user display:** Each message contains its own `userSettings` object - ensure messages have proper user information when added
 -   **Messages showing incorrect sender:** Check that `currentUserId` matches the `senderId` in your messages
--   **Participant info not showing:** Populate `usersSettings` with information for all chat participants, not just the current user
--   **User settings not persisting:** The component automatically syncs `usersSettings` to the chat state for persistence across sessions
+-   **Participant info not showing:** Ensure each message includes proper `userSettings` when adding messages from different participants
 -   **Attachments not working:** Ensure `allowAttachments` is set to `true` and file URLs are accessible
 -   **Chat not scrolling to bottom:** Call `scrollToBottom` action after programmatically adding messages
--   **User avatar not displaying:** Verify the avatar URL is valid in `usersSettings` (initials will be shown as fallback)
+-   **User avatar not displaying:** Verify the avatar URL is valid in the message's `userSettings` property (initials will be shown as fallback)
 -   **Right-click event not firing:** Make sure the component is not in editing mode
 -   **Group chat header not showing correctly:** Check that you have messages from multiple different senders
 -   **messageReceived event not triggering:** Verify that the incoming message has a different senderId than currentUserId
