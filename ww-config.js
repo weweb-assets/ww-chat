@@ -181,7 +181,7 @@ export default {
             event: {},
         },
         {
-            name: 'userSettingsChanged',
+            name: 'settingsChanged',
             label: { en: 'On user settings changed' },
             event: {
                 userName: 'New Username',

@@ -362,6 +362,18 @@ export default {
                         ...chatState.value,
                         messages: updatedMessages,
                     });
+
+                    console.log('Settings changed');
+
+                    emit('trigger-event', {
+                        name: 'settingsChanged',
+                        event: {
+                            userName: newUserName,
+                            userAvatar: newUserAvatar,
+                            userLocation: newUserLocation,
+                            userStatus: newUserStatus,
+                        },
+                    });
                 }
             },
             1000
@@ -380,34 +392,23 @@ export default {
                 [newUserId, newUserName, newUserAvatar, newUserLocation, newUserStatus],
                 [oldUserId, oldUserName, oldUserAvatar, oldUserLocation, oldUserStatus]
             ) => {
-                if (oldUserId !== undefined) {
-                    // Skip initial load - check if any setting has changed
-                    const hasChanges =
-                        oldUserName !== newUserName ||
-                        oldUserAvatar !== newUserAvatar ||
-                        oldUserLocation !== newUserLocation ||
-                        oldUserStatus !== newUserStatus;
+                // Check if any setting has changed
+                const hasChanges =
+                    oldUserName !== newUserName ||
+                    oldUserAvatar !== newUserAvatar ||
+                    oldUserLocation !== newUserLocation ||
+                    oldUserStatus !== newUserStatus ||
+                    oldUserId !== newUserId;
 
-                    if (hasChanges) {
-                        updateUserMessages(
-                            newUserId,
-                            oldUserId,
-                            newUserName,
-                            newUserAvatar,
-                            newUserLocation,
-                            newUserStatus
-                        );
-                    }
-
-                    emit('trigger-event', {
-                        name: 'userSettingsChanged',
-                        event: {
-                            userName: newUserName,
-                            userAvatar: newUserAvatar,
-                            userLocation: newUserLocation,
-                            userStatus: newUserStatus,
-                        },
-                    });
+                if (hasChanges) {
+                    updateUserMessages(
+                        newUserId,
+                        oldUserId,
+                        newUserName,
+                        newUserAvatar,
+                        newUserLocation,
+                        newUserStatus
+                    );
                 }
             },
             { immediate: true }
