@@ -366,8 +366,6 @@ export default {
                         messages: updatedMessages,
                     });
 
-                    console.log('Settings changed');
-
                     // Store settings for immediate event emission
                     latestUserSettings.value = {
                         userName: newUserName,
@@ -386,6 +384,8 @@ export default {
                     name: 'settingsChanged',
                     event: newSettings,
                 });
+
+                console.log('Settings changed emitted');
 
                 // Reset to avoid duplicate events
                 latestUserSettings.value = null;
