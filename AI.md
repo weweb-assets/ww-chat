@@ -91,12 +91,28 @@ Icon Properties:
 
 User Properties:
 
--   `userName`: `string` - Name to display for the current user. Default: `User`
--   `userAvatar`: `string` - URL of the user avatar image (initials will be used if empty). Default: ``
--   `userLocation`: `string` - Location to display under the user name (optional). Default: ``
--   `userStatus`: `string` - Current status of the user. Options: `online`, `offline`, `away`, `busy`. Default: `online`
+-   `userName`: `string` - Name to display for the current user (used as fallback when usersSettings is empty). Default: `User`
+-   `userAvatar`: `string` - URL of the user avatar image (used as fallback when usersSettings is empty). Default: ``
+-   `userLocation`: `string` - Location to display under the user name (used as fallback when usersSettings is empty). Default: ``
+-   `userStatus`: `string` - Current status of the user (used as fallback when usersSettings is empty). Options: `online`, `offline`, `away`, `busy`. Default: `online`
 -   `currentUserId`: `string` - Unique identifier for the current user (used to identify your messages). Default: `current-user`
 -   `showSelfInHeader`: `boolean` - If enabled, shows the current user in the header instead of the chat partner. Default: `false`
+
+User Settings Management:
+
+-   `usersSettings`: `object` - **Priority source** for all user information throughout the component. Automatically stores and manages user settings by user ID. Structure:
+    ```javascript
+    {
+      "user-id-1": {
+        name: "User Name",
+        avatar: "avatar-url",
+        location: "User Location",
+        status: "online|offline|away|busy"
+      },
+      "user-id-2": { ... }
+    }
+    ```
+    The component automatically prioritizes values from `usersSettings` over direct props (`userName`, `userAvatar`, etc.). This ensures consistent user display across messages, headers, and participant lists.
 
 Chat Settings:
 
@@ -154,6 +170,13 @@ Events:
 -   `attachmentClick`: {attachment: attachmentObject} - Triggered when an attachment is clicked
 -   `close`: {} - Triggered when the close button in the header is clicked
 
+User Settings Events:
+
+-   `userNameChanged`: {userName} - Triggered when a user's name changes
+-   `userAvatarChanged`: {userAvatar} - Triggered when a user's avatar changes
+-   `userLocationChanged`: {userLocation} - Triggered when a user's location changes
+-   `userStatusChanged`: {userStatus} - Triggered when a user's status changes
+
 Actions:
 
 -   `scrollToBottom`: Scrolls the message area to the bottom. Args: `smooth` (boolean, optional) - Whether to use smooth scrolling animation. Default: `false`
@@ -162,14 +185,33 @@ Actions:
 
 Variables:
 
--   `chatHistory`: array - The full conversation history as an array of message objects
+-   `chatState`: object - The complete chat state including:
+    -   `messages`: array - The full conversation history as an array of message objects
+    -   `conversation`: object - Information about the conversation (type, participants, etc.)
+    -   `currentUser`: object - Current user information (id, name, avatar, location, status)
+    -   `usersSettings`: object - User settings by user ID (priority source for user information)
+    -   `utils`: object - Component state information (messageCount, isDisabled, etc.)
+
+Local Context Data:
+
+The component provides rich local context data for use in formulas and bindings:
+
+-   `messages`: array - Enhanced message objects with display information and participant details
+-   `conversation`: object - Conversation metadata including type (private/group), participant counts, and participant lists
+-   `currentUser`: object - Current user information
+-   `usersSettings`: object - **Key feature** - User settings storage by user ID, automatically updated when user properties change
+-   `utils`: object - Component state utilities (message count, disabled state, etc.)
 
 Special Features:
 
--   User status indicator (online, offline, away, busy)
+-   **Smart User Settings Management** - `usersSettings` object automatically stores and prioritizes user information by user ID
+-   **Priority Display System** - User information from `usersSettings` takes precedence over direct props for consistent display
+-   **Real-time User Updates** - Changes to user settings immediately reflect across messages, headers, and participant lists
+-   **Multi-user Support** - Store settings for current user and all chat participants in a single object
+-   User status indicator (online, offline, away, busy) with automatic fallback handling
 -   Chat partner detection that automatically updates the header based on conversation participants
 -   Group chat support with customizable display template and participant count
--   Message grouping by sender
+-   Message grouping by sender with enhanced participant information
 -   Date separators with "Today", "Yesterday", or date labels, fully customizable
 -   Empty message state with customizable text and styling
 -   File attachments with image preview support
@@ -182,11 +224,15 @@ Special Features:
 
 Important Implementation Notes:
 
+-   **usersSettings Priority System**: The component prioritizes user information in this order: `usersSettings[userId]` → direct props (`userName`, `userAvatar`, etc.) → default values
+-   **Automatic User Settings Management**: When user properties change, the component automatically updates `usersSettings` for the current user
+-   **Multi-user Display**: For optimal display, populate `usersSettings` with information for all chat participants, not just the current user
+-   **Real-time Reactivity**: Changes to `usersSettings` immediately update all UI elements (messages, headers, participant lists)
 -   The chat component is designed for real-time messaging but doesn't include built-in socket connections
 -   For large chat histories, consider pagination or virtual scrolling
 -   The component uses reactive Vue 3 styling with v-bind for dynamic property updates
 -   All styling properties are bindable for dynamic theming
--   The header will automatically display the chat partner's information based on message history
+-   The header will automatically display the chat partner's information based on message history and `usersSettings`
 -   Right-click events provide coordinates for showing custom context menus at the correct position
 -   Responsive design adapts to container size but may need additional styling for small screens
 -   The `inputBorderRadius` property supports advanced corner control - you can set individual corner radii using the Spacing type interface
@@ -271,12 +317,98 @@ Example Styled Implementation:
 }
 ```
 
+Example with usersSettings Management:
+
+```json
+{
+    "tag": "ww-chat",
+    "content": {
+        "currentUserId": "john-doe",
+        "displayHeader": true,
+        "allowAttachments": true,
+        "chatHistory": [
+            {
+                "id": "msg-1",
+                "text": "Hello there! Welcome to our support chat.",
+                "senderId": "support-agent",
+                "userName": "Support Agent",
+                "timestamp": "2023-06-01T11:15:00.000Z"
+            },
+            {
+                "id": "msg-2",
+                "text": "Hi! Thanks for the quick response.",
+                "senderId": "john-doe",
+                "userName": "John Doe",
+                "timestamp": "2023-06-01T11:16:00.000Z"
+            }
+        ]
+    },
+    "usersSettings": {
+        "john-doe": {
+            "name": "John Doe",
+            "avatar": "https://example.com/avatars/john.jpg",
+            "location": "New York, USA",
+            "status": "online"
+        },
+        "support-agent": {
+            "name": "Support Agent",
+            "avatar": "https://example.com/avatars/support.jpg",
+            "location": "Support Team",
+            "status": "online"
+        }
+    }
+}
+```
+
+**Key Benefits of usersSettings:**
+
+-   **Consistent Display**: All user information comes from one source across messages, headers, and participant lists
+-   **Real-time Updates**: Changes to user settings immediately reflect throughout the UI
+-   **Multi-user Support**: Store settings for all participants, not just the current user
+-   **Priority System**: usersSettings takes precedence over individual props for reliable display
+-   **Event-Driven**: Automatic events fire when any user setting changes, enabling external integrations
+
+**User Settings Events Usage:**
+
+-   **Simple & Clean**: Each event only contains the changed value (e.g., `{userName: 'New Name'}`)
+-   **Focused Data**: No complex data structures - just the new value for easy access
+-   **Real-time Integration**: Use these events to sync user changes with external systems or trigger workflows
+-   **Event Examples**:
+
+    ```javascript
+    // userNameChanged
+    {
+        userName: 'John Doe';
+    }
+
+    // userAvatarChanged
+    {
+        userAvatar: 'https://example.com/avatar.jpg';
+    }
+
+    // userLocationChanged
+    {
+        userLocation: 'New York, USA';
+    }
+
+    // userStatusChanged
+    {
+        userStatus: 'away';
+    }
+    ```
+
 Troubleshooting:
 
+-   **User information not updating:** Ensure you're updating `usersSettings` object rather than individual props (`userName`, `userAvatar`, etc.) for priority display
+-   **Inconsistent user display:** Check that `usersSettings` contains complete information for all relevant user IDs
+-   **User settings events not firing:** Events only fire when properties change through props, not during initial load. Ensure the component is not in editing mode.
+-   **Event data access:** Each event contains only the changed value. Use the `usersSettings` local context data to access complete user information if needed.
 -   **Messages showing incorrect sender:** Check that `currentUserId` matches the `senderId` in your messages
+-   **Participant info not showing:** Populate `usersSettings` with information for all chat participants, not just the current user
+-   **User settings not persisting:** The component automatically syncs `usersSettings` to the chat state for persistence across sessions
 -   **Attachments not working:** Ensure `allowAttachments` is set to `true` and file URLs are accessible
 -   **Chat not scrolling to bottom:** Call `scrollToBottom` action after programmatically adding messages
--   **User avatar not displaying:** Verify the avatar URL is valid (initials will be shown as fallback)
+-   **User avatar not displaying:** Verify the avatar URL is valid in `usersSettings` (initials will be shown as fallback)
 -   **Right-click event not firing:** Make sure the component is not in editing mode
 -   **Group chat header not showing correctly:** Check that you have messages from multiple different senders
 -   **messageReceived event not triggering:** Verify that the incoming message has a different senderId than currentUserId

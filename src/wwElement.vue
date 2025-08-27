@@ -177,6 +177,7 @@ export default {
         const newMessage = ref('');
         const isScrolling = ref(false);
         const pendingAttachments = ref([]);
+        const usersSettings = ref({});
 
         const { value: chatState, setValue: setChatState } = wwLib.wwVariable.useComponentVariable({
             uid: props.uid,
@@ -192,6 +193,7 @@ export default {
                     allParticipants: [],
                 },
                 currentUser: { id: '', name: '', avatar: '', location: '', status: 'online' },
+                usersSettings: {},
                 utils: { messageCount: 0, isDisabled: false, allowAttachments: false, displayHeader: true },
             },
         });
@@ -216,13 +218,23 @@ export default {
 
         const messages = computed(() => {
             return rawMessages.value.map(message => {
+                const senderId = resolveMapping(message, props.content?.mappingSenderId, 'senderId') || '';
+                const originalUserName = resolveMapping(message, props.content?.mappingUserName, 'userName') || '';
+
+                // Prioritize usersSettings for user display information
+                const userSettings = usersSettings.value[senderId];
+                const displayUserName = userSettings?.name || originalUserName || 'Unknown User';
+
                 return {
                     id:
                         resolveMapping(message, props.content?.mappingMessageId, 'id') ||
                         `msg-${wwLib.wwUtils.getUid()}`,
                     text: resolveMapping(message, props.content?.mappingMessageText, 'text') || '',
-                    senderId: resolveMapping(message, props.content?.mappingSenderId, 'senderId') || '',
-                    userName: resolveMapping(message, props.content?.mappingUserName, 'userName') || '',
+                    senderId: senderId,
+                    userName: displayUserName,
+                    avatar: userSettings?.avatar || '',
+                    location: userSettings?.location || '',
+                    status: userSettings?.status || 'online',
                     timestamp:
                         resolveMapping(message, props.content?.mappingTimestamp, 'timestamp') ||
                         new Date().toISOString(),
@@ -237,11 +249,23 @@ export default {
         const allowAttachments = computed(() => props.content?.allowAttachments || false);
         const inputPlaceholder = computed(() => props.content?.inputPlaceholder || 'Type a message...');
 
-        // User properties
-        const userName = computed(() => props.content?.userName || 'User');
-        const userAvatar = computed(() => props.content?.userAvatar || '');
-        const userLocation = computed(() => props.content?.userLocation || '');
-        const userStatus = computed(() => props.content?.userStatus || 'online');
+        // User properties - prioritize usersSettings over direct props
+        const userName = computed(() => {
+            const userSettings = usersSettings.value[currentUserId.value];
+            return userSettings?.name || props.content?.userName || 'User';
+        });
+        const userAvatar = computed(() => {
+            const userSettings = usersSettings.value[currentUserId.value];
+            return userSettings?.avatar || props.content?.userAvatar || '';
+        });
+        const userLocation = computed(() => {
+            const userSettings = usersSettings.value[currentUserId.value];
+            return userSettings?.location || props.content?.userLocation || '';
+        });
+        const userStatus = computed(() => {
+            const userSettings = usersSettings.value[currentUserId.value];
+            return userSettings?.status || props.content?.userStatus || 'online';
+        });
 
         // Style properties
         const containerStyles = computed(() => ({
@@ -317,6 +341,106 @@ export default {
             { deep: true }
         );
 
+        // Initialize usersSettings from chatState
+        watch(
+            () => chatState.value?.usersSettings,
+            newUsersSettings => {
+                if (
+                    newUsersSettings &&
+                    Object.keys(newUsersSettings).length > 0 &&
+                    JSON.stringify(usersSettings.value) !== JSON.stringify(newUsersSettings)
+                ) {
+                    usersSettings.value = { ...newUsersSettings };
+                }
+            },
+            { immediate: true }
+        );
+
+        // Watch for user settings changes and update usersSettings ref
+        watch(
+            [
+                currentUserId,
+                () => props.content?.userName,
+                () => props.content?.userAvatar,
+                () => props.content?.userLocation,
+                () => props.content?.userStatus,
+            ],
+            (
+                [newUserId, newUserName, newUserAvatar, newUserLocation, newUserStatus],
+                [oldUserId, oldUserName, oldUserAvatar, oldUserLocation, oldUserStatus]
+            ) => {
+                const oldSettings = usersSettings.value[newUserId] || {};
+                const currentSettings = {
+                    name: newUserName || 'User',
+                    avatar: newUserAvatar || '',
+                    location: newUserLocation || '',
+                    status: newUserStatus || 'online',
+                };
+
+                // Check for changes and emit specific events
+                if (!isEditing.value && oldSettings.name !== undefined) {
+                    // Skip initial load
+                    if (oldSettings.name !== currentSettings.name) {
+                        emit('trigger-event', {
+                            name: 'userNameChanged',
+                            event: {
+                                userName: currentSettings.name,
+                            },
+                        });
+                    }
+
+                    if (oldSettings.avatar !== currentSettings.avatar) {
+                        emit('trigger-event', {
+                            name: 'userAvatarChanged',
+                            event: {
+                                userAvatar: currentSettings.avatar,
+                            },
+                        });
+                    }
+
+                    if (oldSettings.location !== currentSettings.location) {
+                        emit('trigger-event', {
+                            name: 'userLocationChanged',
+                            event: {
+                                userLocation: currentSettings.location,
+                            },
+                        });
+                    }
+
+                    if (oldSettings.status !== currentSettings.status) {
+                        emit('trigger-event', {
+                            name: 'userStatusChanged',
+                            event: {
+                                userStatus: currentSettings.status,
+                            },
+                        });
+                    }
+                }
+
+                usersSettings.value = {
+                    ...usersSettings.value,
+                    [newUserId]: currentSettings,
+                };
+            },
+            { immediate: true }
+        );
+
+        watch(
+            usersSettings,
+            newUsersSettings => {
+                if (
+                    chatState.value &&
+                    JSON.stringify(chatState.value.usersSettings) !== JSON.stringify(newUsersSettings)
+                ) {
+                    setChatState({
+                        ...chatState.value,
+                        usersSettings: newUsersSettings,
+                    });
+                }
+            },
+            { deep: true }
+        );
+
         const scrollToBottom = async (smooth = false) => {
             await nextTick();
             if (messagesContainer.value) {
@@ -348,11 +472,11 @@ export default {
                 attachments: attachments.length > 0 ? attachments : undefined,
             };
 
-            const updatedMessages = [...(chatState.value?.messages || []), message];
-            setChatState({
-                ...chatState.value,
-                messages: updatedMessages,
-            });
+            // const updatedMessages = [...(chatState.value?.messages || []), message];
+            // setChatState({
+            //     ...chatState.value,
+            //     messages: updatedMessages,
+            // });
 
             newMessage.value = '';
 
@@ -559,8 +683,9 @@ export default {
             const otherSenderIds = allSenderIds.filter(id => id !== currentUserId.value);
 
             const participants = otherSenderIds.map(senderId => {
+                const userSettings = usersSettings.value[senderId];
                 const msg = messages.value.find(m => m.senderId === senderId);
-                return msg ? msg.userName : 'Unknown User';
+                return userSettings?.name || (msg ? msg.userName : 'Unknown User');
             });
 
             const participantsString = participants.join(', ');
@@ -579,12 +704,15 @@ export default {
 
             // Two participants total (current user + 1 other) - show recipient info
             if (allSenderIds.length === 2 || (otherSenderIds.length === 1 && !props.content?.showSelfInHeader)) {
-                const otherUser = messages.value.find(msg => msg.senderId === otherSenderIds[0]);
+                const otherUserId = otherSenderIds[0];
+                const otherUserSettings = usersSettings.value[otherUserId];
+                const otherUser = messages.value.find(msg => msg.senderId === otherUserId);
+
                 return {
-                    name: otherUser?.userName || 'Unknown User',
-                    avatar: otherUser?.avatar || otherUser?.avatarUrl || '',
-                    location: otherUser?.location || '',
-                    status: otherUser?.status || 'online',
+                    name: otherUserSettings?.name || otherUser?.userName || 'Unknown User',
+                    avatar: otherUserSettings?.avatar || otherUser?.avatar || otherUser?.avatarUrl || '',
+                    location: otherUserSettings?.location || otherUser?.location || '',
+                    status: otherUserSettings?.status || otherUser?.status || 'online',
                     participants,
                     participantsString,
                 };
@@ -604,10 +732,18 @@ export default {
                 groupChatName = `Group Chat (${totalParticipants} participants)`;
             }
 
+            // For group chat location, prioritize usersSettings for the last message sender
+            let groupLocation = '';
+            if (lastOtherMsg) {
+                const lastSenderSettings = usersSettings.value[lastOtherMsg.senderId];
+                const displayName = lastSenderSettings?.name || lastOtherMsg.userName;
+                groupLocation = `Last message from ${displayName}`;
+            }
+
             return {
                 name: groupChatName,
                 avatar: props.content?.groupChatAvatar || '',
-                location: lastOtherMsg ? `Last message from ${lastOtherMsg.userName}` : '',
+                location: groupLocation,
                 status: 'online',
                 participants,
                 participantsString,
@@ -639,10 +775,13 @@ export default {
                 otherParticipantCount: otherSenderIds.length,
                 participants: otherSenderIds.map(senderId => {
                     const msg = messages.value.find(m => m.senderId === senderId);
+                    const userSettings = usersSettings.value[senderId];
                     return {
                         id: senderId,
-                        name: msg ? msg.userName : 'Unknown User',
-                        avatar: msg?.avatar || msg?.avatarUrl || '',
+                        name: userSettings?.name || (msg ? msg.userName : 'Unknown User'),
+                        avatar: userSettings?.avatar || msg?.avatar || msg?.avatarUrl || '',
+                        location: userSettings?.location || '',
+                        status: userSettings?.status || 'online',
                         lastMessageTime: messages.value
                             .filter(m => m.senderId === senderId)
                             .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0]?.timestamp,
@@ -651,10 +790,18 @@ export default {
                 allParticipants: allSenderIds.map(senderId => {
                     const msg = messages.value.find(m => m.senderId === senderId);
                     const isCurrentUser = senderId === currentUserId.value;
+                    const userSettings = usersSettings.value[senderId];
+
                     return {
                         id: senderId,
-                        name: isCurrentUser ? userName.value : msg ? msg.userName : 'Unknown User',
-                        avatar: isCurrentUser ? userAvatar.value : msg?.avatar || msg?.avatarUrl || '',
+                        name: isCurrentUser
+                            ? userName.value
+                            : userSettings?.name || (msg ? msg.userName : 'Unknown User'),
+                        avatar: isCurrentUser
+                            ? userAvatar.value
+                            : userSettings?.avatar || msg?.avatar || msg?.avatarUrl || '',
+                        location: isCurrentUser ? userLocation.value : userSettings?.location || '',
+                        status: isCurrentUser ? userStatus.value : userSettings?.status || 'online',
                         isCurrentUser,
                         lastMessageTime: messages.value
                             .filter(m => m.senderId === senderId)
@@ -672,9 +819,11 @@ export default {
                 isLast: index === messages.value.length - 1 || messages.value[index + 1].senderId !== message.senderId,
                 participantInfo: conversationData.value.allParticipants.find(p => p.id === message.senderId) || {
                     id: message.senderId,
-                    name: 'Unknown User',
-                    avatar: '',
-                    isCurrentUser: false,
+                    name: usersSettings.value[message.senderId]?.name || 'Unknown User',
+                    avatar: usersSettings.value[message.senderId]?.avatar || '',
+                    location: usersSettings.value[message.senderId]?.location || '',
+                    status: usersSettings.value[message.senderId]?.status || 'online',
+                    isCurrentUser: message.senderId === currentUserId.value,
                 },
             })),
             conversation: conversationData.value,
@@ -685,6 +834,7 @@ export default {
                 location: userLocation.value || '',
                 status: userStatus.value || 'online',
             },
+            usersSettings: usersSettings.value,
             utils: {
                 messageCount: messages.value.length,
                 isDisabled: isDisabled.value,
@@ -724,6 +874,13 @@ export default {
         - \`location\`: Current user location
         - \`status\`: Current user status
 
+        #### usersSettings
+        Object containing user settings keyed by user ID:
+        - Each key is a user ID (e.g., 'current-user-id1')
+        - Each value contains user settings: \`name\`, \`avatar\`, \`location\`, \`status\`
+        - Automatically updated when current user settings change
+        - Example: \`{ 'user-123': { name: 'John Doe', avatar: '...', location: 'NYC', status: 'online' } }\`
+
         #### utils
         Component state information:
         - \`messageCount\`: Total number of messages
@@ -731,15 +888,15 @@ export default {
         - \`allowAttachments\`: Boolean indicating if attachments are allowed
         - \`displayHeader\`: Boolean indicating if header is displayed`;
 
-        // Sync chatState with local context data
+        // Sync chatState with local context data (excluding usersSettings to avoid recursion)
         watch(
             chatData,
             newChatData => {
-                // Only sync if using internal state (not external chatHistory prop)
-                // if (!props.content?.chatHistory) {
-                //     setChatState(newChatData);
-                // }
-                setChatState(newChatData);
+                const { usersSettings: _, ...dataWithoutUsersSettings } = newChatData;
+                setChatState({
+                    ...dataWithoutUsersSettings,
+                    usersSettings: usersSettings.value,
+                });
             },
             { deep: true, immediate: true }
         );
@@ -847,6 +1004,7 @@ export default {
             addMessage,
             clearMessages,
             currentLocalContext,
+            usersSettings,
         };
     },
     methods: {

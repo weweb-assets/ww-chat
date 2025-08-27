@@ -174,6 +174,34 @@ export default {
             label: { en: 'On close' },
             event: {},
         },
+        {
+            name: 'userNameChanged',
+            label: { en: 'On user name changed' },
+            event: {
+                userName: 'New Username',
+            },
+        },
+        {
+            name: 'userAvatarChanged',
+            label: { en: 'On user avatar changed' },
+            event: {
+                userAvatar: 'https://example.com/new-avatar.jpg',
+            },
+        },
+        {
+            name: 'userLocationChanged',
+            label: { en: 'On user location changed' },
+            event: {
+                userLocation: 'New Location',
+            },
+        },
+        {
+            name: 'userStatusChanged',
+            label: { en: 'On user status changed' },
+            event: {
+                userStatus: 'away',
+            },
+        },
     ],
     actions: [
         {
