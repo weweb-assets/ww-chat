@@ -378,17 +378,21 @@ export default {
             1000
         );
 
-        watch(latestUserSettings, newSettings => {
-            if (newSettings) {
-                emit('trigger-event', {
-                    name: 'settingsChanged',
-                    event: newSettings,
-                });
+        watch(
+            latestUserSettings,
+            newSettings => {
+                if (newSettings) {
+                    emit('trigger-event', {
+                        name: 'settingsChanged',
+                        event: newSettings,
+                    });
 
-                // Reset to avoid duplicate events
-                latestUserSettings.value = null;
-            }
-        });
+                    // Reset to avoid duplicate events
+                    latestUserSettings.value = null;
+                }
+            },
+            { immediate: true, deep: true }
+        );
 
         // Watch for user settings changes and debounce updates
         watch(
