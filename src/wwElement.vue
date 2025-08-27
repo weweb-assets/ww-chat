@@ -385,8 +385,6 @@ export default {
                     event: newSettings,
                 });
 
-                console.log('Log: Settings changed emitted');
-
                 // Reset to avoid duplicate events
                 latestUserSettings.value = null;
             }
