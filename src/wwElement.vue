@@ -336,6 +336,9 @@ export default {
             { deep: true }
         );
 
+        // Store the latest user settings for event emission
+        const latestUserSettings = ref(null);
+
         // Debounced function to update all current user messages with new settings
         const updateUserMessages = debounce(
             (newUserId, oldUserId, newUserName, newUserAvatar, newUserLocation, newUserStatus) => {
@@ -365,19 +368,29 @@ export default {
 
                     console.log('Settings changed');
 
-                    emit('trigger-event', {
-                        name: 'settingsChanged',
-                        event: {
-                            userName: newUserName,
-                            userAvatar: newUserAvatar,
-                            userLocation: newUserLocation,
-                            userStatus: newUserStatus,
-                        },
-                    });
+                    // Store settings for immediate event emission
+                    latestUserSettings.value = {
+                        userName: newUserName,
+                        userAvatar: newUserAvatar,
+                        userLocation: newUserLocation,
+                        userStatus: newUserStatus,
+                    };
                 }
             },
             1000
         );
+
+        watch(latestUserSettings, newSettings => {
+            if (newSettings) {
+                emit('trigger-event', {
+                    name: 'settingsChanged',
+                    event: newSettings,
+                });
+
+                // Reset to avoid duplicate events
+                latestUserSettings.value = null;
+            }
+        });
 
         // Watch for user settings changes and debounce updates
         watch(
@@ -450,13 +463,6 @@ export default {
                     userStatus: userStatus.value,
                 },
             };
-
-            // To keep in mind
-            // const updatedMessages = [...(chatState.value?.messages || []), message];
-            // setChatState({
-            //     ...chatState.value,
-            //     messages: updatedMessages,
-            // });
 
             newMessage.value = '';
 
