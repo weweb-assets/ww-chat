@@ -207,8 +207,13 @@ export default {
         const { resolveMappingFormula } = wwLib.wwFormula.useFormula();
 
         const resolveMapping = (message, mappingFormula, defaultProp) => {
-            if (!mappingFormula) return message[defaultProp];
-            return resolveMappingFormula(mappingFormula, message);
+            try {
+                if (!mappingFormula) return message?.[defaultProp];
+                return resolveMappingFormula(mappingFormula, message);
+            } catch (error) {
+                console.warn('Error resolving mapping:', error, { mappingFormula, defaultProp, message });
+                return message?.[defaultProp];
+            }
         };
 
         const isEditing = computed(() => {
@@ -220,10 +225,35 @@ export default {
         });
 
         const currentUserId = computed(() => props.content?.currentUserId || 'current-user');
-        const rawMessages = computed(() => props.content?.chatHistory || chatState.value?.messages || []);
+        const rawMessages = computed(() => {
+            const chatHistory = props.content?.chatHistory;
+            const stateMessages = chatState.value?.messages;
+
+            // Ensure we always have a valid array
+            if (Array.isArray(chatHistory)) return chatHistory;
+            if (Array.isArray(stateMessages)) return stateMessages;
+            return [];
+        });
 
         const messages = computed(() => {
             return rawMessages.value.map(message => {
+                // Ensure message is an object
+                if (!message || typeof message !== 'object') {
+                    return {
+                        id: `msg-${wwLib.wwUtils.getUid()}`,
+                        text: '',
+                        senderId: '',
+                        userName: 'Unknown User',
+                        avatar: '',
+                        location: '',
+                        status: 'online',
+                        timestamp: new Date().toISOString(),
+                        attachments: undefined,
+                        userSettings: {},
+                        _originalData: message,
+                    };
+                }
+
                 const senderId = resolveMapping(message, props.content?.mappingSenderId, 'senderId') || '';
                 const originalUserName = resolveMapping(message, props.content?.mappingUserName, 'userName') || '';
 
