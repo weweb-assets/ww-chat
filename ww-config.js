@@ -50,6 +50,7 @@ export default {
                 'messageFontWeight',
                 'messageFontFamily',
                 'messageBorder',
+                'messageRadius',
                 'ownMessageTitle',
                 'ownMessageBgColor',
                 'ownMessageTextColor',
@@ -57,6 +58,7 @@ export default {
                 'ownMessageFontWeight',
                 'ownMessageFontFamily',
                 'ownMessageBorder',
+                'ownMessageRadius',
             ],
             // Input styles
             [
@@ -757,6 +759,31 @@ export default {
             },
             /* wwEditor:end */
         },
+        messageRadius: {
+            label: { en: 'Border Radius' },
+            type: 'Spacing',
+            options: {
+                isCorner: true,
+                unitChoices: [
+                    { value: 'px', label: 'px', min: 0, max: 50, default: true },
+                    { value: '%', label: '%', min: 0, max: 100, digits: 2, step: 1 },
+                ],
+            },
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '18px 18px 18px 0px',
+            /* wwEditor:start */
+            bindingValidation: {
+                markdown: 'border-radius',
+                type: 'string',
+                cssSupports: 'border-radius',
+                tooltip: 'Border radius of messages from others',
+            },
+            /* wwEditor:end */
+        },
 
         // Own message styles
         ownMessageTitle: {
@@ -877,6 +904,31 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Border of your own messages',
+            },
+            /* wwEditor:end */
+        },
+        ownMessageRadius: {
+            label: { en: 'Border Radius' },
+            type: 'Spacing',
+            options: {
+                isCorner: true,
+                unitChoices: [
+                    { value: 'px', label: 'px', min: 0, max: 50, default: true },
+                    { value: '%', label: '%', min: 0, max: 100, digits: 2, step: 1 },
+                ],
+            },
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '18px 0px 18px 18px',
+            /* wwEditor:start */
+            bindingValidation: {
+                markdown: 'border-radius',
+                type: 'string',
+                cssSupports: 'border-radius',
+                tooltip: 'Border radius of your own messages',
             },
             /* wwEditor:end */
         },

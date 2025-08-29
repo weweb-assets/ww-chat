@@ -28,12 +28,14 @@
                     :message-font-weight="messageFontWeight"
                     :message-font-family="messageFontFamily"
                     :message-border="messageBorder"
+                    :message-radius="messageRadius"
                     :own-message-bg-color="ownMessageBgColor"
                     :own-message-text-color="ownMessageTextColor"
                     :own-message-font-size="ownMessageFontSize"
                     :own-message-font-weight="ownMessageFontWeight"
                     :own-message-font-family="ownMessageFontFamily"
                     :own-message-border="ownMessageBorder"
+                    :own-message-radius="ownMessageRadius"
                     @attachment-click="handleAttachmentClick"
                     @right-click="handleRightClick"
                 />
@@ -85,6 +87,10 @@ export default {
             type: String,
             default: '1px solid #e2e8f0',
         },
+        messageRadius: {
+            type: String,
+            default: '18px',
+        },
         ownMessageBgColor: {
             type: String,
             default: '#dbeafe',
@@ -108,6 +114,10 @@ export default {
         ownMessageBorder: {
             type: String,
             default: '1px solid #bfdbfe',
+        },
+        ownMessageRadius: {
+            type: String,
+            default: '18px',
         },
         emptyMessageText: {
             type: String,
