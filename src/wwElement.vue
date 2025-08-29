@@ -207,12 +207,13 @@ export default {
         const { resolveMappingFormula } = wwLib.wwFormula.useFormula();
 
         const resolveMapping = (message, mappingFormula, defaultProp) => {
+            if (!message || typeof message !== 'object') return '';
+            if (!mappingFormula) return message[defaultProp] || '';
+
             try {
-                if (!mappingFormula) return message?.[defaultProp];
-                return resolveMappingFormula(mappingFormula, message);
+                return resolveMappingFormula(mappingFormula, message) || '';
             } catch (error) {
-                console.warn('Error resolving mapping:', error, { mappingFormula, defaultProp, message });
-                return message?.[defaultProp];
+                return message[defaultProp] || '';
             }
         };
 
@@ -236,11 +237,11 @@ export default {
         });
 
         const messages = computed(() => {
-            return rawMessages.value.map(message => {
+            return rawMessages.value.map((message, index) => {
                 // Ensure message is an object
                 if (!message || typeof message !== 'object') {
                     return {
-                        id: `msg-${wwLib.wwUtils.getUid()}`,
+                        id: `invalid-msg-${index}`,
                         text: '',
                         senderId: '',
                         userName: 'Unknown User',
@@ -262,9 +263,7 @@ export default {
                 const displayUserName = userSettings.userName || originalUserName || 'Unknown User';
 
                 return {
-                    id:
-                        resolveMapping(message, props.content?.mappingMessageId, 'id') ||
-                        `msg-${wwLib.wwUtils.getUid()}`,
+                    id: resolveMapping(message, props.content?.mappingMessageId, 'id') || `msg-${index}`,
                     text: resolveMapping(message, props.content?.mappingMessageText, 'text') || '',
                     senderId: senderId,
                     userName: displayUserName,
