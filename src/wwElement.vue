@@ -221,7 +221,18 @@ export default {
         });
 
         const currentUserId = computed(() => props.content?.currentUserId || 'current-user');
-        const rawMessages = computed(() => props.content?.chatHistory || chatState.value?.messages || []);
+        const rawMessages = computed(() => {
+            // Ensure we always have an array to work with
+            const chatHistory = props.content?.chatHistory;
+
+            // Check if chatHistory is a valid array
+            if (Array.isArray(chatHistory)) {
+                return chatHistory;
+            }
+
+            // Final fallback to empty array
+            return [];
+        });
 
         const messages = computed(() => {
             return rawMessages.value.map(message => {
