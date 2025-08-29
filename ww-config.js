@@ -263,6 +263,10 @@ export default {
                 type: 'string',
                 tooltip: 'Font family used throughout the chat',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the font family for all text elements in the chat component.\n\nThis affects all typography including messages, headers, input text, and UI elements. You can use web-safe fonts, Google Fonts, or custom font stacks.\n\n**Examples**:\n- "Inter, sans-serif" - Modern sans-serif\n- "Georgia, serif" - Classic serif\n- "Monaco, monospace" - Monospace font',
+            },
             /* wwEditor:end */
         },
 
@@ -306,6 +310,10 @@ export default {
                 type: 'string',
                 tooltip: 'Background color of the chat header',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the background color of the chat header area.\n\nThe header contains user information like name, avatar, status, and location. Choose a color that complements your app design and provides good contrast with the header text.\n\n**Examples**:\n- "#ffffff" - Clean white background\n- "#f8fafc" - Light gray for subtle distinction\n- "#1e293b" - Dark theme header',
+            },
             /* wwEditor:end */
             hidden: content => content.displayHeader === false,
         },
@@ -322,6 +330,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Text color in the chat header',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the color of all text elements in the chat header.\n\nThis affects the user name, location text, and other header content. Ensure good contrast with the header background color for optimal readability.\n\n**Examples**:\n- "#1e293b" - Dark gray for light backgrounds\n- "#ffffff" - White for dark backgrounds\n- "#64748b" - Medium gray for subtle text',
             },
             /* wwEditor:end */
             hidden: content => content.displayHeader === false,
@@ -340,6 +352,10 @@ export default {
                 type: 'string',
                 tooltip: 'Border of the chat header',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the bottom border of the chat header.\n\nThis creates a visual separation between the header and the messages area. You can control the width, style, and color of the border.\n\n**Examples**:\n- "1px solid #e2e8f0" - Thin light gray border\n- "2px solid #3b82f6" - Thicker blue border\n- "none" - No border for seamless design',
+            },
             /* wwEditor:end */
             hidden: content => content.displayHeader === false,
         },
@@ -357,6 +373,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Padding of the chat header',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Controls the internal spacing around content in the chat header.\n\nUses the advanced Spacing interface allowing you to set different padding for each side (top, right, bottom, left) or uniform padding.\n\n**Examples**:\n- "16px" - Uniform 16px padding on all sides\n- "12px 16px" - 12px top/bottom, 16px left/right\n- "8px 16px 12px 16px" - Different padding for each side',
             },
             /* wwEditor:end */
             hidden: content => content.displayHeader === false,
@@ -381,6 +401,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Font size of the user name in header',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the font size for the user name displayed in the chat header.\n\nSupports multiple units (px, em, rem) with appropriate ranges for each. The name is the primary text element in the header, so choose a size that creates good visual hierarchy.\n\n**Examples**:\n- "1rem" - Standard readable size\n- "1.2rem" - Slightly larger for emphasis\n- "18px" - Fixed pixel size',
             },
             /* wwEditor:end */
             hidden: content => content.displayHeader === false,
@@ -412,6 +436,10 @@ export default {
                 type: 'string',
                 tooltip: 'Font weight of the user name in header',
             },
+            propertyHelp: {
+                tooltip:
+                    'Controls how bold or light the user name appears in the header.\n\nFont weight affects the visual hierarchy and emphasis of the name. Higher values (600-900) create bolder text, while lower values (100-400) create lighter text.\n\n**Examples**:\n- "400" - Normal weight for body text\n- "600" - Semi-bold for emphasis (default)\n- "700" - Bold for strong emphasis',
+            },
             /* wwEditor:end */
             hidden: content => content.displayHeader === false,
         },
@@ -436,6 +464,10 @@ export default {
                 type: 'string',
                 tooltip: 'Font size of the location text in header',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the font size for the location text displayed under the user name in the header.\n\nThe location text is secondary information, so it\'s typically smaller than the user name. Supports px, em, and rem units.\n\n**Examples**:\n- "0.875rem" - Standard secondary text size (default)\n- "14px" - Fixed small size\n- "0.75rem" - Smaller for compact design',
+            },
             /* wwEditor:end */
             hidden: content => content.displayHeader === false,
         },
@@ -458,6 +490,10 @@ export default {
                 type: 'number',
                 tooltip: 'Opacity of the location text in header',
             },
+            propertyHelp: {
+                tooltip:
+                    'Controls the transparency of the location text in the header.\n\nLower opacity values make the text more subtle and less prominent. This helps create visual hierarchy between the main user name and secondary location information.\n\n**Examples**:\n- "0.7" - Subtle but readable (default)\n- "1" - Full opacity for maximum visibility\n- "0.5" - Very subtle for minimal design',
+            },
             /* wwEditor:end */
             hidden: content => content.displayHeader === false,
         },
@@ -475,6 +511,10 @@ export default {
                 type: 'string',
                 tooltip: 'Color of the close button (leave empty to inherit from header text color)',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the color of the close button icon in the chat header.\n\nIf left empty, the close button will inherit the color from the header text color setting. This allows for consistent theming while providing the flexibility to customize the close button separately if needed.\n\n**Examples**:\n- "" - Inherit from header text color (recommended)\n- "#64748b" - Custom gray color\n- "#dc2626" - Red for emphasis',
+            },
             /* wwEditor:end */
             hidden: content => content.displayHeader === false,
         },
@@ -491,6 +531,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Background color of the close button on hover',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the background color that appears behind the close button when users hover over it.\n\nThis provides visual feedback to indicate the button is interactive. Using a subtle background color enhances usability without being distracting.\n\n**Examples**:\n- "rgba(0, 0, 0, 0.05)" - Light gray overlay (default)\n- "rgba(255, 0, 0, 0.1)" - Light red tint\n- "transparent" - No hover background',
             },
             /* wwEditor:end */
             hidden: content => content.displayHeader === false,
@@ -516,6 +560,10 @@ export default {
                 type: 'string',
                 tooltip: 'Background color of the messages area',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the background color of the main messages area where all chat messages are displayed.\n\nThis area contains the conversation history and should provide good contrast with message bubbles. Choose a neutral color that doesn\'t compete with message content.\n\n**Examples**:\n- "#ffffff" - Clean white background\n- "#f8fafc" - Light gray for reduced eye strain\n- "#1e293b" - Dark background for dark theme',
+            },
             /* wwEditor:end */
         },
         messagesAreaPadding: {
@@ -531,6 +579,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Padding of the messages area',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Controls the internal spacing around the messages area content.\n\nThis padding creates space between the messages and the edges of the container, improving readability and visual comfort. Uses the advanced Spacing interface for precise control.\n\n**Examples**:\n- "16px" - Uniform 16px padding on all sides\n- "20px 16px" - 20px top/bottom, 16px left/right\n- "12px 24px 16px 24px" - Different padding for each side',
             },
             /* wwEditor:end */
         },
@@ -549,6 +601,10 @@ export default {
                 type: 'string',
                 tooltip: 'Text to display when there are no messages',
             },
+            propertyHelp: {
+                tooltip:
+                    'The text displayed in the messages area when there are no messages to show.\n\nThis provides helpful feedback to users and can encourage them to start the conversation. The message should be friendly and contextually appropriate for your application.\n\n**Examples**:\n- "No messages yet" - Generic and friendly\n- "Start the conversation!" - Encouraging\n- "Your conversation will appear here" - Descriptive',
+            },
             /* wwEditor:end */
         },
         emptyMessageColor: {
@@ -564,6 +620,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Color of the empty message text',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the color of the empty message text displayed when there are no messages.\n\nThis text is typically styled as secondary/muted content since it\'s informational rather than actual conversation content. Choose a subtle color that\'s readable but not distracting.\n\n**Examples**:\n- "#64748b" - Medium gray for subtle appearance\n- "#9ca3af" - Lighter gray for minimal emphasis\n- "#374151" - Darker gray for better readability',
             },
             /* wwEditor:end */
         },
@@ -586,6 +646,10 @@ export default {
                 type: 'string',
                 tooltip: 'Text color of the date separator',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the color of the date text in date separators that appear between messages from different days.\n\nDate separators help users navigate through conversation history. The text should be readable but subtle enough not to dominate the conversation flow.\n\n**Examples**:\n- "#64748b" - Medium gray for subtle separation\n- "#9ca3af" - Lighter gray for minimal emphasis\n- "#374151" - Darker gray for better visibility',
+            },
             /* wwEditor:end */
         },
         dateSeparatorLineColor: {
@@ -601,6 +665,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Color of the date separator divider line',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the color of the horizontal line that extends from both sides of the date text in date separators.\n\nThis line provides visual separation between message groups from different days. It should be subtle enough to organize content without being distracting.\n\n**Examples**:\n- "#e2e8f0" - Light gray for subtle separation\n- "#d1d5db" - Slightly darker for more definition\n- "transparent" - No divider line, text only',
             },
             /* wwEditor:end */
         },
@@ -618,6 +686,10 @@ export default {
                 type: 'string',
                 tooltip: 'Background color behind the date text',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the background color directly behind the date text in date separators.\n\nThis background ensures the date text remains readable over the divider line. It should typically match the messages area background for a seamless appearance.\n\n**Examples**:\n- "#ffffff" - White to match light backgrounds\n- "#f8fafc" - Light gray to match gray backgrounds\n- "#1e293b" - Dark color for dark themes',
+            },
             /* wwEditor:end */
         },
         dateSeparatorBorderRadius: {
@@ -633,6 +705,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Border radius of the date separator',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the border radius for the background area behind the date text in date separators.\n\nThis creates rounded corners around the date text background, softening the appearance and making it more visually appealing. Small values create subtle rounding.\n\n**Examples**:\n- "4px" - Subtle rounded corners\n- "8px" - More pronounced rounding\n- "0px" - Sharp, square corners',
             },
             /* wwEditor:end */
         },
@@ -657,6 +733,10 @@ export default {
                 type: 'string',
                 tooltip: 'Background color of messages from others',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the background color for message bubbles from other participants (not the current user).\n\nThis color helps distinguish between messages from different senders and should provide good contrast with the message text. Choose a color that complements your overall design theme.\n\n**Examples**:\n- "#f1f5f9" - Light blue-gray for neutral appearance\n- "#f3f4f6" - Light gray for subtle distinction\n- "#fef3c7" - Light yellow for warmth',
+            },
             /* wwEditor:end */
         },
         messageTextColor: {
@@ -672,6 +752,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Text color of messages from others',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the text color for messages from other participants (not the current user).\n\nThis should provide excellent readability against the message background color. Dark colors work well on light backgrounds, while light colors work on dark backgrounds.\n\n**Examples**:\n- "#334155" - Dark slate for light backgrounds\n- "#ffffff" - White for dark backgrounds\n- "#1f2937" - Very dark gray for maximum contrast',
             },
             /* wwEditor:end */
         },
@@ -695,6 +779,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Font size of messages from others',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the font size for message text from other participants.\n\nThis determines the readability and visual prominence of message content. Choose a size that\'s comfortable to read on your target devices and screen sizes.\n\n**Examples**:\n- "0.875rem" - Standard readable size (14px)\n- "1rem" - Base font size (16px)\n- "16px" - Fixed pixel size for consistency',
             },
             /* wwEditor:end */
         },
@@ -725,6 +813,10 @@ export default {
                 type: 'string',
                 tooltip: 'Font weight of messages from others',
             },
+            propertyHelp: {
+                tooltip:
+                    'Controls how bold or light the message text appears for messages from other participants.\n\nFont weight affects readability and emphasis. Normal weight (400) is typically used for body text, while higher weights can create emphasis.\n\n**Examples**:\n- "400" - Normal weight for easy reading\n- "500" - Medium weight for slight emphasis\n- "300" - Light weight for elegant appearance',
+            },
             /* wwEditor:end */
         },
         messageFontFamily: {
@@ -741,6 +833,10 @@ export default {
                 type: 'string',
                 tooltip: 'Font family of messages from others',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the font family for message text from other participants.\n\nBy default, inherits from the main chat font family setting. You can override this to use a different font specifically for message content, such as a more readable font for long conversations.\n\n**Examples**:\n- "inherit" - Use the main chat font family\n- "Inter, sans-serif" - Modern sans-serif font\n- "Georgia, serif" - Serif font for readability',
+            },
             /* wwEditor:end */
         },
         messageBorder: {
@@ -756,6 +852,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Border of messages from others',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the border around message bubbles from other participants.\n\nBorders can help define message boundaries and add visual structure. You can control the width, style, and color. Use "none" for borderless messages.\n\n**Examples**:\n- "1px solid #e2e8f0" - Thin light gray border\n- "2px solid #3b82f6" - Thicker blue border\n- "none" - No border for clean appearance',
             },
             /* wwEditor:end */
         },
@@ -782,6 +882,10 @@ export default {
                 cssSupports: 'border-radius',
                 tooltip: 'Border radius of messages from others',
             },
+            propertyHelp: {
+                tooltip:
+                    'Controls the corner rounding of message bubbles from other users.\n\nSupports all CSS border-radius formats including individual corner control using the advanced Spacing interface. You can set uniform radius or customize each corner separately.\n\n**Examples**:\n- "12px" - uniform 12px radius on all corners\n- "20px 8px" - 20px on top/bottom, 8px on left/right\n- "16px 16px 4px 16px" - custom radius for each corner (top-left, top-right, bottom-right, bottom-left)',
+            },
             /* wwEditor:end */
         },
 
@@ -805,6 +909,10 @@ export default {
                 type: 'string',
                 tooltip: 'Background color of your own messages',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the background color for message bubbles from the current user.\n\nThis color distinguishes your messages from others\' messages, creating clear visual separation in the conversation. Typically uses a different color or shade than other participants.\n\n**Examples**:\n- "#dbeafe" - Light blue for current user emphasis\n- "#dcfce7" - Light green for positive association\n- "#f3e8ff" - Light purple for unique distinction',
+            },
             /* wwEditor:end */
         },
         ownMessageTextColor: {
@@ -820,6 +928,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Text color of your own messages',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the text color for messages from the current user.\n\nThis should provide excellent readability against your own message background color. The color can match or complement the background to maintain visual consistency.\n\n**Examples**:\n- "#1e40af" - Blue text to match blue background theme\n- "#166534" - Green text for green background theme\n- "#334155" - Dark gray for universal readability',
             },
             /* wwEditor:end */
         },
@@ -843,6 +955,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Font size of your own messages',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the font size for message text from the current user.\n\nTypically matches the font size of other messages for consistency, but can be adjusted to create visual distinction if desired.\n\n**Examples**:\n- "0.875rem" - Standard readable size matching others\n- "1rem" - Slightly larger for current user emphasis\n- "16px" - Fixed pixel size for consistency',
             },
             /* wwEditor:end */
         },
@@ -873,6 +989,10 @@ export default {
                 type: 'string',
                 tooltip: 'Font weight of your own messages',
             },
+            propertyHelp: {
+                tooltip:
+                    'Controls how bold or light your own message text appears.\n\nTypically matches the font weight of other messages for consistency, but can be adjusted to subtly emphasize your own messages if desired.\n\n**Examples**:\n- "400" - Normal weight matching others\n- "500" - Medium weight for slight emphasis\n- "300" - Light weight for elegant distinction',
+            },
             /* wwEditor:end */
         },
         ownMessageFontFamily: {
@@ -889,6 +1009,10 @@ export default {
                 type: 'string',
                 tooltip: 'Font family of your own messages',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the font family for your own message text.\n\nBy default, inherits from the main chat font family setting. You can override this to use a different font specifically for your own messages, though consistency is typically preferred.\n\n**Examples**:\n- "inherit" - Use the main chat font family (recommended)\n- "Inter, sans-serif" - Modern sans-serif if different from others\n- "system-ui" - System font for native appearance',
+            },
             /* wwEditor:end */
         },
         ownMessageBorder: {
@@ -904,6 +1028,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Border of your own messages',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the border around your own message bubbles.\n\nThis can match or complement the border used for other messages. The border helps define message boundaries and can reinforce the visual distinction between your messages and others.\n\n**Examples**:\n- "1px solid #bfdbfe" - Light blue border matching background\n- "2px solid #3b82f6" - Stronger blue border for emphasis\n- "none" - No border for clean, modern appearance',
             },
             /* wwEditor:end */
         },
@@ -930,6 +1058,10 @@ export default {
                 cssSupports: 'border-radius',
                 tooltip: 'Border radius of your own messages',
             },
+            propertyHelp: {
+                tooltip:
+                    'Controls the corner rounding of your own message bubbles.\n\nSupports all CSS border-radius formats including individual corner control using the advanced Spacing interface. You can set uniform radius or customize each corner separately to create unique styling for your own messages.\n\n**Examples**:\n- "12px" - uniform 12px radius on all corners\n- "20px 8px" - 20px on top/bottom, 8px on left/right\n- "16px 16px 4px 16px" - custom radius for each corner (top-left, top-right, bottom-right, bottom-left)',
+            },
             /* wwEditor:end */
         },
 
@@ -953,6 +1085,10 @@ export default {
                 type: 'string',
                 tooltip: 'Background color of the message input',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the background color of the entire input area containing the message input field and action buttons.\n\nThis area is typically separated from the messages area and should provide good contrast with the input field itself.\n\n**Examples**:\n- "#ffffff" - White for clean separation\n- "#f8fafc" - Light gray for subtle distinction\n- "#1e293b" - Dark background for dark themes',
+            },
             /* wwEditor:end */
         },
         inputAreaBorder: {
@@ -968,6 +1104,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Border top of the input area container',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the top border of the input area container that separates it from the messages area.\n\nThis border helps visually distinguish the input section from the conversation history. Use "none" for a seamless design.\n\n**Examples**:\n- "1px solid #e2e8f0" - Subtle gray separation\n- "2px solid #3b82f6" - Stronger blue accent\n- "none" - No border for seamless flow',
             },
             /* wwEditor:end */
         },
@@ -990,6 +1130,10 @@ export default {
                 type: 'string',
                 tooltip: 'Border of the textarea',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the border around the message input textarea in its default state.\n\nThis border defines the input field boundary and should provide clear visual indication of the interactive area. Works in combination with hover and focus states.\n\n**Examples**:\n- "1px solid #e2e8f0" - Subtle gray border\n- "2px solid #d1d5db" - More prominent definition\n- "none" - Borderless for minimal design',
+            },
             /* wwEditor:end */
         },
         textareaBorderHover: {
@@ -1005,6 +1149,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Border of the textarea on hover',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the border around the message input textarea when users hover over it.\n\nThis provides visual feedback indicating the field is interactive. Typically uses a slightly darker or more prominent color than the default border.\n\n**Examples**:\n- "1px solid #cbd5e1" - Darker gray on hover\n- "2px solid #9ca3af" - Thicker and darker\n- "1px solid #3b82f6" - Color change to blue',
             },
             /* wwEditor:end */
         },
@@ -1022,6 +1170,10 @@ export default {
                 type: 'string',
                 tooltip: 'Border of the textarea when focused',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the border around the message input textarea when it has focus (user is typing).\n\nThis provides clear visual feedback that the field is active and ready for input. Typically uses an accent color to draw attention.\n\n**Examples**:\n- "1px solid #3b82f6" - Blue focus indicator\n- "2px solid #059669" - Green with thicker border\n- "1px solid #7c3aed" - Purple for brand colors',
+            },
             /* wwEditor:end */
         },
         inputTextColor: {
@@ -1037,6 +1189,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Text color of the message input',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the color of text that users type in the message input field.\n\nThis should provide excellent readability against the input background and be consistent with your overall design theme.\n\n**Examples**:\n- "#334155" - Dark slate for light backgrounds\n- "#ffffff" - White for dark input backgrounds\n- "#1f2937" - Very dark gray for maximum contrast',
             },
             /* wwEditor:end */
         },
@@ -1060,6 +1216,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Font size of the message input',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the font size for text in the message input field.\n\nThis should be comfortable for typing and typically matches or is similar to the message font size for consistency.\n\n**Examples**:\n- "0.875rem" - Standard input size (14px)\n- "1rem" - Base font size (16px) for better mobile usability\n- "16px" - Fixed pixel size for consistency',
             },
             /* wwEditor:end */
         },
@@ -1090,6 +1250,10 @@ export default {
                 type: 'string',
                 tooltip: 'Font weight of the message input',
             },
+            propertyHelp: {
+                tooltip:
+                    'Controls how bold or light the text appears in the message input field.\n\nNormal weight (400) is standard for input fields and provides good readability without being distracting.\n\n**Examples**:\n- "400" - Normal weight for standard inputs\n- "500" - Medium weight for slightly more presence\n- "300" - Light weight for elegant appearance',
+            },
             /* wwEditor:end */
         },
         inputFontFamily: {
@@ -1105,6 +1269,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Font family of the message input',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the font family for text in the message input field.\n\nBy default, inherits from the main chat font family setting. Keeping consistency with message fonts is typically preferred for a cohesive experience.\n\n**Examples**:\n- "inherit" - Use the main chat font family (recommended)\n- "system-ui" - System font for native feel\n- "monospace" - Fixed-width font for specific use cases',
             },
             /* wwEditor:end */
         },
@@ -1122,6 +1290,10 @@ export default {
                 type: 'string',
                 tooltip: 'Placeholder text color in the message input',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the color of the placeholder text in the message input field.\n\nPlaceholder text should be clearly distinguishable from actual input text while remaining readable. It typically uses a muted or lighter color.\n\n**Examples**:\n- "#94a3b8" - Medium gray for subtle guidance\n- "#d1d5db" - Lighter gray for minimal appearance\n- "#6b7280" - Darker gray for better visibility',
+            },
             /* wwEditor:end */
         },
         inputHeight: {
@@ -1137,6 +1309,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Fixed height of the input area',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the fixed height of the message input field.\n\nThis determines how tall the input field appears and affects the overall size of the input area. Consider touch target sizes for mobile devices.\n\n**Examples**:\n- "38px" - Compact height for desktop interfaces\n- "44px" - Better for touch devices (recommended minimum)\n- "50px" - Larger for improved accessibility',
             },
             /* wwEditor:end */
         },
@@ -1162,6 +1338,30 @@ export default {
                 type: 'string',
                 cssSupports: 'border-radius',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the border radius for the message input field corners.\n\nRounded corners can make the input feel more modern and friendly. Higher values create more pronounced rounding. Uses the advanced Spacing interface for precise corner control.\n\n**Examples**:\n- "20px" - Highly rounded, pill-like appearance\n- "8px" - Moderately rounded corners\n- "4px" - Subtle rounding\n- "0px" - Sharp, square corners',
+            },
+            /* wwEditor:end */
+        },
+        inputPlaceholder: {
+            label: { en: 'Placeholder Text' },
+            type: 'Text',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: 'Type a message...',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'Placeholder text displayed in the message input',
+            },
+            propertyHelp: {
+                tooltip:
+                    'The placeholder text shown in the message input field when it\'s empty.\n\nThis text provides guidance to users about what they should type. It disappears when the user starts typing.\n\n**Examples**:\n- "Type a message..."\n- "Write your message here"\n- "Enter your text"',
+            },
             /* wwEditor:end */
         },
 
@@ -1185,6 +1385,10 @@ export default {
                 type: 'string',
                 tooltip: 'Icon for the send button',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the icon used for the send message button.\n\nThis icon appears in the input area and allows users to send their typed message. Choose an icon that clearly represents the send action.\n\n**Examples**:\n- "send" - Arrow pointing up/right (default)\n- "chevron-right" - Right-pointing arrow\n- "arrow-up" - Upward arrow for vertical send',
+            },
             /* wwEditor:end */
         },
         sendIconColor: {
@@ -1201,6 +1405,10 @@ export default {
                 type: 'string',
                 tooltip: 'Color of the send button icon',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the color of the send button icon.\n\nThis should provide good contrast against the input background and be easily recognizable as an interactive element. Consider using an accent color to draw attention to this important action.\n\n**Examples**:\n- "#334155" - Dark gray for subtle appearance\n- "#3b82f6" - Blue for accent/primary action\n- "#059669" - Green for positive action indication',
+            },
             /* wwEditor:end */
         },
         sendIconSize: {
@@ -1216,6 +1424,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Size of the send button icon',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the size of the send button icon.\n\nThe icon should be large enough to be easily clickable, especially on touch devices, while fitting comfortably within the input area design.\n\n**Examples**:\n- "20px" - Standard size for desktop interfaces\n- "24px" - Larger for better touch targets\n- "16px" - Smaller for compact designs',
             },
             /* wwEditor:end */
         },
@@ -1238,6 +1450,10 @@ export default {
                 type: 'string',
                 tooltip: 'Icon for the attachment button',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the icon used for the file attachment button.\n\nThis icon appears when attachments are enabled and allows users to add files to their messages. Choose an icon that clearly represents file attachment.\n\n**Examples**:\n- "paperclip" - Classic attachment symbol (default)\n- "plus" - Plus sign for adding files\n- "file" - Document icon for file uploads',
+            },
             /* wwEditor:end */
         },
         attachmentIconColor: {
@@ -1254,6 +1470,10 @@ export default {
                 type: 'string',
                 tooltip: 'Color of the attachment button icon',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the color of the attachment button icon.\n\nThis should be easily visible against the input background and indicate that the button is interactive. Can match other icon colors for consistency.\n\n**Examples**:\n- "#334155" - Dark gray for neutral appearance\n- "#6b7280" - Medium gray for subtle presence\n- "#3b82f6" - Blue to match other interactive elements',
+            },
             /* wwEditor:end */
         },
         attachmentIconSize: {
@@ -1269,6 +1489,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Size of the attachment button icon',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the size of the attachment button icon.\n\nShould be large enough for easy interaction while maintaining visual balance with other input area elements. Consider touch target requirements.\n\n**Examples**:\n- "20px" - Standard size matching other icons\n- "22px" - Slightly larger for emphasis\n- "18px" - Smaller for compact layouts',
             },
             /* wwEditor:end */
         },
@@ -1291,6 +1515,10 @@ export default {
                 type: 'string',
                 tooltip: 'Icon for the remove attachment button',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the icon used for removing attachments from messages.\n\nThis icon appears on attachment previews and allows users to remove files before sending. Choose an icon that clearly indicates removal or deletion.\n\n**Examples**:\n- "x" - X mark for close/remove (default)\n- "trash" - Trash bin for delete action\n- "minus" - Minus sign for removal',
+            },
             /* wwEditor:end */
         },
         removeIconColor: {
@@ -1307,6 +1535,10 @@ export default {
                 type: 'string',
                 tooltip: 'Color of the remove attachment button icon',
             },
+            propertyHelp: {
+                tooltip:
+                    'Sets the color of the remove attachment button icon.\n\nThis icon should be clearly visible and may use a color that indicates a destructive action, such as red, or match other UI elements for consistency.\n\n**Examples**:\n- "#334155" - Dark gray for neutral appearance\n- "#dc2626" - Red to indicate destructive action\n- "#6b7280" - Medium gray for subtle presence',
+            },
             /* wwEditor:end */
         },
         removeIconSize: {
@@ -1322,6 +1554,10 @@ export default {
             bindingValidation: {
                 type: 'string',
                 tooltip: 'Size of the remove attachment button icon',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the size of the remove attachment button icon.\n\nThis icon appears on attachment previews and should be large enough to interact with easily while not overwhelming the attachment preview. Typically smaller than main action icons.\n\n**Examples**:\n- "16px" - Compact size for attachment previews\n- "18px" - Slightly larger for easier interaction\n- "14px" - Smaller for minimal design',
             },
             /* wwEditor:end */
         },
@@ -1425,6 +1661,26 @@ export default {
             propertyHelp: {
                 tooltip:
                     'A unique ID that identifies the current user. This is used to determine which messages belong to the user versus other participants.\n\nThe component uses this ID to style messages differently depending on whether they are sent by the current user or others.\n\n**Examples**: user-123, customer-456, agent-789',
+            },
+            /* wwEditor:end */
+        },
+        showSelfInHeader: {
+            label: { en: 'Show Self in Header' },
+            type: 'OnOff',
+            section: 'settings',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: false,
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'boolean',
+                tooltip: 'Whether to show the current user information in the header',
+            },
+            propertyHelp: {
+                tooltip:
+                    "Controls whether the current user's information (name, avatar, status) is displayed in the chat header.\n\nWhen enabled, the header shows the current user's details. When disabled, the header shows other participants or group information instead.\n\nUseful for distinguishing between different chat modes (personal vs group chats).",
             },
             /* wwEditor:end */
         },
@@ -1667,79 +1923,10 @@ export default {
         },
         chatHistory: {
             label: { en: 'Chat History' },
-            type: 'Array',
+            type: 'Info',
             section: 'settings',
             bindable: true,
             defaultValue: [],
-            options: {
-                item: {
-                    type: 'Object',
-                    defaultValue: {
-                        id: 'msg-1',
-                        text: 'Hello there!',
-                        senderId: 'user-1',
-                        userName: 'John Doe',
-                        timestamp: new Date().toISOString(),
-                    },
-                    options: {
-                        item: {
-                            id: {
-                                label: { en: 'Message ID' },
-                                type: 'Text',
-                            },
-                            text: {
-                                label: { en: 'Message Text' },
-                                type: 'Textarea',
-                            },
-                            senderId: {
-                                label: { en: 'Sender ID' },
-                                type: 'Text',
-                            },
-                            userName: {
-                                label: { en: 'Sender Name' },
-                                type: 'Text',
-                            },
-                            timestamp: {
-                                label: { en: 'Timestamp' },
-                                type: 'Text',
-                            },
-                            attachments: {
-                                label: { en: 'Attachments' },
-                                type: 'Array',
-                                options: {
-                                    item: {
-                                        type: 'Object',
-                                        options: {
-                                            item: {
-                                                id: {
-                                                    label: { en: 'ID' },
-                                                    type: 'Text',
-                                                },
-                                                name: {
-                                                    label: { en: 'Name' },
-                                                    type: 'Text',
-                                                },
-                                                type: {
-                                                    label: { en: 'MIME Type' },
-                                                    type: 'Text',
-                                                },
-                                                size: {
-                                                    label: { en: 'Size (bytes)' },
-                                                    type: 'Number',
-                                                },
-                                                url: {
-                                                    label: { en: 'URL' },
-                                                    type: 'Text',
-                                                },
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-            },
             /* wwEditor:start */
             bindingValidation: {
                 type: 'array',
@@ -1764,11 +1951,16 @@ export default {
             },
             section: 'settings',
             /* wwEditor:start */
+            bindingValidation: {
+                type: 'formula',
+                tooltip: 'Formula to extract the unique message ID from each message object',
+            },
             propertyHelp: {
                 tooltip:
                     'Formula to extract the message ID from your data structure.\n\nThis formula is executed for each message in the chat history to determine its unique identifier.\n\n**Examples**:\n- `context.mapping?.["id"]`\n- `context.mapping?.["messageId"]`\n- `"msg-" + context.mapping?.["index"]`',
             },
             /* wwEditor:end */
+            hidden: (content, _, boundProps) => !boundProps.chatHistory,
         },
         mappingMessageText: {
             label: { en: 'Message Text Mapping' },
@@ -1783,11 +1975,16 @@ export default {
             },
             section: 'settings',
             /* wwEditor:start */
+            bindingValidation: {
+                type: 'formula',
+                tooltip: 'Formula to extract the message text content from each message object',
+            },
             propertyHelp: {
                 tooltip:
                     'Formula to extract the message text content from your data structure.\n\nThis formula is executed for each message in the chat history to get the text that will be displayed.\n\n**Examples**:\n- `context.mapping?.["text"]`\n- `context.mapping?.["content"]`\n- `context.mapping?.["message"]`',
             },
             /* wwEditor:end */
+            hidden: (content, _, boundProps) => !boundProps.chatHistory,
         },
         mappingSenderId: {
             label: { en: 'Sender ID Mapping' },
@@ -1802,11 +1999,16 @@ export default {
             },
             section: 'settings',
             /* wwEditor:start */
+            bindingValidation: {
+                type: 'formula',
+                tooltip: 'Formula to extract the sender ID from each message object',
+            },
             propertyHelp: {
                 tooltip:
                     'Formula to extract the sender ID from your data structure.\n\nThis formula is executed for each message to determine who sent it. This is compared with the currentUserId to style messages differently.\n\n**Examples**:\n- `context.mapping?.["senderId"]`\n- `context.mapping?.["userId"]`\n- `context.mapping?.["from"]`',
             },
             /* wwEditor:end */
+            hidden: (content, _, boundProps) => !boundProps.chatHistory,
         },
         mappingUserName: {
             label: { en: 'User Name Mapping' },
@@ -1821,11 +2023,16 @@ export default {
             },
             section: 'settings',
             /* wwEditor:start */
+            bindingValidation: {
+                type: 'formula',
+                tooltip: 'Formula to extract the user display name from each message object',
+            },
             propertyHelp: {
                 tooltip:
                     'Formula to extract the user display name from your data structure.\n\nThis formula is executed for each message to get the display name of the sender shown above their messages.\n\n**Examples**:\n- `context.mapping?.["userName"]`\n- `context.mapping?.["senderName"]`\n- `context.mapping?.["from_name"]`',
             },
             /* wwEditor:end */
+            hidden: (content, _, boundProps) => !boundProps.chatHistory,
         },
         mappingTimestamp: {
             label: { en: 'Timestamp Mapping' },
@@ -1840,11 +2047,16 @@ export default {
             },
             section: 'settings',
             /* wwEditor:start */
+            bindingValidation: {
+                type: 'formula',
+                tooltip: 'Formula to extract the timestamp from each message object',
+            },
             propertyHelp: {
                 tooltip:
                     'Formula to extract the timestamp from your data structure.\n\nThis formula is executed for each message to get the time when it was sent. Should return an ISO date string or Date object.\n\n**Examples**:\n- `context.mapping?.["timestamp"]`\n- `context.mapping?.["sentAt"]`\n- `context.mapping?.["date"]`',
             },
             /* wwEditor:end */
+            hidden: (content, _, boundProps) => !boundProps.chatHistory,
         },
         mappingAttachments: {
             label: { en: 'Attachments Mapping' },
@@ -1859,11 +2071,16 @@ export default {
             },
             section: 'settings',
             /* wwEditor:start */
+            bindingValidation: {
+                type: 'formula',
+                tooltip: 'Formula to extract the attachments array from each message object',
+            },
             propertyHelp: {
                 tooltip:
                     'Formula to extract the attachments array from your data structure.\n\nThis formula should return an array of attachment objects, each with id, name, type, size, and url properties.\n\n**Examples**:\n- `context.mapping?.["attachments"]`\n- `context.mapping?.["files"]`\n- `context.mapping?.["media"]`',
             },
             /* wwEditor:end */
+            hidden: (content, _, boundProps) => !boundProps.chatHistory,
         },
     },
 };

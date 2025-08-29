@@ -48,12 +48,14 @@ Message Style Properties:
 -   `messageBgColor`: `string` - Background color of messages from others. Default: `#f1f5f9`
 -   `messageTextColor`: `string` - Text color of messages from others. Default: `#334155`
 -   `messageBorder`: `string` - Border of messages from others. Default: `1px solid #e2e8f0`
+-   `messageRadius`: `Spacing` - Border radius of messages from others with advanced corner control. Supports all CSS border-radius formats. Default: `18px 18px 18px 18px`
 -   `messageFontSize`: `string` - Font size of messages from others. Supports px, em, and rem units. Default: `0.9375rem`
 -   `messageFontWeight`: `string` - Font weight of messages from others (100-900). Default: `400`
 -   `messageFontFamily`: `string` - Font family of messages from others. Default: `inherit`
 -   `ownMessageBgColor`: `string` - Background color of your own messages. Default: `#dbeafe`
 -   `ownMessageTextColor`: `string` - Text color of your own messages. Default: `#1e40af`
 -   `ownMessageBorder`: `string` - Border of your own messages. Default: `1px solid #bfdbfe`
+-   `ownMessageRadius`: `Spacing` - Border radius of your own messages with advanced corner control. Supports all CSS border-radius formats. Default: `18px 18px 18px 18px`
 -   `ownMessageFontSize`: `string` - Font size of your own messages. Supports px, em, and rem units. Default: `0.9375rem`
 -   `ownMessageFontWeight`: `string` - Font weight of your own messages (100-900). Default: `400`
 -   `ownMessageFontFamily`: `string` - Font family of your own messages. Default: `inherit`
@@ -229,7 +231,8 @@ Important Implementation Notes:
 -   The header will automatically display the chat partner's information based on message history and `usersSettings`
 -   Right-click events provide coordinates for showing custom context menus at the correct position
 -   Responsive design adapts to container size but may need additional styling for small screens
--   The `inputBorderRadius` property supports advanced corner control - you can set individual corner radii using the Spacing type interface
+-   The `inputBorderRadius`, `messageRadius`, and `ownMessageRadius` properties support advanced corner control - you can set individual corner radii using the Spacing type interface
+-   Message border radius properties give you complete control over message bubble appearance without automatic modifications for message grouping
 -   Textarea border states (default/hover/focus) are completely separate from the input area container border for precise styling control
 
 Enhanced Styling Capabilities:
@@ -237,7 +240,7 @@ Enhanced Styling Capabilities:
 -   **Classes, States & Responsive Support**: All style properties support CSS classes, pseudo-states (hover, focus, etc.), and responsive breakpoints for advanced styling control
 -   **Advanced Font Control**: Comprehensive font properties for messages and input area including size, weight (100-900), and family
 -   **Flexible Unit Support**: Font size properties support px, em, and rem units with appropriate value ranges and step controls
--   **Spacing Type Integration**: Padding properties and `inputBorderRadius` use the advanced Spacing type with corner control and multiple unit options (px, %)
+-   **Spacing Type Integration**: Padding properties, `inputBorderRadius`, `messageRadius`, and `ownMessageRadius` use the advanced Spacing type with corner control and multiple unit options (px, %)
 -   **Interactive Border States**: Textarea supports separate styling for default, hover, and focus states with dedicated border properties
 -   **Fixed-Height Input Control**: Textarea maintains consistent height with internal scrolling, eliminating dynamic resizing behavior
 -   **Typography Consistency**: Font weight properties use standardized numeric values (100-900) for consistent typography across the component
@@ -279,12 +282,14 @@ Example Styled Implementation:
         "messageBgColor": "#ffffff",
         "messageTextColor": "#24292f",
         "messageBorder": "1px solid #d0d7de",
+        "messageRadius": "16px 16px 16px 4px",
         "messageFontSize": "1rem",
         "messageFontWeight": "400",
         "messageFontFamily": "Inter, sans-serif",
         "ownMessageBgColor": "#ddf4ff",
         "ownMessageTextColor": "#0969da",
         "ownMessageBorder": "1px solid #54aeff",
+        "ownMessageRadius": "16px 4px 16px 16px",
         "ownMessageFontSize": "1rem",
         "ownMessageFontWeight": "500",
         "ownMessageFontFamily": "Inter, sans-serif",
