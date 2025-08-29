@@ -158,11 +158,11 @@ export default {
         },
         messageRadius: {
             type: String,
-            default: '18px',
+            default: '18px 18px 18px 18px',
         },
         ownMessageRadius: {
             type: String,
-            default: '18px',
+            default: '18px 18px 18px 18px',
         },
     },
     emits: ['attachment-click', 'right-click'],
@@ -254,42 +254,20 @@ export default {
     &__content {
         max-width: 70%;
         padding: 10px 12px;
-        border-radius: var(--message-radius, 18px);
+        border-radius: var(--message-radius, 18px 18px 18px 18px);
         position: relative;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-
-        --message-radius-small: calc(var(--message-radius, 18px) * 0.22);
-        --message-radius-medium: calc(var(--message-radius, 18px) * 0.44);
 
         &:not(.ww-message-item--continued) {
             margin-top: 8px;
         }
 
-        &--own {
-            border-bottom-right-radius: var(--message-radius-small);
-        }
-
         .ww-message-item--continued & {
-            border-top-left-radius: var(--message-radius-medium);
-            border-top-right-radius: var(--message-radius-medium);
             margin-top: 2px;
         }
 
-        .ww-message-item--own.ww-message-item--continued & {
-            border-top-left-radius: var(--message-radius-medium);
-            border-top-right-radius: var(--message-radius-medium);
-            border-bottom-right-radius: var(--message-radius-small);
-        }
-
         .ww-message-item--continue-next & {
-            border-bottom-left-radius: var(--message-radius-medium);
-            border-bottom-right-radius: var(--message-radius-medium);
             margin-bottom: 2px;
-        }
-
-        .ww-message-item--own.ww-message-item--continue-next & {
-            border-bottom-left-radius: var(--message-radius-medium);
-            border-bottom-right-radius: var(--message-radius-small);
         }
     }
 

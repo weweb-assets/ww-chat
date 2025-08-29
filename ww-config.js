@@ -774,7 +774,7 @@ export default {
             classes: true,
             states: true,
             responsive: true,
-            defaultValue: '18px 18px 18px 0px',
+            defaultValue: '18px 18px 18px 18px',
             /* wwEditor:start */
             bindingValidation: {
                 markdown: 'border-radius',
@@ -922,7 +922,7 @@ export default {
             classes: true,
             states: true,
             responsive: true,
-            defaultValue: '18px 0px 18px 18px',
+            defaultValue: '18px 18px 18px 18px',
             /* wwEditor:start */
             bindingValidation: {
                 markdown: 'border-radius',

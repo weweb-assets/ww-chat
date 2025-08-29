@@ -89,7 +89,7 @@ export default {
         },
         messageRadius: {
             type: String,
-            default: '18px',
+            default: '18px 18px 18px 18px',
         },
         ownMessageBgColor: {
             type: String,
@@ -117,7 +117,7 @@ export default {
         },
         ownMessageRadius: {
             type: String,
-            default: '18px',
+            default: '18px 18px 18px 18px',
         },
         emptyMessageText: {
             type: String,
