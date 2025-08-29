@@ -468,16 +468,10 @@ export default {
         const scrollToBottom = async (smooth = false) => {
             await nextTick();
             if (messagesContainer.value) {
-                if (smooth) {
-                    const lastElement = messagesContainer.value.lastElementChild;
-                    if (lastElement) {
-                        lastElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
-                    } else {
-                        messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
-                    }
-                } else {
-                    messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
-                }
+                messagesContainer.value.scrollTo({
+                    top: messagesContainer.value.scrollHeight,
+                    behavior: smooth ? 'smooth' : 'auto',
+                });
             }
         };
 
@@ -1111,7 +1105,6 @@ export default {
         flex: 1;
         min-height: 0;
         overflow-y: auto;
-        scroll-behavior: smooth;
         padding: var(--ww-chat-messages-padding);
         background-color: var(--ww-chat-messages-bg);
         position: relative;
