@@ -208,13 +208,8 @@ export default {
 
         const resolveMapping = (message, mappingFormula, defaultProp) => {
             if (!message || typeof message !== 'object') return '';
-            if (!mappingFormula) return message[defaultProp] || '';
-
-            try {
-                return resolveMappingFormula(mappingFormula, message) || '';
-            } catch (error) {
-                return message[defaultProp] || '';
-            }
+            if (!mappingFormula) return message[defaultProp];
+            return resolveMappingFormula(mappingFormula, message);
         };
 
         const isEditing = computed(() => {
@@ -226,30 +221,21 @@ export default {
         });
 
         const currentUserId = computed(() => props.content?.currentUserId || 'current-user');
-        const rawMessages = computed(() => {
-            const chatHistory = props.content?.chatHistory;
-            const stateMessages = chatState.value?.messages;
-
-            // Ensure we always have a valid array
-            if (Array.isArray(chatHistory)) return chatHistory;
-            if (Array.isArray(stateMessages)) return stateMessages;
-            return [];
-        });
+        const rawMessages = computed(() => props.content?.chatHistory || chatState.value?.messages || []);
 
         const messages = computed(() => {
-            return rawMessages.value.map((message, index) => {
-                // Ensure message is an object
+            return rawMessages.value.map(message => {
                 if (!message || typeof message !== 'object') {
                     return {
-                        id: `invalid-msg-${index}`,
+                        id: `msg-${wwLib.wwUtils.getUid()}`,
                         text: '',
                         senderId: '',
-                        userName: 'Unknown User',
+                        userName: '',
                         avatar: '',
                         location: '',
-                        status: 'online',
-                        timestamp: new Date().toISOString(),
-                        attachments: undefined,
+                        status: '',
+                        timestamp: '',
+                        attachments: [],
                         userSettings: {},
                         _originalData: message,
                     };
@@ -263,7 +249,9 @@ export default {
                 const displayUserName = userSettings.userName || originalUserName || 'Unknown User';
 
                 return {
-                    id: resolveMapping(message, props.content?.mappingMessageId, 'id') || `msg-${index}`,
+                    id:
+                        resolveMapping(message, props.content?.mappingMessageId, 'id') ||
+                        `msg-${wwLib.wwUtils.getUid()}`,
                     text: resolveMapping(message, props.content?.mappingMessageText, 'text') || '',
                     senderId: senderId,
                     userName: displayUserName,

@@ -163,7 +163,7 @@ export default {
             const result = [];
             let currentDate = null;
 
-            props.messages.forEach((message, index) => {
+            props.messages.forEach(message => {
                 const messageDate = message.timestamp
                     ? new Date(message.timestamp).toDateString()
                     : new Date().toDateString();
@@ -179,7 +179,7 @@ export default {
 
                 result.push({
                     ...message,
-                    key: message.id || `msg-${index}`,
+                    key: message.id || `msg-${wwLib.wwUtils.getUid()}`,
                 });
             });
 
