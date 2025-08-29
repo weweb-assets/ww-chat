@@ -361,9 +361,7 @@ export default {
         watch(
             messages,
             () => {
-                if (!isScrolling.value) {
-                    scrollToBottom();
-                }
+                if (!isScrolling.value) scrollToBottom(); // Will use autoScrollBehavior setting
             },
             { deep: true }
         );
@@ -465,12 +463,16 @@ export default {
             { immediate: true }
         );
 
-        const scrollToBottom = async (smooth = false) => {
+        const scrollToBottom = async (smooth = null) => {
             await nextTick();
             if (messagesContainer.value) {
+                // Use the autoScrollBehavior setting if smooth parameter is not explicitly provided
+                const behavior =
+                    smooth !== null ? (smooth ? 'smooth' : 'auto') : props.content?.autoScrollBehavior || 'auto';
+
                 messagesContainer.value.scrollTo({
                     top: messagesContainer.value.scrollHeight,
-                    behavior: smooth ? 'smooth' : 'auto',
+                    behavior: behavior,
                 });
             }
         };

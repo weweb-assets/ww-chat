@@ -106,7 +106,7 @@ export default {
                 'showSelfInHeader',
             ],
             // Chat settings
-            ['chatSettingsTitle', 'groupChatText', 'allowAttachments', 'disabled'],
+            ['chatSettingsTitle', 'groupChatText', 'allowAttachments', 'disabled', 'autoScrollBehavior'],
             // Localization settings
             ['localizationTitle', 'locale', 'timeFormat', 'todayText', 'yesterdayText', 'justNowText'],
             // Chat data
@@ -1740,6 +1740,30 @@ export default {
             propertyHelp: {
                 tooltip:
                     'When enabled, the entire chat component becomes inactive and users cannot send messages.\n\nUse this setting to temporarily disable chat functionality while maintaining the UI. The component will appear faded when disabled.',
+            },
+            /* wwEditor:end */
+        },
+        autoScrollBehavior: {
+            label: { en: 'Auto-scroll Behavior' },
+            type: 'TextSelect',
+            options: {
+                options: [
+                    { value: 'smooth', label: { en: 'Smooth' } },
+                    { value: 'auto', label: { en: 'Instant' } },
+                ],
+            },
+            section: 'settings',
+            bindable: true,
+            defaultValue: 'auto',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                enum: ['smooth', 'auto'],
+                tooltip: 'Behavior when automatically scrolling to new messages',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Controls how the chat scrolls to the bottom when new messages are received.\n\n"Smooth" provides a gradual animated scroll effect, while "Instant" immediately jumps to the bottom without animation.\n\n**Smooth**: Better user experience with animated scrolling\n**Instant**: Immediate response, better for high-frequency message environments',
             },
             /* wwEditor:end */
         },

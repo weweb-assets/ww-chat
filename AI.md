@@ -121,6 +121,7 @@ Chat Settings:
 -   `groupChatTemplate`: `string` - Template for group chat header text. Use {count} as placeholder for number of participants. Default: `Group Chat ({count} participants)`
 -   `allowAttachments`: `boolean` - Whether to allow file attachments. Default: `false`
 -   `disabled`: `boolean` - Whether the chat component is disabled. Default: `false`
+-   `autoScrollBehavior`: `string` - Controls how the chat scrolls to bottom when new messages arrive. Options: `smooth` (animated scrolling), `auto` (instant jump). Default: `auto`
 
 Localization Properties:
 
@@ -178,7 +179,7 @@ User Settings Events:
 
 Actions:
 
--   `scrollToBottom`: Scrolls the message area to the bottom. Args: `smooth` (boolean, optional) - Whether to use smooth scrolling animation. Default: `false`
+-   `scrollToBottom`: Scrolls the message area to the bottom. Args: `smooth` (boolean, optional) - Whether to use smooth scrolling animation. When not specified, uses the `autoScrollBehavior` setting. Default: Uses `autoScrollBehavior` setting
 
 Variables:
 
@@ -211,7 +212,7 @@ Special Features:
 -   Date separators with "Today", "Yesterday", or date labels, fully customizable
 -   Empty message state with customizable text and styling
 -   File attachments with image preview support
--   Auto-scrolling to latest messages
+-   Auto-scrolling to latest messages with configurable behavior (smooth or instant)
 -   Context menu support via right-click events on messages
 -   Fixed-height textarea with scroll support and hover/focus state styling
 -   Shift+Enter support for multiline messages
@@ -256,6 +257,7 @@ Example Basic Implementation:
         "currentUserId": "john-doe",
         "displayHeader": true,
         "allowAttachments": true,
+        "autoScrollBehavior": "smooth",
         "chatHistory": [
             {
                 "id": "msg-1",
@@ -380,10 +382,14 @@ Troubleshooting:
 -   **Messages showing incorrect sender:** Check that `currentUserId` matches the `senderId` in your messages
 -   **Participant info not showing:** Ensure each message includes proper `userSettings` when adding messages from different participants
 -   **Attachments not working:** Ensure `allowAttachments` is set to `true` and file URLs are accessible
--   **Chat not scrolling to bottom:** Call `scrollToBottom` action after programmatically adding messages
+-   **Chat not scrolling to bottom:** Call `scrollToBottom` action after programmatically adding messages. Configure `autoScrollBehavior` setting to control automatic scroll behavior for new messages
 -   **User avatar not displaying:** Verify the avatar URL is valid in the message's `userSettings` property (initials will be shown as fallback)
 -   **Right-click event not firing:** Make sure the component is not in editing mode
 -   **Group chat header not showing correctly:** Check that you have messages from multiple different senders
 -   **messageReceived event not triggering:** Verify that the incoming message has a different senderId than currentUserId
 -   **Textarea border states not working:** Ensure all three border properties (`textareaBorder`, `textareaBorderHover`, `textareaBorderFocus`) are properly configured
 -   **Input height not consistent:** The textarea now uses fixed height with internal scrolling - adjust `inputHeight` property instead of expecting auto-resize behavior
+
+Production content example:
+
+{"uid":"c01ded26-8cd1-411e-b908-7724b45a1daf","name":"Chat 1","wwObjectBaseId":"2c8e3e54-3ea3-48ea-b8c8-e7580e3362a2","libraryComponentBaseId":null,"parentSectionId":"0b7157db-1974-4139-9f41-9a53c4a35e42","parentLibraryComponentId":null,"\_state":{"style":{"mobile":{"padding":"8px"},"tablet":{"padding":"12px"},"default":{"flex":"0 1 auto","width":"500px","height":"800px","display":"flex","overflow":"hidden","customCss":{},"aspectRatio":"unset","borderRadius":"16px"}},"interactions":[{"id":"033cf581-cd67-4cc9-a1d5-58d161a5e821","name":"Insert message","actions":{"40c6dd73-f7c5-4ff4-ac86-c4db3ab1401a":{"id":"40c6dd73-f7c5-4ff4-ac86-c4db3ab1401a","next":"60b36d26-c290-4334-a28f-c625d33e0869","type":"variable","varId":"3e631ef9-8fc9-4dc1-9db7-b8a90d138c8f","internal":false,"varValue":{"code":"event?.['message']","**wwtype":"f"},"arrayUpdateType":"push"},"60b36d26-c290-4334-a28f-c625d33e0869":{"id":"60b36d26-c290-4334-a28f-c625d33e0869","uid":"c01ded26-8cd1-411e-b908-7724b45a1daf","args":[false],"type":"component-action","category":"elements","actionName":"scrollToBottom"}},"trigger":"messageSent","firstAction":"40c6dd73-f7c5-4ff4-ac86-c4db3ab1401a","triggerConditions":null},{"id":"c0c4e408-d063-43bf-9a6f-085e1a7c3744","name":"Settings changed","actions":{"f9ee1978-ae6f-463a-b695-aeac567ed3ac":{"id":"f9ee1978-ae6f-463a-b695-aeac567ed3ac","type":"variable","varId":"3e631ef9-8fc9-4dc1-9db7-b8a90d138c8f","internal":false,"varValue":{"code":"variables['c01ded26-8cd1-411e-b908-7724b45a1daf-chatState']?.['messages']","**wwtype":"f"}}},"trigger":"settingsChanged","firstAction":"f9ee1978-ae6f-463a-b695-aeac567ed3ac","triggerConditions":null}]},"content":{"default":{"locale":"enUS","disabled":false,"sendIcon":"lucide/send","userName":{"code":"variables['8d04d52d-e816-4b54-b6ce-5fa731592f38-value']","**wwtype":"f","defaultValue":"John"},"todayText":"Today","fontFamily":null,"removeIcon":"lucide/x","timeFormat":"h:mm a","userAvatar":{"code":"variables['f8afce9e-e59b-4a97-8c08-3fc6b8ac54e5-value']","**wwtype":"f","defaultValue":"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&q=80"},"userStatus":{"code":"variables['b135e389-bcbd-4abd-b85c-d1d2f4a662ae-value']","__wwtype":"f","defaultValue":"online"},"chatHistory":{"code":"variables['3e631ef9-8fc9-4dc1-9db7-b8a90d138c8f']","__wwtype":"f"},"inputBorder":"1px solid #2d3748","inputHeight":"52px","justNowText":"just now","headerBorder":"none","inputBgColor":"#1e293b","sendIconSize":"20px","userLocation":{"code":"variables['97515301-3723-4779-9c8f-4524bf587e69-value']","\_\_wwtype":"f","defaultValue":"Paris"},"currentUserId":"user-2","displayHeader":true,"headerBgColor":"#1e293b","headerPadding":"16px 24px","messageBorder":"none","sendIconColor":"#3b82f6","yesterdayText":"Yesterday","attachmentIcon":"lucide/paperclip","inputMaxHeight":"120px","inputMinHeight":"48px","inputTextColor":"#ffffff","messageBgColor":"#1e293b","removeIconSize":"16px","backgroundColor":"#121826","containerBorder":"1px solid #2d3748","containerShadow":"0 4px 20px rgba(0, 0, 0, 0.3)","headerBoxShadow":"0 2px 8px rgba(0, 0, 0, 0.2)","headerTextColor":"#ffffff","mappingSenderId":{"code":"context.mapping?.['senderId']","type":"f"},"mappingUserName":{"code":"context.mapping?.['userName']","type":"f"},"removeIconColor":"#f43f5e","allowAttachments":true,"emptyMessageText":"No messages yet","inputPlaceholder":"Ask me anything...","mappingMessageId":{"code":"context.mapping?.['id']","type":"f"},"mappingTimestamp":{"code":"context.mapping?.['timestamp']","type":"f"},"messageTextColor":"#ffffff","ownMessageBorder":"none","showSelfInHeader":false,"emptyMessageColor":"#94a3b8","groupChatTemplate":"Group Chat ({count} participants)","inputBorderRadius":"24px","ownMessageBgColor":"linear-gradient(135deg, #3b82f6, #2563eb)","attachmentIconSize":"20px","headerNameFontSize":"18px","mappingAttachments":{"code":"context.mapping?.['attachments']","type":"f"},"mappingMessageText":{"code":"context.mapping?.['text']","type":"f"},"messagesAreaHeight":"500px","attachmentIconColor":"#64748b","messagesAreaBgColor":"#121826","messagesAreaPadding":"24px","ownMessageTextColor":"#ffffff","dateSeparatorBgColor":"#121826","headerNameFontWeight":"600","containerBorderRadius":"16px","headerLocationOpacity":.7,"inputPlaceholderColor":"#94a3b8","messagesAreaMinHeight":"100px","dateSeparatorLineColor":"#2d3748","dateSeparatorTextColor":"#94a3b8","headerCloseButtonColor":"#64748b","headerLocationFontSize":"14px","headerCloseButtonBgHover":"rgba(0, 0, 0, 0.05)","dateSeparatorBorderRadius":"4px","autoScrollBehavior":"auto"}}}
