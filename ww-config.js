@@ -75,6 +75,9 @@ export default {
                 'inputHeight',
                 'inputBorderRadius',
                 'inputPlaceholder',
+            ],
+            // Icons
+            [
                 'sendTitle',
                 'sendIcon',
                 'sendIconColor',
