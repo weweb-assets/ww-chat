@@ -1963,7 +1963,7 @@ export default {
             /* wwEditor:end */
         },
         mappingMessageId: {
-            label: { en: 'Message ID Mapping' },
+            label: { en: 'Message ID' },
             type: 'Formula',
             options: content => ({
                 template:
@@ -1987,7 +1987,7 @@ export default {
             hidden: (content, _, boundProps) => !boundProps.chatHistory,
         },
         mappingMessageText: {
-            label: { en: 'Message Text Mapping' },
+            label: { en: 'Message Text' },
             type: 'Formula',
             options: content => ({
                 template:
@@ -2011,7 +2011,7 @@ export default {
             hidden: (content, _, boundProps) => !boundProps.chatHistory,
         },
         mappingSenderId: {
-            label: { en: 'Sender ID Mapping' },
+            label: { en: 'Sender ID' },
             type: 'Formula',
             options: content => ({
                 template:
@@ -2035,7 +2035,7 @@ export default {
             hidden: (content, _, boundProps) => !boundProps.chatHistory,
         },
         mappingUserName: {
-            label: { en: 'User Name Mapping' },
+            label: { en: 'User Name' },
             type: 'Formula',
             options: content => ({
                 template:
@@ -2059,7 +2059,7 @@ export default {
             hidden: (content, _, boundProps) => !boundProps.chatHistory,
         },
         mappingTimestamp: {
-            label: { en: 'Timestamp Mapping' },
+            label: { en: 'Timestamp' },
             type: 'Formula',
             options: content => ({
                 template:
@@ -2083,7 +2083,7 @@ export default {
             hidden: (content, _, boundProps) => !boundProps.chatHistory,
         },
         mappingAttachments: {
-            label: { en: 'Attachments Mapping' },
+            label: { en: 'Attachments' },
             type: 'Formula',
             options: content => ({
                 template:
