@@ -94,12 +94,6 @@ Icon Properties:
 
 User Properties:
 
--   `userName`: `string` - Name to display for the current user (used as fallback when usersSettings is empty). Default: `User`
--   `userAvatar`: `string` - URL of the user avatar image (used as fallback when usersSettings is empty). Default: ``
--   `userLocation`: `string` - Location to display under the user name (used as fallback when usersSettings is empty). Default: ``
--   `userStatus`: `string` - Current status of the user (used as fallback when usersSettings is empty). Options: `online`, `offline`, `away`, `busy`. Default: `online`
--   `currentUserId`: `string` - Unique identifier for the current user (used to identify your messages). Default: `current-user`
--   `showSelfInHeader`: `boolean` - If enabled, shows the current user in the header instead of the chat partner. Default: `false`
 
 User Settings Management:
 
@@ -162,7 +156,6 @@ Message Data Mapping:
 -   `mappingMessageId`: `Formula` - Formula to extract message ID from your data. Default: `context.mapping?.['id']`
 -   `mappingMessageText`: `Formula` - Formula to extract message text from your data. Default: `context.mapping?.['text']`
 -   `mappingSenderId`: `Formula` - Formula to extract sender ID from your data. Default: `context.mapping?.['senderId']`
--   `mappingUserName`: `Formula` - Formula to extract user name from your data. Default: `context.mapping?.['userName']`
 -   `mappingTimestamp`: `Formula` - Formula to extract timestamp from your data. Default: `context.mapping?.['timestamp']`
 -   `mappingAttachments`: `Formula` - Formula to extract attachments from your data. Default: `context.mapping?.['attachments']`
 
@@ -229,7 +222,7 @@ Special Features:
 
 Important Implementation Notes:
 
--   **usersSettings Priority System**: The component prioritizes user information in this order: `usersSettings[userId]` → direct props (`userName`, `userAvatar`, etc.) → default values
+Participant identity is fully derived from Participant Data (participants array + mappings). The current user is inferred via `mappingIsCurrentUser`.
 -   **Automatic User Settings Management**: When user properties change, the component automatically updates `usersSettings` for the current user
 -   **Multi-user Display**: For optimal display, populate `usersSettings` with information for all chat participants, not just the current user
 -   **Real-time Reactivity**: Changes to `usersSettings` immediately update all UI elements (messages, headers, participant lists)
@@ -260,9 +253,10 @@ Example Basic Implementation:
 {
     "tag": "ww-chat",
     "content": {
-        "userName": "John Doe",
-        "userStatus": "online",
-        "currentUserId": "john-doe",
+        "participants": [
+            { "id": "john-doe", "name": "John Doe", "status": "online", "isCurrentUser": true },
+            { "id": "agent-007", "name": "Support Agent", "status": "busy" }
+        ],
         "displayHeader": true,
         "allowAttachments": true,
         "autoScrollBehavior": "smooth",
@@ -271,7 +265,7 @@ Example Basic Implementation:
                 "id": "msg-1",
                 "text": "Hello there! Welcome to our support chat.",
                 "senderId": "support-agent",
-                "userName": "Support Agent",
+                
                 "timestamp": "2023-06-01T11:15:00.000Z"
             }
         ]
@@ -285,10 +279,10 @@ Example Styled Implementation:
 {
     "tag": "ww-chat",
     "content": {
-        "userName": "John Doe",
-        "userAvatar": "https://example.com/avatars/john.jpg",
-        "userStatus": "online",
-        "currentUserId": "john-doe",
+        "participants": [
+            { "id": "john-doe", "name": "John Doe", "status": "online", "isCurrentUser": true },
+            { "id": "agent-007", "name": "Support Agent", "status": "busy" }
+        ],
         "messageBgColor": "#ffffff",
         "messageTextColor": "#24292f",
         "messageBorder": "1px solid #d0d7de",
@@ -332,7 +326,10 @@ Example with usersSettings Management:
 {
     "tag": "ww-chat",
     "content": {
-        "currentUserId": "john-doe",
+        "participants": [
+            { "id": "john-doe", "name": "John Doe", "status": "online", "isCurrentUser": true },
+            { "id": "agent-007", "name": "Support Agent", "status": "busy" }
+        ],
         "displayHeader": true,
         "allowAttachments": true,
         "messages": [
@@ -340,14 +337,14 @@ Example with usersSettings Management:
                 "id": "msg-1",
                 "text": "Hello there! Welcome to our support chat.",
                 "senderId": "support-agent",
-                "userName": "Support Agent",
+                
                 "timestamp": "2023-06-01T11:15:00.000Z"
             },
             {
                 "id": "msg-2",
                 "text": "Hi! Thanks for the quick response.",
                 "senderId": "john-doe",
-                "userName": "John Doe",
+                
                 "timestamp": "2023-06-01T11:16:00.000Z"
             }
         ]
