@@ -99,6 +99,17 @@ export default {
             ['localizationTitle', 'locale', 'timeFormat', 'todayText', 'yesterdayText', 'justNowText'],
             // Chat data
             ['chatDataTitle', 'chatHistory'],
+            // Participant data
+            [
+                'participantDataTitle',
+                'participants',
+                'mappingParticipantId',
+                'mappingParticipantName',
+                'mappingParticipantAvatar',
+                'mappingParticipantLocation',
+                'mappingParticipantStatus',
+                'mappingIsCurrentUser',
+            ],
             // Message data mapping
             [
                 'messageDataTitle',
@@ -1320,6 +1331,134 @@ export default {
             propertyHelp: {
                 tooltip:
                     'An array of message objects that represent the conversation history.\n\nEach message should include id, text, senderId, userName, and timestamp properties. Optionally can include attachments.\n\n**Example**: \n```json\n[{ \n  "id": "msg-1", \n  "text": "Hello!", \n  "senderId": "user-1", \n  "userName": "John", \n  "timestamp": "2023-06-01T10:30:00Z" \n}]\n```',
+            },
+            /* wwEditor:end */
+        },
+
+        // Participant data
+        participantDataTitle: {
+            type: 'Title',
+            label: { en: 'Participant Data' },
+            section: 'settings',
+        },
+        participants: {
+            label: { en: 'Participants' },
+            type: 'Array',
+            section: 'settings',
+            bindable: true,
+            defaultValue: [],
+            options: {
+                item: {
+                    type: 'Object',
+                    options: {
+                        item: {
+                            id: { label: { en: 'Participant ID' }, type: 'Text' },
+                            name: { label: { en: 'Name' }, type: 'Text' },
+                            avatar: { label: { en: 'Avatar URL' }, type: 'Text' },
+                            location: { label: { en: 'Location' }, type: 'Text' },
+                            status: {
+                                label: { en: 'Status' },
+                                type: 'TextSelect',
+                                options: {
+                                    options: [
+                                        { value: 'online', label: { en: 'Online' } },
+                                        { value: 'offline', label: { en: 'Offline' } },
+                                        { value: 'away', label: { en: 'Away' } },
+                                        { value: 'busy', label: { en: 'Busy' } },
+                                    ],
+                                },
+                            },
+                            isCurrentUser: { label: { en: 'Is Current User' }, type: 'OnOff' },
+                        },
+                    },
+                },
+            },
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'array',
+                tooltip: 'Array of participant objects representing users in the conversation',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Provide the list of chat participants. Each participant can include id, name, avatar, location, status, and an optional isCurrentUser flag.\n\nThe mapping formulas below let you adapt to any data shape.',
+            },
+            /* wwEditor:end */
+        },
+        mappingParticipantId: {
+            label: { en: 'Participant ID Mapping' },
+            type: 'Formula',
+            options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
+            defaultValue: { type: 'f', code: "context.mapping?.['id'] ?? context.mapping?.['participantId']" },
+            section: 'settings',
+            /* wwEditor:start */
+            propertyHelp: {
+                tooltip:
+                    'Formula to extract the unique ID from each participant object.\n\nExamples:\n- `context.mapping?.["id"]`\n- `context.mapping?.["userId"]`\n- `context.mapping?.["_id"]`',
+            },
+            /* wwEditor:end */
+        },
+        mappingParticipantName: {
+            label: { en: 'Participant Name Mapping' },
+            type: 'Formula',
+            options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
+            defaultValue: { type: 'f', code: "context.mapping?.['name'] ?? context.mapping?.['userName'] ?? context.mapping?.['fullName']" },
+            section: 'settings',
+            /* wwEditor:start */
+            propertyHelp: {
+                tooltip:
+                    'Formula to extract the display name for each participant.\n\nExamples:\n- `context.mapping?.["name"]`\n- `context.mapping?.["userName"]`\n- `context.mapping?.["fullName"]`',
+            },
+            /* wwEditor:end */
+        },
+        mappingParticipantAvatar: {
+            label: { en: 'Participant Avatar Mapping' },
+            type: 'Formula',
+            options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
+            defaultValue: { type: 'f', code: "context.mapping?.['avatar'] ?? context.mapping?.['avatarUrl'] ?? context.mapping?.['photo']" },
+            section: 'settings',
+            /* wwEditor:start */
+            propertyHelp: {
+                tooltip:
+                    'Formula to extract the avatar URL for each participant.\n\nExamples:\n- `context.mapping?.["avatar"]`\n- `context.mapping?.["avatarUrl"]`\n- `context.mapping?.["photo"]`',
+            },
+            /* wwEditor:end */
+        },
+        mappingParticipantLocation: {
+            label: { en: 'Participant Location Mapping' },
+            type: 'Formula',
+            options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
+            defaultValue: { type: 'f', code: "context.mapping?.['location'] ?? context.mapping?.['subtitle']" },
+            section: 'settings',
+            /* wwEditor:start */
+            propertyHelp: {
+                tooltip:
+                    'Formula to extract the location or subtitle text for each participant.\n\nExamples:\n- `context.mapping?.["location"]`\n- `context.mapping?.["subtitle"]`',
+            },
+            /* wwEditor:end */
+        },
+        mappingParticipantStatus: {
+            label: { en: 'Participant Status Mapping' },
+            type: 'Formula',
+            options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
+            defaultValue: { type: 'f', code: "context.mapping?.['status']" },
+            section: 'settings',
+            /* wwEditor:start */
+            propertyHelp: {
+                tooltip:
+                    'Formula to extract the status for each participant (online, offline, away, busy).',
+            },
+            /* wwEditor:end */
+        },
+        mappingIsCurrentUser: {
+            label: { en: 'Is Current User Mapping' },
+            type: 'Formula',
+            options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
+            defaultValue: { type: 'f', code: "!!context.mapping?.['isCurrentUser']" },
+            section: 'settings',
+            /* wwEditor:start */
+            propertyHelp: {
+                tooltip:
+                    'Formula that returns true if the participant is the current user.\n\nIf provided, this can be used to infer the current user ID from the participants list.',
             },
             /* wwEditor:end */
         },

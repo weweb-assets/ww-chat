@@ -190,18 +190,58 @@ export default {
             return false;
         });
 
-        const currentUserId = computed(() => props.content?.currentUserId || 'current-user');
         const rawMessages = computed(() => props.content?.chatHistory || chatHistory.value || []);
+
+        // Participants data (new): prefer mappings from Participant Data
+        const rawParticipants = computed(() => props.content?.participants || []);
+
+        const resolveMappingGeneric = (data, mappingFormula, defaultProp) => {
+            if (!mappingFormula) return data?.[defaultProp];
+            return resolveMappingFormula(mappingFormula, data);
+        };
+
+        const participants = computed(() => {
+            if (!Array.isArray(rawParticipants.value)) return [];
+            return rawParticipants.value
+                .map(p => {
+                    const id = resolveMappingGeneric(p, props.content?.mappingParticipantId, 'id');
+                    const name =
+                        resolveMappingGeneric(p, props.content?.mappingParticipantName, 'name') ||
+                        resolveMappingGeneric(p, props.content?.mappingParticipantName, 'userName') ||
+                        'User';
+                    const avatar =
+                        resolveMappingGeneric(p, props.content?.mappingParticipantAvatar, 'avatar') ||
+                        resolveMappingGeneric(p, props.content?.mappingParticipantAvatar, 'avatarUrl') ||
+                        '';
+                    const location =
+                        resolveMappingGeneric(p, props.content?.mappingParticipantLocation, 'location') || '';
+                    const status = resolveMappingGeneric(p, props.content?.mappingParticipantStatus, 'status') || 'online';
+                    const isCurrentUser = !!resolveMappingGeneric(p, props.content?.mappingIsCurrentUser, 'isCurrentUser');
+                    return { id, name, avatar, location, status, isCurrentUser, _originalData: p };
+                })
+                .filter(p => !!p.id);
+        });
+
+        const currentUserId = computed(() => {
+            const fromParticipants = participants.value.find(p => p.isCurrentUser)?.id;
+            return fromParticipants || props.content?.currentUserId || 'current-user';
+        });
 
         const messages = computed(() => {
             return rawMessages.value.map(message => {
+                const senderId = resolveMapping(message, props.content?.mappingSenderId, 'senderId') || '';
+                const participant = participants.value.find(p => p.id === senderId);
+                const nameFromParticipant = participant?.name;
                 return {
                     id:
                         resolveMapping(message, props.content?.mappingMessageId, 'id') ||
                         `msg-${wwLib.wwUtils.getUid()}`,
                     text: resolveMapping(message, props.content?.mappingMessageText, 'text') || '',
-                    senderId: resolveMapping(message, props.content?.mappingSenderId, 'senderId') || '',
-                    userName: resolveMapping(message, props.content?.mappingUserName, 'userName') || '',
+                    senderId,
+                    userName:
+                        nameFromParticipant ||
+                        resolveMapping(message, props.content?.mappingUserName, 'userName') ||
+                        'Unknown User',
                     timestamp:
                         resolveMapping(message, props.content?.mappingTimestamp, 'timestamp') ||
                         new Date().toISOString(),
@@ -508,65 +548,109 @@ export default {
         };
 
         const chatPartners = computed(() => {
-            if (messages.value.length === 0 || props.content?.showSelfInHeader) {
+            // If no participants configured, fallback to previous behavior based on messages/self
+            const hasParticipants = participants.value.length > 0;
+            if (!hasParticipants) {
+                if (messages.value.length === 0 || props.content?.showSelfInHeader) {
+                    return {
+                        name: userName.value,
+                        avatar: userAvatar.value,
+                        location: userLocation.value,
+                        status: userStatus.value,
+                        participants: [],
+                        participantsString: '',
+                    };
+                }
+
+                const otherSenderIds = [
+                    ...new Set(
+                        messages.value.filter(msg => msg.senderId !== currentUserId.value).map(msg => msg.senderId)
+                    ),
+                ];
+
+                if (otherSenderIds.length === 0) {
+                    return {
+                        name: userName.value,
+                        avatar: userAvatar.value,
+                        location: userLocation.value,
+                        status: userStatus.value,
+                        participants: [],
+                        participantsString: '',
+                    };
+                }
+
+                const names = otherSenderIds.map(senderId => {
+                    const msg = messages.value.find(m => m.senderId === senderId);
+                    return msg ? msg.userName : 'Unknown User';
+                });
+                const participantsString = names.join(', ');
+
+                if (otherSenderIds.length === 1) {
+                    const otherUser = messages.value.find(msg => msg.senderId === otherSenderIds[0]);
+                    return {
+                        name: otherUser.userName,
+                        avatar: otherUser.avatar || otherUser.avatarUrl || '',
+                        location: '',
+                        status: 'online',
+                        participants: names,
+                        participantsString,
+                    };
+                }
+
+                const lastOtherMsg = [...messages.value]
+                    .filter(msg => msg.senderId !== currentUserId.value)
+                    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+
+                const template = props.content?.groupChatTemplate || 'Group Chat ({count} participants)';
+                const groupChatName = template.replace('{count}', otherSenderIds.length);
+
                 return {
-                    name: userName.value,
-                    avatar: userAvatar.value,
-                    location: userLocation.value,
-                    status: userStatus.value,
-                    participants: [],
-                    participantsString: '',
-                };
-            }
-
-            const otherSenderIds = [
-                ...new Set(messages.value.filter(msg => msg.senderId !== currentUserId.value).map(msg => msg.senderId)),
-            ];
-
-            if (otherSenderIds.length === 0) {
-                return {
-                    name: userName.value,
-                    avatar: userAvatar.value,
-                    location: userLocation.value,
-                    status: userStatus.value,
-                    participants: [],
-                    participantsString: '',
-                };
-            }
-
-            const participants = otherSenderIds.map(senderId => {
-                const msg = messages.value.find(m => m.senderId === senderId);
-                return msg ? msg.userName : 'Unknown User';
-            });
-
-            const participantsString = participants.join(', ');
-
-            if (otherSenderIds.length === 1) {
-                const otherUser = messages.value.find(msg => msg.senderId === otherSenderIds[0]);
-                return {
-                    name: otherUser.userName,
-                    avatar: otherUser.avatar || otherUser.avatarUrl || '',
-                    location: '',
+                    name: groupChatName,
+                    avatar: '',
+                    location: lastOtherMsg ? `Last message from ${lastOtherMsg.userName}` : '',
                     status: 'online',
-                    participants,
+                    participants: names,
                     participantsString,
                 };
             }
 
-            const lastOtherMsg = [...messages.value]
-                .filter(msg => msg.senderId !== currentUserId.value)
-                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+            // With participants configured
+            const others = participants.value.filter(p => p.id !== currentUserId.value);
+
+            if (others.length === 0 || props.content?.showSelfInHeader) {
+                // Show current user (from settings) when no others or explicitly requested
+                return {
+                    name: userName.value,
+                    avatar: userAvatar.value,
+                    location: userLocation.value,
+                    status: userStatus.value,
+                    participants: [],
+                    participantsString: '',
+                };
+            }
+
+            if (others.length === 1) {
+                const p = others[0];
+                return {
+                    name: p.name,
+                    avatar: p.avatar || '',
+                    location: p.location || '',
+                    status: p.status || 'online',
+                    participants: [p.name],
+                    participantsString: p.name,
+                };
+            }
 
             const template = props.content?.groupChatTemplate || 'Group Chat ({count} participants)';
-            const groupChatName = template.replace('{count}', otherSenderIds.length);
-
+            const groupChatName = template.replace('{count}', others.length);
+            const names = others.map(p => p.name);
             return {
                 name: groupChatName,
                 avatar: '',
-                location: lastOtherMsg ? `Last message from ${lastOtherMsg.userName}` : '',
+                location: '',
                 status: 'online',
-                participants,
-                participantsString,
+                participants: names,
+                participantsString: names.join(', '),
             };
         });
 
@@ -589,6 +673,7 @@ export default {
             pendingAttachments,
 
             currentUserId,
+            participants,
             isDisabled,
             displayHeader,
             allowAttachments,
