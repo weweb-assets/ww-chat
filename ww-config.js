@@ -1387,6 +1387,10 @@ export default {
                 enum: ['start', 'center', 'end'],
                 tooltip: 'Vertical alignment of the action buttons (send/attachment) within the input row',
             },
+            propertyHelp: {
+                tooltip:
+                    'Controls the vertical alignment of the action buttons (attachment and send) relative to the textarea in the input row.\n\nstart aligns to the top, center vertically centers them, end aligns to the bottom.',
+            },
             /* wwEditor:end */
         },
         inputPlaceholder: {
@@ -1622,6 +1626,16 @@ export default {
             states: true,
             responsive: true,
             defaultValue: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'Background (color or gradient) for the send button',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the send button background. Can be a solid color or gradient.\n\nExamples:\n- #2563eb\n- linear-gradient(135deg, #3b82f6, #2563eb)',
+            },
+            /* wwEditor:end */
         },
         sendButtonHoverBgColor: {
             label: { en: 'Hover Background' },
@@ -1632,6 +1646,12 @@ export default {
             states: true,
             responsive: true,
             defaultValue: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+            /* wwEditor:start */
+            bindingValidation: { type: 'string', tooltip: 'Hover background for the send button' },
+            propertyHelp: {
+                tooltip: 'Background (color or gradient) applied to the send button on hover.',
+            },
+            /* wwEditor:end */
         },
         sendButtonBorder: {
             label: { en: 'Border' },
@@ -1642,6 +1662,13 @@ export default {
             states: true,
             responsive: true,
             defaultValue: 'none',
+            /* wwEditor:start */
+            bindingValidation: { type: 'string', tooltip: 'Border for the send button' },
+            propertyHelp: {
+                tooltip:
+                    'Defines the border of the send button.\n\nExamples:\n- none\n- 1px solid #e2e8f0',
+            },
+            /* wwEditor:end */
         },
         sendButtonBorderRadius: {
             label: { en: 'Border Radius' },
@@ -1652,6 +1679,12 @@ export default {
             states: true,
             responsive: true,
             defaultValue: '12px',
+            /* wwEditor:start */
+            bindingValidation: { type: 'string', tooltip: 'Border radius of the send button' },
+            propertyHelp: {
+                tooltip: 'Corner roundness of the send button. Accepts any CSS length (px, %).',
+            },
+            /* wwEditor:end */
         },
         sendButtonSize: {
             label: { en: 'Size' },
@@ -1662,6 +1695,12 @@ export default {
             states: true,
             responsive: true,
             defaultValue: '42px',
+            /* wwEditor:start */
+            bindingValidation: { type: 'string', tooltip: 'Square size of the send button' },
+            propertyHelp: {
+                tooltip: 'Width and height of the send button (square). Example: 42px.',
+            },
+            /* wwEditor:end */
         },
         sendButtonBoxShadow: {
             label: { en: 'Shadow' },
@@ -1672,6 +1711,12 @@ export default {
             states: true,
             responsive: true,
             defaultValue: '0 2px 4px rgba(59, 130, 246, 0.3)',
+            /* wwEditor:start */
+            bindingValidation: { type: 'string', tooltip: 'Shadow applied to the send button' },
+            propertyHelp: {
+                tooltip: 'CSS box-shadow for the send button.',
+            },
+            /* wwEditor:end */
         },
 
         // Attachment button styles
@@ -1689,6 +1734,12 @@ export default {
             states: true,
             responsive: true,
             defaultValue: '#f8fafc',
+            /* wwEditor:start */
+            bindingValidation: { type: 'string', tooltip: 'Background for the attachment button' },
+            propertyHelp: {
+                tooltip: 'Sets the attachment button background color or gradient.',
+            },
+            /* wwEditor:end */
         },
         attachmentButtonHoverBgColor: {
             label: { en: 'Hover Background' },
@@ -1699,6 +1750,12 @@ export default {
             states: true,
             responsive: true,
             defaultValue: '#f1f5f9',
+            /* wwEditor:start */
+            bindingValidation: { type: 'string', tooltip: 'Hover background for the attachment button' },
+            propertyHelp: {
+                tooltip: 'Background applied to the attachment button on hover.',
+            },
+            /* wwEditor:end */
         },
         attachmentButtonBorder: {
             label: { en: 'Border' },
@@ -1709,6 +1766,12 @@ export default {
             states: true,
             responsive: true,
             defaultValue: '1px solid #e2e8f0',
+            /* wwEditor:start */
+            bindingValidation: { type: 'string', tooltip: 'Border for the attachment button' },
+            propertyHelp: {
+                tooltip: 'Defines the border of the attachment button. Example: 1px solid #e2e8f0.',
+            },
+            /* wwEditor:end */
         },
         attachmentButtonBorderRadius: {
             label: { en: 'Border Radius' },
@@ -1719,6 +1782,12 @@ export default {
             states: true,
             responsive: true,
             defaultValue: '12px',
+            /* wwEditor:start */
+            bindingValidation: { type: 'string', tooltip: 'Border radius of the attachment button' },
+            propertyHelp: {
+                tooltip: 'Corner roundness of the attachment button. Accepts any CSS length (px, %).',
+            },
+            /* wwEditor:end */
         },
         attachmentButtonSize: {
             label: { en: 'Size' },
@@ -1729,6 +1798,12 @@ export default {
             states: true,
             responsive: true,
             defaultValue: '42px',
+            /* wwEditor:start */
+            bindingValidation: { type: 'string', tooltip: 'Square size of the attachment button' },
+            propertyHelp: {
+                tooltip: 'Width and height of the attachment button (square). Example: 42px.',
+            },
+            /* wwEditor:end */
         },
         attachmentButtonBoxShadow: {
             label: { en: 'Shadow' },
@@ -1739,6 +1814,12 @@ export default {
             states: true,
             responsive: true,
             defaultValue: '0 1px 2px rgba(0, 0, 0, 0.06)',
+            /* wwEditor:start */
+            bindingValidation: { type: 'string', tooltip: 'Shadow applied to the attachment button' },
+            propertyHelp: {
+                tooltip: 'CSS box-shadow for the attachment button.',
+            },
+            /* wwEditor:end */
         },
 
         // ======== SETTINGS ========
@@ -2300,6 +2381,16 @@ export default {
                     },
                 },
             },
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'array',
+                tooltip: 'Array of participant objects representing users in the conversation',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Provide the list of chat participants. Each participant may include id, name, avatar, location, status, and an optional isCurrentUser flag. Use the mapping formulas below to adapt to your data structure.',
+            },
+            /* wwEditor:end */
         },
         mappingParticipantId: {
             label: { en: 'Participant ID' },
@@ -2307,6 +2398,13 @@ export default {
             options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
             defaultValue: { type: 'f', code: "context.mapping?.['id'] ?? context.mapping?.['userId'] ?? context.mapping?.['_id']" },
             section: 'settings',
+            /* wwEditor:start */
+            bindingValidation: { type: 'formula', tooltip: 'Formula that returns the unique participant ID' },
+            propertyHelp: {
+                tooltip:
+                    'Extracts the unique ID for each participant.\n\nExamples:\n- context.mapping?.["id"]\n- context.mapping?.["userId"]\n- context.mapping?.["_id"]',
+            },
+            /* wwEditor:end */
         },
         mappingParticipantName: {
             label: { en: 'Participant Name' },
@@ -2314,6 +2412,13 @@ export default {
             options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
             defaultValue: { type: 'f', code: "context.mapping?.['name'] ?? context.mapping?.['userName'] ?? context.mapping?.['fullName']" },
             section: 'settings',
+            /* wwEditor:start */
+            bindingValidation: { type: 'formula', tooltip: 'Formula that returns the participant display name' },
+            propertyHelp: {
+                tooltip:
+                    'Extracts the display name for each participant.\n\nExamples:\n- context.mapping?.["name"]\n- context.mapping?.["userName"]\n- context.mapping?.["fullName"]',
+            },
+            /* wwEditor:end */
         },
         mappingParticipantAvatar: {
             label: { en: 'Participant Avatar' },
@@ -2321,6 +2426,13 @@ export default {
             options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
             defaultValue: { type: 'f', code: "context.mapping?.['avatar'] ?? context.mapping?.['avatarUrl'] ?? context.mapping?.['photo']" },
             section: 'settings',
+            /* wwEditor:start */
+            bindingValidation: { type: 'formula', tooltip: 'Formula that returns the avatar URL' },
+            propertyHelp: {
+                tooltip:
+                    'Extracts the avatar URL.\n\nExamples:\n- context.mapping?.["avatar"]\n- context.mapping?.["avatarUrl"]\n- context.mapping?.["photo"]',
+            },
+            /* wwEditor:end */
         },
         mappingParticipantLocation: {
             label: { en: 'Participant Location' },
@@ -2328,6 +2440,13 @@ export default {
             options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
             defaultValue: { type: 'f', code: "context.mapping?.['location'] ?? context.mapping?.['subtitle']" },
             section: 'settings',
+            /* wwEditor:start */
+            bindingValidation: { type: 'formula', tooltip: 'Formula that returns the location/subtitle' },
+            propertyHelp: {
+                tooltip:
+                    'Extracts a location/subtitle string for each participant.\n\nExamples:\n- context.mapping?.["location"]\n- context.mapping?.["subtitle"]',
+            },
+            /* wwEditor:end */
         },
         mappingParticipantStatus: {
             label: { en: 'Participant Status' },
@@ -2335,6 +2454,12 @@ export default {
             options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
             defaultValue: { type: 'f', code: "context.mapping?.['status']" },
             section: 'settings',
+            /* wwEditor:start */
+            bindingValidation: { type: 'formula', tooltip: 'Formula that returns the status (online, offline, away, busy)' },
+            propertyHelp: {
+                tooltip: 'Extracts the participant status. Expected values: online, offline, away, busy.',
+            },
+            /* wwEditor:end */
         },
         mappingIsCurrentUser: {
             label: { en: 'Is Current User' },
@@ -2342,6 +2467,13 @@ export default {
             options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
             defaultValue: { type: 'f', code: "!!context.mapping?.['isCurrentUser']" },
             section: 'settings',
+            /* wwEditor:start */
+            bindingValidation: { type: 'formula', tooltip: 'Formula that returns true if this participant is the current user' },
+            propertyHelp: {
+                tooltip:
+                    'Return a boolean indicating whether the participant is the current user. When true, the component infers currentUserId from this participant.',
+            },
+            /* wwEditor:end */
         },
     },
 };
