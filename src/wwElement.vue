@@ -236,7 +236,6 @@ export default {
         });
 
         // Participants mapping
-        const { resolveMappingFormula } = wwLib.wwFormula.useFormula();
         const resolveParticipantMapping = (obj, formula, fallbackKey) => {
             if (!obj || typeof obj !== 'object') return undefined;
             if (!formula) return obj[fallbackKey];
