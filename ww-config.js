@@ -67,6 +67,7 @@ export default {
                 'inputMinHeight',
                 'inputBorderRadius',
                 'inputPlaceholder',
+                'inputActionAlign',
             ],
             // Icons
             [
@@ -81,24 +82,40 @@ export default {
                 'removeIconColor',
                 'removeIconSize',
             ],
+            // Send button styles
+            [
+                'sendButtonTitle',
+                'sendButtonBgColor',
+                'sendButtonHoverBgColor',
+                'sendButtonBorder',
+                'sendButtonBorderRadius',
+                'sendButtonSize',
+                'sendButtonBoxShadow',
+            ],
+            // Attachment button styles
+            [
+                'attachmentButtonTitle',
+                'attachmentButtonBgColor',
+                'attachmentButtonHoverBgColor',
+                'attachmentButtonBorder',
+                'attachmentButtonBorderRadius',
+                'attachmentButtonSize',
+                'attachmentButtonBoxShadow',
+            ],
         ],
         customSettingsPropertiesOrder: [
-            // User settings
-            [
-                'userSettingsTitle',
-                'userName',
-                'userAvatar',
-                'userLocation',
-                'userStatus',
-                'currentUserId',
-                'showSelfInHeader',
-            ],
             // Chat settings
             ['chatSettingsTitle', 'groupChatTemplate', 'allowAttachments', 'disabled'],
-            // Localization settings
-            ['localizationTitle', 'locale', 'timeFormat', 'todayText', 'yesterdayText', 'justNowText'],
-            // Chat data
-            ['chatDataTitle', 'chatHistory'],
+            // Chat data + mapping
+            [
+                'chatDataTitle',
+                'chatHistory',
+                'mappingMessageId',
+                'mappingMessageText',
+                'mappingSenderId',
+                'mappingTimestamp',
+                'mappingAttachments',
+            ],
             // Participant data
             [
                 'participantDataTitle',
@@ -110,16 +127,8 @@ export default {
                 'mappingParticipantStatus',
                 'mappingIsCurrentUser',
             ],
-            // Message data mapping
-            [
-                'messageDataTitle',
-                'mappingMessageId',
-                'mappingMessageText',
-                'mappingSenderId',
-                'mappingUserName',
-                'mappingTimestamp',
-                'mappingAttachments',
-            ],
+            // Localization settings
+            ['localizationTitle', 'locale', 'timeFormat', 'todayText', 'yesterdayText', 'justNowText'],
         ],
     },
     triggerEvents: [
@@ -785,6 +794,27 @@ export default {
             },
             /* wwEditor:end */
         },
+        inputActionAlign: {
+            label: { en: 'Input Action Align' },
+            type: 'TextSelect',
+            options: {
+                options: [
+                    { value: 'start', label: { en: 'Start' } },
+                    { value: 'center', label: { en: 'Center' } },
+                    { value: 'end', label: { en: 'End' } },
+                ],
+            },
+            section: 'style',
+            bindable: true,
+            defaultValue: 'end',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                enum: ['start', 'center', 'end'],
+                tooltip: 'Vertical alignment of the action button (send/attachment) within the input area',
+            },
+            /* wwEditor:end */
+        },
 
         // Icon properties
         iconsTitle: {
@@ -910,108 +940,105 @@ export default {
             /* wwEditor:end */
         },
 
-        // ======== SETTINGS ========
-
-        // User settings
-        userSettingsTitle: {
+        // Send button styles
+        sendButtonTitle: {
             type: 'Title',
-            label: { en: 'User Settings' },
-            section: 'settings',
+            label: { en: 'Send Button' },
+            section: 'style',
         },
-        userName: {
-            label: { en: 'User Name' },
-            type: 'Text',
-            section: 'settings',
+        sendButtonBgColor: {
+            label: { en: 'Background Color' },
+            type: 'Color',
+            section: 'style',
             bindable: true,
-            defaultValue: 'User',
-            /* wwEditor:start */
-            bindingValidation: {
-                type: 'string',
-                tooltip: 'Name to display for the current user',
-            },
-            propertyHelp: {
-                tooltip:
-                    'The display name for the current user that will appear on their messages and potentially in the header.\n\n**Examples**: John Doe, Customer Service, Support Agent',
-            },
-            /* wwEditor:end */
+            defaultValue: 'transparent',
         },
-        userAvatar: {
-            label: { en: 'User Avatar URL' },
-            type: 'Text',
-            section: 'settings',
+        sendButtonHoverBgColor: {
+            label: { en: 'Hover Background' },
+            type: 'Color',
+            section: 'style',
             bindable: true,
-            defaultValue: '',
-            /* wwEditor:start */
-            bindingValidation: {
-                type: 'string',
-                tooltip: 'URL of the user avatar image (initials will be used if empty)',
-            },
-            propertyHelp: {
-                tooltip:
-                    "URL to the image that will be displayed as the user's avatar. If left empty, the user's initials will be displayed instead.\n\n**Example**: https://example.com/avatars/user.jpg",
-            },
-            /* wwEditor:end */
+            defaultValue: 'rgba(0,0,0,0.05)',
         },
-        userLocation: {
-            label: { en: 'User Location' },
-            type: 'Text',
-            section: 'settings',
+        sendButtonBorder: {
+            label: { en: 'Border' },
+            type: 'Border',
+            section: 'style',
             bindable: true,
-            defaultValue: '',
-            /* wwEditor:start */
-            bindingValidation: {
-                type: 'string',
-                tooltip: 'Location to display under the user name (optional)',
-            },
-            propertyHelp: {
-                tooltip:
-                    "Optional information to display under the user's name in the header, such as their location or status.\n\n**Examples**: New York USA, Online, Available until 5 PM",
-            },
-            /* wwEditor:end */
+            defaultValue: 'none',
         },
-        userStatus: {
-            label: { en: 'User Status' },
-            type: 'TextSelect',
-            options: {
-                options: [
-                    { value: 'online', label: { en: 'Online' } },
-                    { value: 'offline', label: { en: 'Offline' } },
-                    { value: 'away', label: { en: 'Away' } },
-                    { value: 'busy', label: { en: 'Busy' } },
-                ],
-            },
-            section: 'settings',
+        sendButtonBorderRadius: {
+            label: { en: 'Border Radius' },
+            type: 'Length',
+            section: 'style',
             bindable: true,
-            defaultValue: 'online',
-            /* wwEditor:start */
-            bindingValidation: {
-                type: 'string',
-                enum: ['online', 'offline', 'away', 'busy'],
-                tooltip: 'Current status of the user',
-            },
-            propertyHelp: {
-                tooltip:
-                    'The current availability status of the user, displayed as a colored indicator in the chat header.\n\nEach status has a specific color: online (green), offline (gray), away (yellow), busy (red).',
-            },
-            /* wwEditor:end */
+            defaultValue: '50%',
         },
-        currentUserId: {
-            label: { en: 'Current User ID' },
-            type: 'Text',
-            section: 'settings',
+        sendButtonSize: {
+            label: { en: 'Size' },
+            type: 'Length',
+            section: 'style',
             bindable: true,
-            defaultValue: 'current-user',
-            /* wwEditor:start */
-            bindingValidation: {
-                type: 'string',
-                tooltip: 'Unique identifier for the current user (used to identify your messages)',
-            },
-            propertyHelp: {
-                tooltip:
-                    'A unique ID that identifies the current user. This is used to determine which messages belong to the user versus other participants.\n\nThe component uses this ID to style messages differently depending on whether they are sent by the current user or others.\n\n**Examples**: user-123, customer-456, agent-789',
-            },
-            /* wwEditor:end */
+            defaultValue: '32px',
         },
+        sendButtonBoxShadow: {
+            label: { en: 'Shadow' },
+            type: 'Shadows',
+            section: 'style',
+            bindable: true,
+            defaultValue: 'none',
+        },
+
+        // Attachment button styles
+        attachmentButtonTitle: {
+            type: 'Title',
+            label: { en: 'Attachment Button' },
+            section: 'style',
+        },
+        attachmentButtonBgColor: {
+            label: { en: 'Background Color' },
+            type: 'Color',
+            section: 'style',
+            bindable: true,
+            defaultValue: 'transparent',
+        },
+        attachmentButtonHoverBgColor: {
+            label: { en: 'Hover Background' },
+            type: 'Color',
+            section: 'style',
+            bindable: true,
+            defaultValue: 'rgba(0,0,0,0.05)',
+        },
+        attachmentButtonBorder: {
+            label: { en: 'Border' },
+            type: 'Border',
+            section: 'style',
+            bindable: true,
+            defaultValue: 'none',
+        },
+        attachmentButtonBorderRadius: {
+            label: { en: 'Border Radius' },
+            type: 'Length',
+            section: 'style',
+            bindable: true,
+            defaultValue: '50%',
+        },
+        attachmentButtonSize: {
+            label: { en: 'Size' },
+            type: 'Length',
+            section: 'style',
+            bindable: true,
+            defaultValue: '32px',
+        },
+        attachmentButtonBoxShadow: {
+            label: { en: 'Shadow' },
+            type: 'Shadows',
+            section: 'style',
+            bindable: true,
+            defaultValue: 'none',
+        },
+
+        // ======== SETTINGS ========
 
         // Chat settings
         chatSettingsTitle: {
@@ -1462,11 +1489,6 @@ export default {
             },
             /* wwEditor:end */
         },
-        messageDataTitle: {
-            type: 'Title',
-            label: { en: 'Message Data Mapping' },
-            section: 'settings',
-        },
         mappingMessageId: {
             label: { en: 'Message ID Mapping' },
             type: 'Formula',
@@ -1524,25 +1546,7 @@ export default {
             },
             /* wwEditor:end */
         },
-        mappingUserName: {
-            label: { en: 'User Name Mapping' },
-            type: 'Formula',
-            options: content => ({
-                template:
-                    Array.isArray(content.chatHistory) && content.chatHistory.length ? content.chatHistory[0] : null,
-            }),
-            defaultValue: {
-                type: 'f',
-                code: "context.mapping?.['userName']",
-            },
-            section: 'settings',
-            /* wwEditor:start */
-            propertyHelp: {
-                tooltip:
-                    'Formula to extract the user display name from your data structure.\n\nThis formula is executed for each message to get the display name of the sender shown above their messages.\n\n**Examples**:\n- `context.mapping?.["userName"]`\n- `context.mapping?.["senderName"]`\n- `context.mapping?.["from_name"]`',
-            },
-            /* wwEditor:end */
-        },
+        // mappingUserName removed – names are now resolved from Participant Data
         mappingTimestamp: {
             label: { en: 'Timestamp Mapping' },
             type: 'Formula',

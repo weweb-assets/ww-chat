@@ -58,6 +58,7 @@
             :input-min-height="inputMinHeight"
             :input-border-radius="inputBorderRadius"
             :placeholder="inputPlaceholder"
+            :action-align="inputActionAlign"
             :send-icon="sendIcon"
             :send-icon-color="sendIconColor"
             :send-icon-size="sendIconSize"
@@ -67,6 +68,18 @@
             :remove-icon="removeIcon"
             :remove-icon-color="removeIconColor"
             :remove-icon-size="removeIconSize"
+            :send-button-bg-color="sendButtonBgColor"
+            :send-button-hover-bg-color="sendButtonHoverBgColor"
+            :send-button-border="sendButtonBorder"
+            :send-button-border-radius="sendButtonBorderRadius"
+            :send-button-size="sendButtonSize"
+            :send-button-box-shadow="sendButtonBoxShadow"
+            :attachment-button-bg-color="attachmentButtonBgColor"
+            :attachment-button-hover-bg-color="attachmentButtonHoverBgColor"
+            :attachment-button-border="attachmentButtonBorder"
+            :attachment-button-border-radius="attachmentButtonBorderRadius"
+            :attachment-button-size="attachmentButtonSize"
+            :attachment-button-box-shadow="attachmentButtonBoxShadow"
             @send="sendMessage"
             @attachment="handleAttachment"
             @remove-attachment="handleRemoveAttachment"
@@ -170,7 +183,7 @@ export default {
 
         const { value: chatHistory, setValue: setChatHistory } = wwLib.wwVariable.useComponentVariable({
             uid: props.uid,
-            name: 'chatHistory',
+            name: 'messages',
             type: 'array',
             defaultValue: [],
         });
@@ -222,10 +235,7 @@ export default {
                 .filter(p => !!p.id);
         });
 
-        const currentUserId = computed(() => {
-            const fromParticipants = participants.value.find(p => p.isCurrentUser)?.id;
-            return fromParticipants || props.content?.currentUserId || 'current-user';
-        });
+        const currentUserId = computed(() => participants.value.find(p => p.isCurrentUser)?.id || '');
 
         const messages = computed(() => {
             return rawMessages.value.map(message => {
@@ -238,10 +248,7 @@ export default {
                         `msg-${wwLib.wwUtils.getUid()}`,
                     text: resolveMapping(message, props.content?.mappingMessageText, 'text') || '',
                     senderId,
-                    userName:
-                        nameFromParticipant ||
-                        resolveMapping(message, props.content?.mappingUserName, 'userName') ||
-                        'Unknown User',
+                    userName: nameFromParticipant || 'Unknown User',
                     timestamp:
                         resolveMapping(message, props.content?.mappingTimestamp, 'timestamp') ||
                         new Date().toISOString(),
@@ -256,11 +263,8 @@ export default {
         const allowAttachments = computed(() => props.content?.allowAttachments || false);
         const inputPlaceholder = computed(() => props.content?.inputPlaceholder || 'Type a message...');
 
-        // User properties
-        const userName = computed(() => props.content?.userName || 'User');
-        const userAvatar = computed(() => props.content?.userAvatar || '');
-        const userLocation = computed(() => props.content?.userLocation || '');
-        const userStatus = computed(() => props.content?.userStatus || 'online');
+        // No user settings – derive from participants
+        const currentUserParticipant = computed(() => participants.value.find(p => p.isCurrentUser));
 
         // Style properties
         const containerStyles = computed(() => ({
@@ -358,7 +362,7 @@ export default {
                 id: `msg-${wwLib.wwUtils.getUid()}`,
                 text: newMessage.value.trim(),
                 senderId: currentUserId.value,
-                userName: userName.value,
+                userName: currentUserParticipant.value?.name || 'You',
                 timestamp: new Date().toISOString(),
                 attachments: attachments.length > 0 ? attachments : undefined,
             };
@@ -548,87 +552,18 @@ export default {
         };
 
         const chatPartners = computed(() => {
-            // If no participants configured, fallback to previous behavior based on messages/self
-            const hasParticipants = participants.value.length > 0;
-            if (!hasParticipants) {
-                if (messages.value.length === 0 || props.content?.showSelfInHeader) {
-                    return {
-                        name: userName.value,
-                        avatar: userAvatar.value,
-                        location: userLocation.value,
-                        status: userStatus.value,
-                        participants: [],
-                        participantsString: '',
-                    };
-                }
-
-                const otherSenderIds = [
-                    ...new Set(
-                        messages.value.filter(msg => msg.senderId !== currentUserId.value).map(msg => msg.senderId)
-                    ),
-                ];
-
-                if (otherSenderIds.length === 0) {
-                    return {
-                        name: userName.value,
-                        avatar: userAvatar.value,
-                        location: userLocation.value,
-                        status: userStatus.value,
-                        participants: [],
-                        participantsString: '',
-                    };
-                }
-
-                const names = otherSenderIds.map(senderId => {
-                    const msg = messages.value.find(m => m.senderId === senderId);
-                    return msg ? msg.userName : 'Unknown User';
-                });
-                const participantsString = names.join(', ');
-
-                if (otherSenderIds.length === 1) {
-                    const otherUser = messages.value.find(msg => msg.senderId === otherSenderIds[0]);
-                    return {
-                        name: otherUser.userName,
-                        avatar: otherUser.avatar || otherUser.avatarUrl || '',
-                        location: '',
-                        status: 'online',
-                        participants: names,
-                        participantsString,
-                    };
-                }
-
-                const lastOtherMsg = [...messages.value]
-                    .filter(msg => msg.senderId !== currentUserId.value)
-                    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
-
-                const template = props.content?.groupChatTemplate || 'Group Chat ({count} participants)';
-                const groupChatName = template.replace('{count}', otherSenderIds.length);
-
+            const others = participants.value.filter(p => !p.isCurrentUser);
+            if (others.length === 0) {
+                const self = participants.value.find(p => p.isCurrentUser);
                 return {
-                    name: groupChatName,
-                    avatar: '',
-                    location: lastOtherMsg ? `Last message from ${lastOtherMsg.userName}` : '',
-                    status: 'online',
-                    participants: names,
-                    participantsString,
-                };
-            }
-
-            // With participants configured
-            const others = participants.value.filter(p => p.id !== currentUserId.value);
-
-            if (others.length === 0 || props.content?.showSelfInHeader) {
-                // Show current user (from settings) when no others or explicitly requested
-                return {
-                    name: userName.value,
-                    avatar: userAvatar.value,
-                    location: userLocation.value,
-                    status: userStatus.value,
+                    name: self?.name || '',
+                    avatar: self?.avatar || '',
+                    location: self?.location || '',
+                    status: self?.status || 'online',
                     participants: [],
                     participantsString: '',
                 };
             }
-
             if (others.length === 1) {
                 const p = others[0];
                 return {
@@ -640,7 +575,6 @@ export default {
                     participantsString: p.name,
                 };
             }
-
             const template = props.content?.groupChatTemplate || 'Group Chat ({count} participants)';
             const groupChatName = template.replace('{count}', others.length);
             const names = others.map(p => p.name);
@@ -678,10 +612,7 @@ export default {
             displayHeader,
             allowAttachments,
             inputPlaceholder,
-            userName,
-            userAvatar,
-            userLocation,
-            userStatus,
+            // user props removed; derive from participants
 
             headerUserName,
             headerUserAvatar,
@@ -736,6 +667,21 @@ export default {
             removeIcon: computed(() => props.content?.removeIcon || 'x'),
             removeIconColor: computed(() => props.content?.removeIconColor || '#f43f5e'),
             removeIconSize: computed(() => props.content?.removeIconSize || '12px'),
+
+            // Input action alignment and button styles
+            inputActionAlign: computed(() => props.content?.inputActionAlign || 'end'),
+            sendButtonBgColor: computed(() => props.content?.sendButtonBgColor || 'transparent'),
+            sendButtonHoverBgColor: computed(() => props.content?.sendButtonHoverBgColor || 'rgba(0,0,0,0.05)'),
+            sendButtonBorder: computed(() => props.content?.sendButtonBorder || 'none'),
+            sendButtonBorderRadius: computed(() => props.content?.sendButtonBorderRadius || '50%'),
+            sendButtonSize: computed(() => props.content?.sendButtonSize || '32px'),
+            sendButtonBoxShadow: computed(() => props.content?.sendButtonBoxShadow || 'none'),
+            attachmentButtonBgColor: computed(() => props.content?.attachmentButtonBgColor || 'transparent'),
+            attachmentButtonHoverBgColor: computed(() => props.content?.attachmentButtonHoverBgColor || 'rgba(0,0,0,0.05)'),
+            attachmentButtonBorder: computed(() => props.content?.attachmentButtonBorder || 'none'),
+            attachmentButtonBorderRadius: computed(() => props.content?.attachmentButtonBorderRadius || '50%'),
+            attachmentButtonSize: computed(() => props.content?.attachmentButtonSize || '32px'),
+            attachmentButtonBoxShadow: computed(() => props.content?.attachmentButtonBoxShadow || 'none'),
 
             // Methods
             scrollToBottom,

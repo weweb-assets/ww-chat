@@ -37,7 +37,7 @@
                     v-if="canSend && !isDisabled"
                     type="button"
                     class="action-button send-button"
-                    :style="{ color: sendIconColor }"
+                    :style="[actionButtonPositionStyle, sendButtonStyle, { color: sendIconColor }]"
                     @click="sendMessage"
                 >
                     <span
@@ -49,7 +49,7 @@
                 <label
                     v-else-if="allowAttachments && !isDisabled"
                     class="action-button attachment-button"
-                    :style="{ color: attachmentIconColor }"
+                    :style="[actionButtonPositionStyle, attachmentButtonStyle, { color: attachmentIconColor }]"
                 >
                     <input type="file" class="file-input" multiple @change="handleAttachment" :disabled="isDisabled" />
                     <span
@@ -117,6 +117,12 @@ export default {
             type: String,
             default: 'Type a message...',
         },
+        // Align action (send/attachment) button vertically: start|center|end
+        actionAlign: {
+            type: String,
+            default: 'end',
+            validator: v => ['start', 'center', 'end'].includes(v),
+        },
         // Icon properties
         sendIcon: {
             type: String,
@@ -126,6 +132,20 @@ export default {
             type: String,
             default: '#334155',
         },
+        // Send button styling
+        sendButtonBgColor: { type: String, default: 'transparent' },
+        sendButtonHoverBgColor: { type: String, default: 'rgba(0,0,0,0.05)' },
+        sendButtonBorder: { type: String, default: 'none' },
+        sendButtonBorderRadius: { type: String, default: '50%' },
+        sendButtonSize: { type: String, default: '32px' },
+        sendButtonBoxShadow: { type: String, default: 'none' },
+        // Attachment button styling
+        attachmentButtonBgColor: { type: String, default: 'transparent' },
+        attachmentButtonHoverBgColor: { type: String, default: 'rgba(0,0,0,0.05)' },
+        attachmentButtonBorder: { type: String, default: 'none' },
+        attachmentButtonBorderRadius: { type: String, default: '50%' },
+        attachmentButtonSize: { type: String, default: '32px' },
+        attachmentButtonBoxShadow: { type: String, default: 'none' },
         sendIconSize: {
             type: String,
             default: '20px',
@@ -332,6 +352,38 @@ export default {
             return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${sizes[i]}`;
         };
 
+        const maxActionButtonSize = computed(() => {
+            const s1 = parseInt(props.sendButtonSize || '32');
+            const s2 = parseInt(props.attachmentButtonSize || '32');
+            return Math.max(s1 || 32, s2 || 32);
+        });
+
+        const actionButtonPositionStyle = computed(() => {
+            if (props.actionAlign === 'start') return { top: '8px', bottom: 'auto', transform: 'none' };
+            if (props.actionAlign === 'center') return { top: '50%', bottom: 'auto', transform: 'translateY(-50%)' };
+            return { bottom: '8px', top: 'auto', transform: 'none' };
+        });
+
+        const sendButtonStyle = computed(() => ({
+            backgroundColor: props.sendButtonBgColor,
+            border: props.sendButtonBorder,
+            borderRadius: props.sendButtonBorderRadius,
+            boxShadow: props.sendButtonBoxShadow,
+            width: props.sendButtonSize,
+            height: props.sendButtonSize,
+            '--hover-bg-color': props.sendButtonHoverBgColor,
+        }));
+
+        const attachmentButtonStyle = computed(() => ({
+            backgroundColor: props.attachmentButtonBgColor,
+            border: props.attachmentButtonBorder,
+            borderRadius: props.attachmentButtonBorderRadius,
+            boxShadow: props.attachmentButtonBoxShadow,
+            width: props.attachmentButtonSize,
+            height: props.attachmentButtonSize,
+            '--hover-bg-color': props.attachmentButtonHoverBgColor,
+        }));
+
         return {
             textareaRef,
             inputValue,
@@ -350,6 +402,8 @@ export default {
                 minHeight: props.inputMinHeight,
                 borderRadius: props.inputBorderRadius,
                 backgroundColor: props.inputBgColor === 'transparent' ? '#ffffff' : props.inputBgColor,
+                paddingTop: props.actionAlign === 'start' ? `${8 + maxActionButtonSize.value}px` : undefined,
+                paddingBottom: props.actionAlign === 'end' ? `${8 + maxActionButtonSize.value}px` : undefined,
             })),
             iconBtnStyles: computed(() => ({
                 color: props.inputTextColor,
@@ -362,6 +416,9 @@ export default {
             sendMessage,
             handleAttachment,
             removeAttachment,
+            actionButtonPositionStyle,
+            sendButtonStyle,
+            attachmentButtonStyle,
         };
     },
 };
@@ -487,20 +544,16 @@ export default {
 .action-button {
     position: absolute;
     right: 8px;
-    bottom: 8px; /* Position at the bottom instead of top */
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
     border: none;
     background: transparent;
     cursor: pointer;
     z-index: 1; /* Ensure button stays above textarea content */
 
     &:hover {
-        background-color: rgba(0, 0, 0, 0.05);
+        background-color: var(--hover-bg-color, rgba(0, 0, 0, 0.05));
     }
 }
 
