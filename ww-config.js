@@ -121,7 +121,7 @@ export default {
             // Chat data + message mapping
             [
                 'chatDataTitle',
-                'chatHistory',
+                'messages',
                 'mappingMessageId',
                 'mappingMessageText',
                 'mappingSenderId',
@@ -2125,8 +2125,8 @@ export default {
             label: { en: 'Chat Data' },
             section: 'settings',
         },
-        chatHistory: {
-            label: { en: 'Chat History' },
+        messages: {
+            label: { en: 'Messages' },
             type: 'Info',
             section: 'settings',
             bindable: true,
@@ -2146,8 +2146,7 @@ export default {
             label: { en: 'Message ID' },
             type: 'Formula',
             options: content => ({
-                template:
-                    Array.isArray(content.chatHistory) && content.chatHistory.length ? content.chatHistory[0] : null,
+                template: Array.isArray(content.messages) && content.messages.length ? content.messages[0] : null,
             }),
             defaultValue: {
                 type: 'f',
@@ -2164,14 +2163,14 @@ export default {
                     'Formula to extract the message ID from your data structure.\n\nThis formula is executed for each message in the chat history to determine its unique identifier.\n\n**Examples**:\n- `context.mapping?.["id"]`\n- `context.mapping?.["messageId"]`\n- `"msg-" + context.mapping?.["index"]`',
             },
             /* wwEditor:end */
-            hidden: (content, _, boundProps) => !boundProps.chatHistory,
+            hidden: (content, _, boundProps) => !boundProps.messages,
         },
         mappingMessageText: {
             label: { en: 'Message Text' },
             type: 'Formula',
             options: content => ({
                 template:
-                    Array.isArray(content.chatHistory) && content.chatHistory.length ? content.chatHistory[0] : null,
+                    Array.isArray(content.messages) && content.messages.length ? content.messages[0] : null,
             }),
             defaultValue: {
                 type: 'f',
@@ -2188,14 +2187,14 @@ export default {
                     'Formula to extract the message text content from your data structure.\n\nThis formula is executed for each message in the chat history to get the text that will be displayed.\n\n**Examples**:\n- `context.mapping?.["text"]`\n- `context.mapping?.["content"]`\n- `context.mapping?.["message"]`',
             },
             /* wwEditor:end */
-            hidden: (content, _, boundProps) => !boundProps.chatHistory,
+            hidden: (content, _, boundProps) => !boundProps.messages,
         },
         mappingSenderId: {
             label: { en: 'Sender ID' },
             type: 'Formula',
             options: content => ({
                 template:
-                    Array.isArray(content.chatHistory) && content.chatHistory.length ? content.chatHistory[0] : null,
+                    Array.isArray(content.messages) && content.messages.length ? content.messages[0] : null,
             }),
             defaultValue: {
                 type: 'f',
@@ -2212,7 +2211,7 @@ export default {
                     'Formula to extract the sender ID from your data structure.\n\nThis formula is executed for each message to determine who sent it. This is compared with the currentUserId to style messages differently.\n\n**Examples**:\n- `context.mapping?.["senderId"]`\n- `context.mapping?.["userId"]`\n- `context.mapping?.["from"]`',
             },
             /* wwEditor:end */
-            hidden: (content, _, boundProps) => !boundProps.chatHistory,
+            hidden: (content, _, boundProps) => !boundProps.messages,
         },
         // mappingUserName removed – names come from Participant Data
         mappingTimestamp: {
@@ -2220,7 +2219,7 @@ export default {
             type: 'Formula',
             options: content => ({
                 template:
-                    Array.isArray(content.chatHistory) && content.chatHistory.length ? content.chatHistory[0] : null,
+                    Array.isArray(content.messages) && content.messages.length ? content.messages[0] : null,
             }),
             defaultValue: {
                 type: 'f',
@@ -2237,14 +2236,14 @@ export default {
                     'Formula to extract the timestamp from your data structure.\n\nThis formula is executed for each message to get the time when it was sent. Should return an ISO date string or Date object.\n\n**Examples**:\n- `context.mapping?.["timestamp"]`\n- `context.mapping?.["sentAt"]`\n- `context.mapping?.["date"]`',
             },
             /* wwEditor:end */
-            hidden: (content, _, boundProps) => !boundProps.chatHistory,
+            hidden: (content, _, boundProps) => !boundProps.messages,
         },
         mappingAttachments: {
             label: { en: 'Attachments' },
             type: 'Formula',
             options: content => ({
                 template:
-                    Array.isArray(content.chatHistory) && content.chatHistory.length ? content.chatHistory[0] : null,
+                    Array.isArray(content.messages) && content.messages.length ? content.messages[0] : null,
             }),
             defaultValue: {
                 type: 'f',
@@ -2261,7 +2260,7 @@ export default {
                     'Formula to extract the attachments array from your data structure.\n\nThis formula should return an array of attachment objects, each with id, name, type, size, and url properties.\n\n**Examples**:\n- `context.mapping?.["attachments"]`\n- `context.mapping?.["files"]`\n- `context.mapping?.["media"]`',
             },
             /* wwEditor:end */
-            hidden: (content, _, boundProps) => !boundProps.chatHistory,
+            hidden: (content, _, boundProps) => !boundProps.messages,
         },
 
         // Participant data

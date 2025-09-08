@@ -74,6 +74,7 @@ Text Area Properties:
 -   `inputPlaceholderColor`: `string` - Placeholder text color in the message input. Default: `#94a3b8`
 -   `inputHeight`: `string` - Fixed height of the textarea (content scrolls if exceeds height). Default: `38px`
 -   `inputBorderRadius`: `Spacing` - Border radius of the input field with advanced corner control (supports px and % units). Default: `20px`
+-   `inputActionAlign`: `start | center | end` - Vertical alignment of the action buttons (attachment/send) within the input row. Default: `end`
 -   `inputFontSize`: `string` - Font size of the input text. Supports px, em, and rem units. Default: `0.875rem`
 -   `inputFontWeight`: `string` - Font weight of the input text (100-900). Default: `400`
 -   `inputFontFamily`: `string` - Font family of the input text. Default: `inherit`
@@ -147,11 +148,11 @@ Localization Properties:
 
 Chat Data:
 
--   `chatHistory`: `array` - Array of message objects for the chat history. Each message contains:
+-   `messages`: `array` - Array of message objects for the chat history. Each message contains:
     -   `id`: `string` - Unique identifier for the message
     -   `text`: `string` - Message text content
     -   `senderId`: `string` - ID of the message sender
-    -   `userName`: `string` - Display name of the message sender
+    -   (Name comes from Participants; no per-message mapping is needed)
     -   `timestamp`: `string` - ISO timestamp of when the message was sent
     -   `attachments`: `array` (optional) - Array of attachment objects
     -   `avatar` or `avatarUrl`: `string` (optional) - URL of sender's avatar image
@@ -200,9 +201,16 @@ The component provides rich local context data for use in formulas and bindings:
 -   `messages`: array - Each message includes a `userSettings` object containing user information for that message
 -   `utils`: object - Component state utilities (message count, disabled state, etc.)
 
+Participant Data:
+
+-   `participants`: `array` - List of chat participants with optional fields: `id`, `name`, `avatar`, `location`, `status`, `isCurrentUser`
+-   Mapping formulas:
+    -   `mappingParticipantId`, `mappingParticipantName`, `mappingParticipantAvatar`, `mappingParticipantLocation`, `mappingParticipantStatus`, `mappingIsCurrentUser`
+-   The component derives sender display names and header information from participants. The current user is inferred from `isCurrentUser`.
+
 Special Features:
 
--   **Message-Based User Settings** - Each message contains a `userSettings` object with user information (userName, userAvatar, userLocation, userStatus)
+-   Names and avatars are resolved from Participant Data; no message-level name mapping is required
 -   **Debounced Updates** - When user settings change, all messages from the current user are automatically updated with the new settings after a 1-second delay to prevent excessive updates
 -   **Self-Contained Messages** - Each message is self-contained with user information, eliminating dependency on external user storage
 -   User status indicator (online, offline, away, busy) with automatic fallback handling
@@ -258,7 +266,7 @@ Example Basic Implementation:
         "displayHeader": true,
         "allowAttachments": true,
         "autoScrollBehavior": "smooth",
-        "chatHistory": [
+        "messages": [
             {
                 "id": "msg-1",
                 "text": "Hello there! Welcome to our support chat.",
@@ -327,7 +335,7 @@ Example with usersSettings Management:
         "currentUserId": "john-doe",
         "displayHeader": true,
         "allowAttachments": true,
-        "chatHistory": [
+        "messages": [
             {
                 "id": "msg-1",
                 "text": "Hello there! Welcome to our support chat.",

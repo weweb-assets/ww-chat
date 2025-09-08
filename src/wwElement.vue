@@ -269,11 +269,11 @@ export default {
         const currentUserId = computed(() => participants.value.find(p => p.isCurrentUser)?.id || '');
         const rawMessages = computed(() => {
             // Ensure we always have an array to work with
-            const chatHistory = props.content?.chatHistory;
+            const messagesContent = props.content?.messages;
 
-            // Check if chatHistory is a valid array
-            if (Array.isArray(chatHistory)) {
-                return chatHistory;
+            // Check if messages is a valid array
+            if (Array.isArray(messagesContent)) {
+                return messagesContent;
             }
 
             // Final fallback to empty array
