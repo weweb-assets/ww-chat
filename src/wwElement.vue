@@ -856,16 +856,7 @@ export default {
         provide('_wwChat:localContext', currentLocalContext);
 
         onMounted(() => {
-            // Initialize all messages with current user settings immediately (bypass debounce)
-            updateUserMessagesImmediate(
-                currentUserId.value,
-                currentUserId.value, // Use same ID for old and new since this is initial setup
-                userName.value,
-                userAvatar.value,
-                userLocation.value,
-                userStatus.value
-            );
-
+            // Ensure we show latest messages on mount
             scrollToBottom();
         });
 
