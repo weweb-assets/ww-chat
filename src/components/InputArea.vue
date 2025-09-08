@@ -48,12 +48,12 @@
             </div>
         </div>
 
-        <div class="ww-chat-input-area__input-row">
+        <div class="ww-chat-input-area__input-row" :style="{ alignItems: alignItemsCss }">
             <!-- Attachment button -->
             <label
                 v-if="allowAttachments"
                 class="ww-chat-input-area__attachment-btn"
-                :style="{ color: attachmentIconColor }"
+                :style="attachmentButtonStyle"
             >
                 <input
                     type="file"
@@ -88,7 +88,7 @@
                 class="ww-chat-input-area__send-btn"
                 :class="{ 'ww-chat-input-area__send-btn--disabled': !canSend || isDisabled }"
                 :disabled="!canSend || isDisabled"
-                :style="{ color: sendIconColor }"
+                :style="sendButtonStyle"
                 @click="sendMessage"
             >
                 <span
@@ -111,6 +111,20 @@ export default {
             type: String,
             default: '',
         },
+        // Alignment and button styles
+        actionAlign: { type: String, default: 'end' },
+        sendButtonBgColor: { type: String, default: 'linear-gradient(135deg, #3b82f6, #2563eb)' },
+        sendButtonHoverBgColor: { type: String, default: 'linear-gradient(135deg, #2563eb, #1d4ed8)' },
+        sendButtonBorder: { type: String, default: 'none' },
+        sendButtonBorderRadius: { type: String, default: '12px' },
+        sendButtonSize: { type: String, default: '42px' },
+        sendButtonBoxShadow: { type: String, default: '0 2px 4px rgba(59, 130, 246, 0.3)' },
+        attachmentButtonBgColor: { type: String, default: '#f8fafc' },
+        attachmentButtonHoverBgColor: { type: String, default: '#f1f5f9' },
+        attachmentButtonBorder: { type: String, default: '1px solid #e2e8f0' },
+        attachmentButtonBorderRadius: { type: String, default: '12px' },
+        attachmentButtonSize: { type: String, default: '42px' },
+        attachmentButtonBoxShadow: { type: String, default: '0 1px 2px rgba(0, 0, 0, 0.06)' },
         isDisabled: {
             type: Boolean,
             default: false,
@@ -320,6 +334,34 @@ export default {
 
         const canSend = computed(() => inputValue.value.trim().length > 0 || props.pendingAttachments.length > 0);
 
+        const alignItemsCss = computed(() => {
+            if (props.actionAlign === 'start') return 'flex-start';
+            if (props.actionAlign === 'center') return 'center';
+            return 'flex-end';
+        });
+
+        const sendButtonStyle = computed(() => ({
+            color: props.sendIconColor,
+            background: props.sendButtonBgColor,
+            border: props.sendButtonBorder,
+            borderRadius: props.sendButtonBorderRadius,
+            width: props.sendButtonSize,
+            height: props.sendButtonSize,
+            boxShadow: props.sendButtonBoxShadow,
+            '--btn-hover-bg': props.sendButtonHoverBgColor,
+        }));
+
+        const attachmentButtonStyle = computed(() => ({
+            color: props.attachmentIconColor,
+            background: props.attachmentButtonBgColor,
+            border: props.attachmentButtonBorder,
+            borderRadius: props.attachmentButtonBorderRadius,
+            width: props.attachmentButtonSize,
+            height: props.attachmentButtonSize,
+            boxShadow: props.attachmentButtonBoxShadow,
+            '--btn-hover-bg': props.attachmentButtonHoverBgColor,
+        }));
+
         watch(
             () => props.modelValue,
             newValue => {
@@ -380,16 +422,19 @@ export default {
             return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${sizes[i]}`;
         };
 
-        return {
-            textareaRef,
-            inputValue,
-            canSend,
-            sendIconHtml,
-            attachmentIconHtml,
-            removeIconHtml,
-            inputAreaStyles: computed(() => ({
-                borderTop: props.inputAreaBorder,
-            })),
+            return {
+                textareaRef,
+                inputValue,
+                canSend,
+                sendIconHtml,
+                attachmentIconHtml,
+                removeIconHtml,
+                alignItemsCss,
+                sendButtonStyle,
+                attachmentButtonStyle,
+                inputAreaStyles: computed(() => ({
+                    borderTop: props.inputAreaBorder,
+                })),
             inputStyles: computed(() => ({
                 backgroundColor: props.inputBgColor,
                 color: props.inputTextColor,
@@ -546,22 +591,15 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 42px;
-        height: 42px;
-        border-radius: 12px;
         cursor: pointer;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         flex-shrink: 0;
-        background-color: #f8fafc;
-        border: 1px solid #e2e8f0;
-        color: #64748b;
-        align-self: flex-end;
+        align-self: auto;
 
         &:hover {
-            background-color: #f1f5f9;
-            border-color: #cbd5e1;
+            background: var(--btn-hover-bg, #f1f5f9);
             transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--btn-hover-shadow, 0 2px 4px rgba(0, 0, 0, 0.1));
         }
 
         &:active {
@@ -644,22 +682,16 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 42px;
-        height: 42px;
-        border-radius: 12px;
         border: none;
-        background: linear-gradient(135deg, #3b82f6, #2563eb);
         cursor: pointer;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         flex-shrink: 0;
-        color: white;
-        box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
-        align-self: flex-end;
+        align-self: auto;
 
         &:hover:not(:disabled) {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            background: var(--btn-hover-bg, linear-gradient(135deg, #2563eb, #1d4ed8));
             transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+            box-shadow: var(--btn-hover-shadow, 0 4px 8px rgba(59, 130, 246, 0.4));
         }
 
         &:active:not(:disabled) {

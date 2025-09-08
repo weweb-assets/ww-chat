@@ -70,6 +70,7 @@
             :input-height="inputHeight"
             :input-border-radius="inputBorderRadius"
             :placeholder="inputPlaceholder"
+            :action-align="actionAlign"
             :send-icon="sendIcon"
             :send-icon-color="sendIconColor"
             :send-icon-size="sendIconSize"
@@ -79,6 +80,18 @@
             :remove-icon="removeIcon"
             :remove-icon-color="removeIconColor"
             :remove-icon-size="removeIconSize"
+            :send-button-bg-color="sendButtonBgColor"
+            :send-button-hover-bg-color="sendButtonHoverBgColor"
+            :send-button-border="sendButtonBorder"
+            :send-button-border-radius="sendButtonBorderRadius"
+            :send-button-size="sendButtonSize"
+            :send-button-box-shadow="sendButtonBoxShadow"
+            :attachment-button-bg-color="attachmentButtonBgColor"
+            :attachment-button-hover-bg-color="attachmentButtonHoverBgColor"
+            :attachment-button-border="attachmentButtonBorder"
+            :attachment-button-border-radius="attachmentButtonBorderRadius"
+            :attachment-button-size="attachmentButtonSize"
+            :attachment-button-box-shadow="attachmentButtonBoxShadow"
             @send="sendMessage"
             @attachment="handleAttachment"
             @remove-attachment="handleRemoveAttachment"
@@ -222,7 +235,38 @@ export default {
             return false;
         });
 
-        const currentUserId = computed(() => props.content?.currentUserId || 'current-user');
+        // Participants mapping
+        const { resolveMappingFormula } = wwLib.wwFormula.useFormula();
+        const resolveParticipantMapping = (obj, formula, fallbackKey) => {
+            if (!obj || typeof obj !== 'object') return undefined;
+            if (!formula) return obj[fallbackKey];
+            return resolveMappingFormula(formula, obj);
+        };
+
+        const rawParticipants = computed(() => props.content?.participants || []);
+
+        const participants = computed(() => {
+            if (!Array.isArray(rawParticipants.value)) return [];
+            return rawParticipants.value
+                .map(p => {
+                    const id = resolveParticipantMapping(p, props.content?.mappingParticipantId, 'id');
+                    const name =
+                        resolveParticipantMapping(p, props.content?.mappingParticipantName, 'name') ||
+                        resolveParticipantMapping(p, props.content?.mappingParticipantName, 'userName') ||
+                        'User';
+                    const avatar =
+                        resolveParticipantMapping(p, props.content?.mappingParticipantAvatar, 'avatar') ||
+                        resolveParticipantMapping(p, props.content?.mappingParticipantAvatar, 'avatarUrl') ||
+                        '';
+                    const location = resolveParticipantMapping(p, props.content?.mappingParticipantLocation, 'location') || '';
+                    const status = resolveParticipantMapping(p, props.content?.mappingParticipantStatus, 'status') || 'online';
+                    const isCurrentUser = !!resolveParticipantMapping(p, props.content?.mappingIsCurrentUser, 'isCurrentUser');
+                    return { id, name, avatar, location, status, isCurrentUser };
+                })
+                .filter(p => !!p.id);
+        });
+
+        const currentUserId = computed(() => participants.value.find(p => p.isCurrentUser)?.id || '');
         const rawMessages = computed(() => {
             // Ensure we always have an array to work with
             const chatHistory = props.content?.chatHistory;
@@ -255,11 +299,14 @@ export default {
                 }
 
                 const senderId = resolveMapping(message, props.content?.mappingSenderId, 'senderId') || '';
-                const originalUserName = resolveMapping(message, props.content?.mappingUserName, 'userName') || '';
-
-                // Use userSettings from message if available, otherwise use original mapping
-                const userSettings = message.userSettings || {};
-                const displayUserName = userSettings.userName || originalUserName || 'Unknown User';
+                const participant = participants.value.find(p => p.id === senderId);
+                const displayUserName = participant?.name || 'Unknown User';
+                const userSettings = {
+                    userName: participant?.name || '',
+                    userAvatar: participant?.avatar || '',
+                    userLocation: participant?.location || '',
+                    userStatus: participant?.status || 'online',
+                };
 
                 return {
                     id:
@@ -268,9 +315,9 @@ export default {
                     text: resolveMapping(message, props.content?.mappingMessageText, 'text') || '',
                     senderId: senderId,
                     userName: displayUserName,
-                    avatar: userSettings.userAvatar || '',
-                    location: userSettings.userLocation || '',
-                    status: userSettings.userStatus || 'online',
+                    avatar: userSettings.userAvatar,
+                    location: userSettings.userLocation,
+                    status: userSettings.userStatus,
                     timestamp:
                         resolveMapping(message, props.content?.mappingTimestamp, 'timestamp') ||
                         new Date().toISOString(),
@@ -287,10 +334,7 @@ export default {
         const inputPlaceholder = computed(() => props.content?.inputPlaceholder || 'Type a message...');
 
         // User properties - use direct props since we no longer have global user settings
-        const userName = computed(() => props.content?.userName || 'User');
-        const userAvatar = computed(() => props.content?.userAvatar || '');
-        const userLocation = computed(() => props.content?.userLocation || '');
-        const userStatus = computed(() => props.content?.userStatus || 'online');
+        const currentUserParticipant = computed(() => participants.value.find(p => p.isCurrentUser));
 
         // Style properties
         const containerStyles = computed(() => ({
@@ -487,15 +531,17 @@ export default {
                 id: `msg-${wwLib.wwUtils.getUid()}`,
                 text: newMessage.value.trim(),
                 senderId: currentUserId.value,
-                userName: userName.value,
+                userName: currentUserParticipant.value?.name || 'You',
                 timestamp: new Date().toISOString(),
                 attachments: attachments.length > 0 ? attachments : undefined,
-                userSettings: {
-                    userName: userName.value,
-                    userAvatar: userAvatar.value,
-                    userLocation: userLocation.value,
-                    userStatus: userStatus.value,
-                },
+                userSettings: currentUserParticipant.value
+                    ? {
+                          userName: currentUserParticipant.value.name,
+                          userAvatar: currentUserParticipant.value.avatar,
+                          userLocation: currentUserParticipant.value.location,
+                          userStatus: currentUserParticipant.value.status,
+                      }
+                    : {},
             };
 
             newMessage.value = '';
@@ -682,12 +728,16 @@ export default {
 
         const chatPartners = computed(() => {
             // If no messages, return current user info as fallback
+            if (participants.value.length === 0) {
+                return { name: '', avatar: '', location: '', status: 'online', participants: [], participantsString: '' };
+            }
+
             if (messages.value.length === 0) {
                 return {
-                    name: userName.value,
-                    avatar: userAvatar.value,
-                    location: userLocation.value,
-                    status: userStatus.value,
+                    name: currentUserParticipant.value?.name || '',
+                    avatar: currentUserParticipant.value?.avatar || '',
+                    location: currentUserParticipant.value?.location || '',
+                    status: currentUserParticipant.value?.status || 'online',
                     participants: [],
                     participantsString: '',
                 };
@@ -697,20 +747,17 @@ export default {
             const allSenderIds = [...new Set(messages.value.map(msg => msg.senderId))];
             const otherSenderIds = allSenderIds.filter(id => id !== currentUserId.value);
 
-            const participants = otherSenderIds.map(senderId => {
-                const msg = messages.value.find(m => m.senderId === senderId);
-                return msg?.userSettings?.userName || msg?.userName || 'Unknown User';
-            });
-
-            const participantsString = participants.join(', ');
+            const others = participants.value.filter(p => otherSenderIds.includes(p.id));
+            const names = others.map(p => p.name);
+            const participantsString = names.join(', ');
 
             // If no other participants (only current user messages), show current user
             if (otherSenderIds.length === 0) {
                 return {
-                    name: userName.value,
-                    avatar: userAvatar.value,
-                    location: userLocation.value,
-                    status: userStatus.value,
+                    name: currentUserParticipant.value?.name || '',
+                    avatar: currentUserParticipant.value?.avatar || '',
+                    location: currentUserParticipant.value?.location || '',
+                    status: currentUserParticipant.value?.status || 'online',
                     participants: [],
                     participantsString: '',
                 };
@@ -719,14 +766,13 @@ export default {
             // Two participants total (current user + 1 other) - show recipient info
             if (allSenderIds.length === 2 || (otherSenderIds.length === 1 && !props.content?.showSelfInHeader)) {
                 const otherUserId = otherSenderIds[0];
-                const otherUser = messages.value.find(msg => msg.senderId === otherUserId);
-
+                const p = participants.value.find(p => p.id === otherUserId);
                 return {
-                    name: otherUser?.userSettings?.userName || otherUser?.userName || 'Unknown User',
-                    avatar: otherUser?.userSettings?.userAvatar || otherUser?.avatar || otherUser?.avatarUrl || '',
-                    location: otherUser?.userSettings?.userLocation || otherUser?.location || '',
-                    status: otherUser?.userSettings?.userStatus || otherUser?.status || 'online',
-                    participants,
+                    name: p?.name || 'Unknown User',
+                    avatar: p?.avatar || '',
+                    location: p?.location || '',
+                    status: p?.status || 'online',
+                    participants: names,
                     participantsString,
                 };
             }
@@ -741,14 +787,14 @@ export default {
             if (props.content?.groupChatText && props.content.groupChatText.trim() !== '') {
                 groupChatName = props.content.groupChatText;
             } else {
-                const totalParticipants = allSenderIds.length;
+                const totalParticipants = others.length + (currentUserParticipant.value ? 1 : 0);
                 groupChatName = `Group Chat (${totalParticipants} participants)`;
             }
 
             // For group chat location, use userSettings from the last message sender
             let groupLocation = '';
             if (lastOtherMsg) {
-                const displayName = lastOtherMsg.userSettings?.userName || lastOtherMsg.userName;
+                const displayName = lastOtherMsg.userName;
                 groupLocation = `Last message from ${displayName}`;
             }
 
@@ -938,14 +984,12 @@ export default {
             pendingAttachments,
 
             currentUserId,
+            participants,
             isDisabled,
             displayHeader,
             allowAttachments,
             inputPlaceholder,
-            userName,
-            userAvatar,
-            userLocation,
-            userStatus,
+            // user settings removed; derived from participants
 
             headerUserName,
             headerUserAvatar,
@@ -1012,6 +1056,21 @@ export default {
             removeIcon: computed(() => props.content?.removeIcon || 'x'),
             removeIconColor: computed(() => props.content?.removeIconColor || '#f43f5e'),
             removeIconSize: computed(() => props.content?.removeIconSize || '12px'),
+
+            // Input action alignment and button styles
+            actionAlign: computed(() => props.content?.inputActionAlign || 'end'),
+            sendButtonBgColor: computed(() => props.content?.sendButtonBgColor || 'linear-gradient(135deg, #3b82f6, #2563eb)'),
+            sendButtonHoverBgColor: computed(() => props.content?.sendButtonHoverBgColor || 'linear-gradient(135deg, #2563eb, #1d4ed8)'),
+            sendButtonBorder: computed(() => props.content?.sendButtonBorder || 'none'),
+            sendButtonBorderRadius: computed(() => props.content?.sendButtonBorderRadius || '12px'),
+            sendButtonSize: computed(() => props.content?.sendButtonSize || '42px'),
+            sendButtonBoxShadow: computed(() => props.content?.sendButtonBoxShadow || '0 2px 4px rgba(59, 130, 246, 0.3)'),
+            attachmentButtonBgColor: computed(() => props.content?.attachmentButtonBgColor || '#f8fafc'),
+            attachmentButtonHoverBgColor: computed(() => props.content?.attachmentButtonHoverBgColor || '#f1f5f9'),
+            attachmentButtonBorder: computed(() => props.content?.attachmentButtonBorder || '1px solid #e2e8f0'),
+            attachmentButtonBorderRadius: computed(() => props.content?.attachmentButtonBorderRadius || '12px'),
+            attachmentButtonSize: computed(() => props.content?.attachmentButtonSize || '42px'),
+            attachmentButtonBoxShadow: computed(() => props.content?.attachmentButtonBoxShadow || '0 1px 2px rgba(0, 0, 0, 0.06)'),
 
             // Methods
             scrollToBottom,

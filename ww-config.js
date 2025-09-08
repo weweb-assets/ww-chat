@@ -77,6 +77,7 @@ export default {
                 'inputHeight',
                 'inputBorderRadius',
                 'inputPlaceholder',
+                'inputActionAlign',
             ],
             // Icons
             [
@@ -93,33 +94,53 @@ export default {
                 'removeIconColor',
                 'removeIconSize',
             ],
+            // Send button styles
+            [
+                'sendButtonTitle',
+                'sendButtonBgColor',
+                'sendButtonHoverBgColor',
+                'sendButtonBorder',
+                'sendButtonBorderRadius',
+                'sendButtonSize',
+                'sendButtonBoxShadow',
+            ],
+            // Attachment button styles
+            [
+                'attachmentButtonTitle',
+                'attachmentButtonBgColor',
+                'attachmentButtonHoverBgColor',
+                'attachmentButtonBorder',
+                'attachmentButtonBorderRadius',
+                'attachmentButtonSize',
+                'attachmentButtonBoxShadow',
+            ],
         ],
         customSettingsPropertiesOrder: [
-            // User settings
-            [
-                'userSettingsTitle',
-                'userName',
-                'userAvatar',
-                'userLocation',
-                'userStatus',
-                'currentUserId',
-                'showSelfInHeader',
-            ],
             // Chat settings
             ['chatSettingsTitle', 'groupChatText', 'allowAttachments', 'disabled', 'autoScrollBehavior'],
-            // Localization settings
-            ['localizationTitle', 'locale', 'timeFormat', 'todayText', 'yesterdayText', 'justNowText'],
-            // Chat data
+            // Chat data + message mapping
             [
                 'chatDataTitle',
                 'chatHistory',
                 'mappingMessageId',
                 'mappingMessageText',
                 'mappingSenderId',
-                'mappingUserName',
                 'mappingTimestamp',
                 'mappingAttachments',
             ],
+            // Participant data
+            [
+                'participantDataTitle',
+                'participants',
+                'mappingParticipantId',
+                'mappingParticipantName',
+                'mappingParticipantAvatar',
+                'mappingParticipantLocation',
+                'mappingParticipantStatus',
+                'mappingIsCurrentUser',
+            ],
+            // Localization settings
+            ['localizationTitle', 'locale', 'timeFormat', 'todayText', 'yesterdayText', 'justNowText'],
         ],
     },
     triggerEvents: [
@@ -1344,6 +1365,30 @@ export default {
             },
             /* wwEditor:end */
         },
+        inputActionAlign: {
+            label: { en: 'Action Align' },
+            type: 'TextSelect',
+            options: {
+                options: [
+                    { value: 'start', label: { en: 'Start' } },
+                    { value: 'center', label: { en: 'Center' } },
+                    { value: 'end', label: { en: 'End' } },
+                ],
+            },
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: 'end',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                enum: ['start', 'center', 'end'],
+                tooltip: 'Vertical alignment of the action buttons (send/attachment) within the input row',
+            },
+            /* wwEditor:end */
+        },
         inputPlaceholder: {
             label: { en: 'Placeholder Text' },
             type: 'Text',
@@ -1562,9 +1607,144 @@ export default {
             /* wwEditor:end */
         },
 
+        // Send button styles
+        sendButtonTitle: {
+            type: 'Title',
+            label: { en: 'Send Button' },
+            section: 'style',
+        },
+        sendButtonBgColor: {
+            label: { en: 'Background Color' },
+            type: 'Color',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+        },
+        sendButtonHoverBgColor: {
+            label: { en: 'Hover Background' },
+            type: 'Color',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+        },
+        sendButtonBorder: {
+            label: { en: 'Border' },
+            type: 'Border',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: 'none',
+        },
+        sendButtonBorderRadius: {
+            label: { en: 'Border Radius' },
+            type: 'Length',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '12px',
+        },
+        sendButtonSize: {
+            label: { en: 'Size' },
+            type: 'Length',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '42px',
+        },
+        sendButtonBoxShadow: {
+            label: { en: 'Shadow' },
+            type: 'Shadows',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '0 2px 4px rgba(59, 130, 246, 0.3)',
+        },
+
+        // Attachment button styles
+        attachmentButtonTitle: {
+            type: 'Title',
+            label: { en: 'Attachment Button' },
+            section: 'style',
+        },
+        attachmentButtonBgColor: {
+            label: { en: 'Background Color' },
+            type: 'Color',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '#f8fafc',
+        },
+        attachmentButtonHoverBgColor: {
+            label: { en: 'Hover Background' },
+            type: 'Color',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '#f1f5f9',
+        },
+        attachmentButtonBorder: {
+            label: { en: 'Border' },
+            type: 'Border',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '1px solid #e2e8f0',
+        },
+        attachmentButtonBorderRadius: {
+            label: { en: 'Border Radius' },
+            type: 'Length',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '12px',
+        },
+        attachmentButtonSize: {
+            label: { en: 'Size' },
+            type: 'Length',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '42px',
+        },
+        attachmentButtonBoxShadow: {
+            label: { en: 'Shadow' },
+            type: 'Shadows',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '0 1px 2px rgba(0, 0, 0, 0.06)',
+        },
+
         // ======== SETTINGS ========
 
         // User settings
+        /* Removed User Settings: userSettingsTitle, userName, userAvatar, userLocation, userStatus, currentUserId, showSelfInHeader */
         userSettingsTitle: {
             type: 'Title',
             label: { en: 'User Settings' },
@@ -2034,30 +2214,7 @@ export default {
             /* wwEditor:end */
             hidden: (content, _, boundProps) => !boundProps.chatHistory,
         },
-        mappingUserName: {
-            label: { en: 'User Name' },
-            type: 'Formula',
-            options: content => ({
-                template:
-                    Array.isArray(content.chatHistory) && content.chatHistory.length ? content.chatHistory[0] : null,
-            }),
-            defaultValue: {
-                type: 'f',
-                code: "context.mapping?.['userName']",
-            },
-            section: 'settings',
-            /* wwEditor:start */
-            bindingValidation: {
-                type: 'formula',
-                tooltip: 'Formula to extract the user display name from each message object',
-            },
-            propertyHelp: {
-                tooltip:
-                    'Formula to extract the user display name from your data structure.\n\nThis formula is executed for each message to get the display name of the sender shown above their messages.\n\n**Examples**:\n- `context.mapping?.["userName"]`\n- `context.mapping?.["senderName"]`\n- `context.mapping?.["from_name"]`',
-            },
-            /* wwEditor:end */
-            hidden: (content, _, boundProps) => !boundProps.chatHistory,
-        },
+        // mappingUserName removed – names come from Participant Data
         mappingTimestamp: {
             label: { en: 'Timestamp' },
             type: 'Formula',
@@ -2105,6 +2262,88 @@ export default {
             },
             /* wwEditor:end */
             hidden: (content, _, boundProps) => !boundProps.chatHistory,
+        },
+
+        // Participant data
+        participantDataTitle: {
+            type: 'Title',
+            label: { en: 'Participant Data' },
+            section: 'settings',
+        },
+        participants: {
+            label: { en: 'Participants' },
+            type: 'Array',
+            section: 'settings',
+            bindable: true,
+            defaultValue: [],
+            options: {
+                item: {
+                    type: 'Object',
+                    options: {
+                        item: {
+                            id: { label: { en: 'Participant ID' }, type: 'Text' },
+                            name: { label: { en: 'Name' }, type: 'Text' },
+                            avatar: { label: { en: 'Avatar URL' }, type: 'Text' },
+                            location: { label: { en: 'Location' }, type: 'Text' },
+                            status: {
+                                label: { en: 'Status' },
+                                type: 'TextSelect',
+                                options: {
+                                    options: [
+                                        { value: 'online', label: { en: 'Online' } },
+                                        { value: 'offline', label: { en: 'Offline' } },
+                                        { value: 'away', label: { en: 'Away' } },
+                                        { value: 'busy', label: { en: 'Busy' } },
+                                    ],
+                                },
+                            },
+                            isCurrentUser: { label: { en: 'Is Current User' }, type: 'OnOff' },
+                        },
+                    },
+                },
+            },
+        },
+        mappingParticipantId: {
+            label: { en: 'Participant ID' },
+            type: 'Formula',
+            options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
+            defaultValue: { type: 'f', code: "context.mapping?.['id'] ?? context.mapping?.['userId'] ?? context.mapping?.['_id']" },
+            section: 'settings',
+        },
+        mappingParticipantName: {
+            label: { en: 'Participant Name' },
+            type: 'Formula',
+            options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
+            defaultValue: { type: 'f', code: "context.mapping?.['name'] ?? context.mapping?.['userName'] ?? context.mapping?.['fullName']" },
+            section: 'settings',
+        },
+        mappingParticipantAvatar: {
+            label: { en: 'Participant Avatar' },
+            type: 'Formula',
+            options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
+            defaultValue: { type: 'f', code: "context.mapping?.['avatar'] ?? context.mapping?.['avatarUrl'] ?? context.mapping?.['photo']" },
+            section: 'settings',
+        },
+        mappingParticipantLocation: {
+            label: { en: 'Participant Location' },
+            type: 'Formula',
+            options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
+            defaultValue: { type: 'f', code: "context.mapping?.['location'] ?? context.mapping?.['subtitle']" },
+            section: 'settings',
+        },
+        mappingParticipantStatus: {
+            label: { en: 'Participant Status' },
+            type: 'Formula',
+            options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
+            defaultValue: { type: 'f', code: "context.mapping?.['status']" },
+            section: 'settings',
+        },
+        mappingIsCurrentUser: {
+            label: { en: 'Is Current User' },
+            type: 'Formula',
+            options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
+            defaultValue: { type: 'f', code: "!!context.mapping?.['isCurrentUser']" },
+            section: 'settings',
         },
     },
 };
