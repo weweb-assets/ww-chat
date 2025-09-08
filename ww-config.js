@@ -2404,6 +2404,7 @@ export default {
                 tooltip:
                     'Extracts the unique ID for each participant.\n\nExamples:\n- context.mapping?.["id"]\n- context.mapping?.["userId"]\n- context.mapping?.["_id"]',
             },
+            hidden: (content, _, boundProps) => !boundProps.participants,
             /* wwEditor:end */
         },
         mappingParticipantName: {
@@ -2418,6 +2419,7 @@ export default {
                 tooltip:
                     'Extracts the display name for each participant.\n\nExamples:\n- context.mapping?.["name"]\n- context.mapping?.["userName"]\n- context.mapping?.["fullName"]',
             },
+            hidden: (content, _, boundProps) => !boundProps.participants,
             /* wwEditor:end */
         },
         mappingParticipantAvatar: {
@@ -2432,6 +2434,7 @@ export default {
                 tooltip:
                     'Extracts the avatar URL.\n\nExamples:\n- context.mapping?.["avatar"]\n- context.mapping?.["avatarUrl"]\n- context.mapping?.["photo"]',
             },
+            hidden: (content, _, boundProps) => !boundProps.participants,
             /* wwEditor:end */
         },
         mappingParticipantLocation: {
@@ -2446,6 +2449,7 @@ export default {
                 tooltip:
                     'Extracts a location/subtitle string for each participant.\n\nExamples:\n- context.mapping?.["location"]\n- context.mapping?.["subtitle"]',
             },
+            hidden: (content, _, boundProps) => !boundProps.participants,
             /* wwEditor:end */
         },
         mappingParticipantStatus: {
@@ -2459,6 +2463,7 @@ export default {
             propertyHelp: {
                 tooltip: 'Extracts the participant status. Expected values: online, offline, away, busy.',
             },
+            hidden: (content, _, boundProps) => !boundProps.participants,
             /* wwEditor:end */
         },
         mappingIsCurrentUser: {
@@ -2473,6 +2478,7 @@ export default {
                 tooltip:
                     'Return a boolean indicating whether the participant is the current user. When true, the component infers currentUserId from this participant.',
             },
+            hidden: (content, _, boundProps) => !boundProps.participants,
             /* wwEditor:end */
         },
     },
