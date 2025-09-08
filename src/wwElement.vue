@@ -409,102 +409,7 @@ export default {
             { deep: true }
         );
 
-        // Store the latest user settings for event emission
-        const latestUserSettings = ref(null);
-
-        // Non-debounced function to immediately update all current user messages with new settings
-        const updateUserMessagesImmediate = (
-            newUserId,
-            oldUserId,
-            newUserName,
-            newUserAvatar,
-            newUserLocation,
-            newUserStatus
-        ) => {
-            if (chatState.value?.messages) {
-                const updatedMessages = chatState.value.messages.map(message => {
-                    if (message.senderId === newUserId || (message.senderId === oldUserId && oldUserId !== newUserId)) {
-                        return {
-                            ...message,
-                            userSettings: {
-                                userName: newUserName || 'User',
-                                userAvatar: newUserAvatar || '',
-                                userLocation: newUserLocation || '',
-                                userStatus: newUserStatus || 'online',
-                            },
-                        };
-                    }
-                    return message;
-                });
-
-                setChatState({
-                    ...chatState.value,
-                    messages: updatedMessages,
-                });
-
-                // Store settings for immediate event emission
-                latestUserSettings.value = {
-                    userName: newUserName,
-                    userAvatar: newUserAvatar,
-                    userLocation: newUserLocation,
-                    userStatus: newUserStatus,
-                };
-            }
-        };
-
-        // Debounced function to update all current user messages with new settings
-        const updateUserMessages = debounce(updateUserMessagesImmediate, 1000);
-
-        watch(
-            latestUserSettings,
-            newSettings => {
-                if (newSettings) {
-                    emit('trigger-event', {
-                        name: 'settingsChanged',
-                        event: newSettings,
-                    });
-
-                    // Reset to avoid duplicate events
-                    latestUserSettings.value = null;
-                }
-            },
-            { immediate: true, deep: true }
-        );
-
-        // Watch for user settings changes and debounce updates
-        watch(
-            [
-                currentUserId,
-                () => props.content?.userName,
-                () => props.content?.userAvatar,
-                () => props.content?.userLocation,
-                () => props.content?.userStatus,
-            ],
-            (
-                [newUserId, newUserName, newUserAvatar, newUserLocation, newUserStatus],
-                [oldUserId, oldUserName, oldUserAvatar, oldUserLocation, oldUserStatus]
-            ) => {
-                // Check if any setting has changed
-                const hasChanges =
-                    oldUserName !== newUserName ||
-                    oldUserAvatar !== newUserAvatar ||
-                    oldUserLocation !== newUserLocation ||
-                    oldUserStatus !== newUserStatus ||
-                    oldUserId !== newUserId;
-
-                if (hasChanges) {
-                    updateUserMessages(
-                        newUserId,
-                        oldUserId,
-                        newUserName,
-                        newUserAvatar,
-                        newUserLocation,
-                        newUserStatus
-                    );
-                }
-            },
-            { immediate: true }
-        );
+        // Removed user settings watcher and debounced updater; participants now drive user info
 
         const scrollToBottom = async (smooth = null) => {
             await nextTick();
@@ -823,46 +728,34 @@ export default {
 
         // Chat local context data
         const conversationData = computed(() => {
-            const allSenderIds = [...new Set(messages.value.map(msg => msg.senderId))];
-            const otherSenderIds = allSenderIds.filter(id => id !== currentUserId.value);
+            const others = participants.value.filter(p => p.id !== currentUserId.value);
+            const all = participants.value.map(p => ({ ...p, isCurrentUser: p.id === currentUserId.value }));
 
             return {
-                type: allSenderIds.length <= 2 ? 'private' : 'group',
-                participantCount: allSenderIds.length,
-                otherParticipantCount: otherSenderIds.length,
-                participants: otherSenderIds.map(senderId => {
-                    const msg = messages.value.find(m => m.senderId === senderId);
-                    return {
-                        id: senderId,
-                        name: msg?.userSettings?.userName || msg?.userName || 'Unknown User',
-                        avatar: msg?.userSettings?.userAvatar || msg?.avatar || msg?.avatarUrl || '',
-                        location: msg?.userSettings?.userLocation || '',
-                        status: msg?.userSettings?.userStatus || 'online',
-                        lastMessageTime: messages.value
-                            .filter(m => m.senderId === senderId)
-                            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0]?.timestamp,
-                    };
-                }),
-                allParticipants: allSenderIds.map(senderId => {
-                    const msg = messages.value.find(m => m.senderId === senderId);
-                    const isCurrentUser = senderId === currentUserId.value;
-
-                    return {
-                        id: senderId,
-                        name: isCurrentUser
-                            ? userName.value
-                            : msg?.userSettings?.userName || msg?.userName || 'Unknown User',
-                        avatar: isCurrentUser
-                            ? userAvatar.value
-                            : msg?.userSettings?.userAvatar || msg?.avatar || msg?.avatarUrl || '',
-                        location: isCurrentUser ? userLocation.value : msg?.userSettings?.userLocation || '',
-                        status: isCurrentUser ? userStatus.value : msg?.userSettings?.userStatus || 'online',
-                        isCurrentUser,
-                        lastMessageTime: messages.value
-                            .filter(m => m.senderId === senderId)
-                            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0]?.timestamp,
-                    };
-                }),
+                type: all.length <= 2 ? 'private' : 'group',
+                participantCount: all.length,
+                otherParticipantCount: others.length,
+                participants: others.map(p => ({
+                    id: p.id,
+                    name: p.name,
+                    avatar: p.avatar || '',
+                    location: p.location || '',
+                    status: p.status || 'online',
+                    lastMessageTime: messages.value
+                        .filter(m => m.senderId === p.id)
+                        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0]?.timestamp,
+                })),
+                allParticipants: all.map(p => ({
+                    id: p.id,
+                    name: p.name,
+                    avatar: p.avatar || '',
+                    location: p.location || '',
+                    status: p.status || 'online',
+                    isCurrentUser: p.isCurrentUser,
+                    lastMessageTime: messages.value
+                        .filter(m => m.senderId === p.id)
+                        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0]?.timestamp,
+                })),
             };
         });
 
@@ -884,10 +777,10 @@ export default {
             conversation: conversationData.value,
             currentUser: {
                 id: currentUserId.value,
-                name: userName.value || '',
-                avatar: userAvatar.value || '',
-                location: userLocation.value || '',
-                status: userStatus.value || 'online',
+                name: currentUserParticipant.value?.name || '',
+                avatar: currentUserParticipant.value?.avatar || '',
+                location: currentUserParticipant.value?.location || '',
+                status: currentUserParticipant.value?.status || 'online',
             },
             utils: {
                 messageCount: messages.value.length,
