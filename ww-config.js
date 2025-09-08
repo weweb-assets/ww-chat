@@ -1744,7 +1744,6 @@ export default {
         // ======== SETTINGS ========
 
         // User settings
-        /* Removed User Settings: userSettingsTitle, userName, userAvatar, userLocation, userStatus, currentUserId, showSelfInHeader */
         userSettingsTitle: {
             type: 'Title',
             label: { en: 'User Settings' },
@@ -2213,7 +2212,7 @@ export default {
             /* wwEditor:end */
             hidden: (content, _, boundProps) => !boundProps.messages,
         },
-        // mappingUserName removed – names come from Participant Data
+        
         mappingTimestamp: {
             label: { en: 'Timestamp' },
             type: 'Formula',

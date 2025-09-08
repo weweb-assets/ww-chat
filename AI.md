@@ -152,7 +152,7 @@ Chat Data:
     -   `id`: `string` - Unique identifier for the message
     -   `text`: `string` - Message text content
     -   `senderId`: `string` - ID of the message sender
-    -   (Name comes from Participants; no per-message mapping is needed)
+
     -   `timestamp`: `string` - ISO timestamp of when the message was sent
     -   `attachments`: `array` (optional) - Array of attachment objects
     -   `avatar` or `avatarUrl`: `string` (optional) - URL of sender's avatar image
@@ -210,7 +210,7 @@ Participant Data:
 
 Special Features:
 
--   Names and avatars are resolved from Participant Data; no message-level name mapping is required
+
 -   **Debounced Updates** - When user settings change, all messages from the current user are automatically updated with the new settings after a 1-second delay to prevent excessive updates
 -   **Self-Contained Messages** - Each message is self-contained with user information, eliminating dependency on external user storage
 -   User status indicator (online, offline, away, busy) with automatic fallback handling

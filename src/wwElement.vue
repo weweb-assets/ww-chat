@@ -989,7 +989,7 @@ export default {
             displayHeader,
             allowAttachments,
             inputPlaceholder,
-            // user settings removed; derived from participants
+            
 
             headerUserName,
             headerUserAvatar,
