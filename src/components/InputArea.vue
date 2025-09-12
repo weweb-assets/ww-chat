@@ -639,7 +639,8 @@ export default {
         width: 100%;
         resize: none;
         height: v-bind('inputHeight');
-        padding: 12px 16px;
+        /* Center a single text line vertically based on height and line-height */
+        padding: calc((v-bind('inputHeight') - 1.5em) / 2) 16px;
         border-radius: v-bind('inputBorderRadius');
         font-size: v-bind('inputFontSize');
         font-weight: v-bind('inputFontWeight');
