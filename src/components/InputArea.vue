@@ -648,6 +648,8 @@ export default {
         font-family: v-bind('inputFontFamily');
         line-height: 1.5;
         overflow-y: auto;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         background-color: v-bind('inputBgColor');
         color: v-bind('inputTextColor');
@@ -656,6 +658,11 @@ export default {
         vertical-align: bottom;
         align-self: flex-end;
         margin: 0;
+
+        &::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
 
         &::placeholder {
             color: v-bind('inputPlaceholderColor');
@@ -671,7 +678,6 @@ export default {
             border: var(--textarea-border-focus);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
             transform: translateY(-1px);
-            overflow-y: auto;
         }
 
         &:disabled {
