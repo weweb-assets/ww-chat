@@ -487,7 +487,8 @@ export default {
         gap: 10px;
         margin-bottom: 4px;
         max-height: 120px;
-        overflow-y: auto;
+        /* Hide scrollbar by default; show when focused for multiline */
+        overflow-y: hidden;
         padding: 6px;
         border-radius: 12px;
         background-color: rgba(0, 0, 0, 0.02);
@@ -670,6 +671,7 @@ export default {
             border: var(--textarea-border-focus);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
             transform: translateY(-1px);
+            overflow-y: auto;
         }
 
         &:disabled {
