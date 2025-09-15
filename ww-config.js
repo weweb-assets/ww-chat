@@ -154,6 +154,7 @@ export default {
                     senderId: 'current-user',
                     userName: 'User',
                     timestamp: new Date().toISOString(),
+                    attachments: [],
                 },
             },
         },
@@ -167,6 +168,7 @@ export default {
                     senderId: 'other-user',
                     userName: 'Other User',
                     timestamp: new Date().toISOString(),
+                    attachments: [],
                 },
             },
         },
@@ -205,7 +207,6 @@ export default {
             label: { en: 'On close' },
             event: {},
         },
-        
     ],
     actions: [
         {
@@ -1619,8 +1620,7 @@ export default {
             /* wwEditor:start */
             bindingValidation: { type: 'string', tooltip: 'Border for the send button' },
             propertyHelp: {
-                tooltip:
-                    'Defines the border of the send button.\n\nExamples:\n- none\n- 1px solid #e2e8f0',
+                tooltip: 'Defines the border of the send button.\n\nExamples:\n- none\n- 1px solid #e2e8f0',
             },
             /* wwEditor:end */
         },
@@ -2084,8 +2084,7 @@ export default {
             label: { en: 'Message Text' },
             type: 'Formula',
             options: content => ({
-                template:
-                    Array.isArray(content.messages) && content.messages.length ? content.messages[0] : null,
+                template: Array.isArray(content.messages) && content.messages.length ? content.messages[0] : null,
             }),
             defaultValue: {
                 type: 'f',
@@ -2108,8 +2107,7 @@ export default {
             label: { en: 'Sender ID' },
             type: 'Formula',
             options: content => ({
-                template:
-                    Array.isArray(content.messages) && content.messages.length ? content.messages[0] : null,
+                template: Array.isArray(content.messages) && content.messages.length ? content.messages[0] : null,
             }),
             defaultValue: {
                 type: 'f',
@@ -2128,13 +2126,12 @@ export default {
             /* wwEditor:end */
             hidden: (content, _, boundProps) => !boundProps.messages,
         },
-        
+
         mappingTimestamp: {
             label: { en: 'Timestamp' },
             type: 'Formula',
             options: content => ({
-                template:
-                    Array.isArray(content.messages) && content.messages.length ? content.messages[0] : null,
+                template: Array.isArray(content.messages) && content.messages.length ? content.messages[0] : null,
             }),
             defaultValue: {
                 type: 'f',
@@ -2157,8 +2154,7 @@ export default {
             label: { en: 'Attachments' },
             type: 'Formula',
             options: content => ({
-                template:
-                    Array.isArray(content.messages) && content.messages.length ? content.messages[0] : null,
+                template: Array.isArray(content.messages) && content.messages.length ? content.messages[0] : null,
             }),
             defaultValue: {
                 type: 'f',
@@ -2230,8 +2226,14 @@ export default {
         mappingParticipantId: {
             label: { en: 'Participant ID' },
             type: 'Formula',
-            options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
-            defaultValue: { type: 'f', code: "context.mapping?.['id'] ?? context.mapping?.['userId'] ?? context.mapping?.['_id']" },
+            options: content => ({
+                template:
+                    Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null,
+            }),
+            defaultValue: {
+                type: 'f',
+                code: "context.mapping?.['id'] ?? context.mapping?.['userId'] ?? context.mapping?.['_id']",
+            },
             section: 'settings',
             /* wwEditor:start */
             bindingValidation: { type: 'formula', tooltip: 'Formula that returns the unique participant ID' },
@@ -2245,8 +2247,14 @@ export default {
         mappingParticipantName: {
             label: { en: 'Participant Name' },
             type: 'Formula',
-            options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
-            defaultValue: { type: 'f', code: "context.mapping?.['name'] ?? context.mapping?.['userName'] ?? context.mapping?.['fullName']" },
+            options: content => ({
+                template:
+                    Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null,
+            }),
+            defaultValue: {
+                type: 'f',
+                code: "context.mapping?.['name'] ?? context.mapping?.['userName'] ?? context.mapping?.['fullName']",
+            },
             section: 'settings',
             /* wwEditor:start */
             bindingValidation: { type: 'formula', tooltip: 'Formula that returns the participant display name' },
@@ -2260,8 +2268,14 @@ export default {
         mappingParticipantAvatar: {
             label: { en: 'Participant Avatar' },
             type: 'Formula',
-            options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
-            defaultValue: { type: 'f', code: "context.mapping?.['avatar'] ?? context.mapping?.['avatarUrl'] ?? context.mapping?.['photo']" },
+            options: content => ({
+                template:
+                    Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null,
+            }),
+            defaultValue: {
+                type: 'f',
+                code: "context.mapping?.['avatar'] ?? context.mapping?.['avatarUrl'] ?? context.mapping?.['photo']",
+            },
             section: 'settings',
             /* wwEditor:start */
             bindingValidation: { type: 'formula', tooltip: 'Formula that returns the avatar URL' },
@@ -2275,7 +2289,10 @@ export default {
         mappingParticipantLocation: {
             label: { en: 'Participant Location' },
             type: 'Formula',
-            options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
+            options: content => ({
+                template:
+                    Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null,
+            }),
             defaultValue: { type: 'f', code: "context.mapping?.['location'] ?? context.mapping?.['subtitle']" },
             section: 'settings',
             /* wwEditor:start */
@@ -2290,11 +2307,17 @@ export default {
         mappingParticipantStatus: {
             label: { en: 'Participant Status' },
             type: 'Formula',
-            options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
+            options: content => ({
+                template:
+                    Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null,
+            }),
             defaultValue: { type: 'f', code: "context.mapping?.['status']" },
             section: 'settings',
             /* wwEditor:start */
-            bindingValidation: { type: 'formula', tooltip: 'Formula that returns the status (online, offline, away, busy)' },
+            bindingValidation: {
+                type: 'formula',
+                tooltip: 'Formula that returns the status (online, offline, away, busy)',
+            },
             propertyHelp: {
                 tooltip: 'Extracts the participant status. Expected values: online, offline, away, busy.',
             },
@@ -2304,11 +2327,17 @@ export default {
         mappingIsCurrentUser: {
             label: { en: 'Is Current User' },
             type: 'Formula',
-            options: content => ({ template: Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null }),
+            options: content => ({
+                template:
+                    Array.isArray(content.participants) && content.participants.length ? content.participants[0] : null,
+            }),
             defaultValue: { type: 'f', code: "!!context.mapping?.['isCurrentUser']" },
             section: 'settings',
             /* wwEditor:start */
-            bindingValidation: { type: 'formula', tooltip: 'Formula that returns true if this participant is the current user' },
+            bindingValidation: {
+                type: 'formula',
+                tooltip: 'Formula that returns true if this participant is the current user',
+            },
             propertyHelp: {
                 tooltip:
                     'Return a boolean indicating whether the participant is the current user. When true, the component infers currentUserId from this participant.',
