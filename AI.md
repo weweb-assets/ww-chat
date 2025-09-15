@@ -28,6 +28,7 @@ Unified chat UI: optional header (via `displayHeader`), always-present messages 
 - headerLocationOpacity: number – Location opacity. Example: 0.7
 - headerCloseButtonColor: string – Close icon color. Example: '#64748b'
 - headerCloseButtonBgHover: string – Close hover bg. Example: 'rgba(0,0,0,.05)'
+- headerShowCloseButton: boolean – Show the header close button. Example: true
 
 - messagesAreaBgColor: string – Messages area background. Example: '#ffffff'
 - messagesAreaPadding: string – Messages area padding. Example: '16px'

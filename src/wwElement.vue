@@ -17,6 +17,7 @@
             :location-opacity="headerLocationOpacity"
             :close-button-color="headerCloseButtonColor"
             :close-button-bg-hover="headerCloseButtonBgHover"
+            :show-close-button="headerShowCloseButton"
             :participants="headerParticipants"
             @close="handleClose"
         />
@@ -918,6 +919,7 @@ export default {
             headerLocationOpacity,
             headerCloseButtonColor,
             headerCloseButtonBgHover,
+            headerShowCloseButton: computed(() => props.content?.headerShowCloseButton !== false),
             messageBgColor,
             messageTextColor,
             messageFontSize,

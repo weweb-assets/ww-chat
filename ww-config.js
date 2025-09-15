@@ -516,6 +516,24 @@ export default {
             hidden: content => content.displayHeader === false,
         },
 
+        headerShowCloseButton: {
+            label: { en: 'Display Close Button' },
+            type: 'OnOff',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: true,
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'boolean',
+                tooltip: 'Whether to display the close button in the chat header',
+            },
+            /* wwEditor:end */
+            hidden: content => content.displayHeader === false,
+        },
+
         // Messages area styles
         messagesAreaTitle: {
             type: 'Title',

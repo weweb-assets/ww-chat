@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-        <button class="ww-chat-header__close" :style="closeButtonStyles" @click="$emit('close')">
+        <button v-if="showCloseButton" class="ww-chat-header__close" :style="closeButtonStyles" @click="$emit('close')">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -104,6 +104,10 @@ export default {
             type: String,
             default: 'rgba(0, 0, 0, 0.05)',
         },
+        showCloseButton: {
+            type: Boolean,
+            default: true,
+        },
     },
     emits: ['close'],
     setup(props) {
@@ -183,6 +187,8 @@ export default {
             return colors[index];
         };
 
+        const showCloseButton = computed(() => props.showCloseButton !== false);
+
         return {
             isEditing,
             userInitials,
@@ -192,6 +198,7 @@ export default {
             locationStyles,
             closeButtonStyles,
             avatarStyles,
+            showCloseButton,
         };
     },
 };
