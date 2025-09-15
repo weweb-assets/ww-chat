@@ -132,6 +132,7 @@ Unified chat UI: optional header (via `displayHeader`), always-present messages 
 - scrollToBottom: (smooth?: boolean) Scroll to the latest message; uses `autoScrollBehavior` when arg omitted.
 
 ***Notes:***
+- IMPORTANT: Do NOT add a custom message input. The component already includes a built-in input area with textarea, send button, and attachment support. Adding another input leads to duplicated UI and broken events.
 - Messages area is always rendered; the header is controlled by `displayHeader`.
 - Enter sends; Shift+Enter inserts a newline.
 - Attachment File objects may not be visible in some inspectors; ids, name, type, size, and url remain available.
