@@ -167,9 +167,9 @@ Events:
 -   `attachmentClick`: {attachment: attachmentObject} - Triggered when an attachment is clicked
 -   `close`: {} - Triggered when the close button in the header is clicked
 
-User Settings Events:
+User Settings:
 
--   No separate user settings events - user settings are now stored directly with each message in the `userSettings` property
+-   There are no dedicated user settings events. User info is provided via participants and optional per-message `userSettings`.
 
 Actions:
 
@@ -204,7 +204,7 @@ Participant Data:
 Special Features:
 
 
--   **Debounced Updates** - When user settings change, all messages from the current user are automatically updated with the new settings after a 1-second delay to prevent excessive updates
+ 
 -   **Self-Contained Messages** - Each message is self-contained with user information, eliminating dependency on external user storage
 -   User status indicator (online, offline, away, busy) with automatic fallback handling
 -   Chat partner detection that automatically updates the header based on conversation participants
@@ -320,66 +320,11 @@ Example Styled Implementation:
 }
 ```
 
-Example with usersSettings Management:
-
-```json
-{
-    "tag": "ww-chat",
-    "content": {
-        "participants": [
-            { "id": "john-doe", "name": "John Doe", "status": "online", "isCurrentUser": true },
-            { "id": "agent-007", "name": "Support Agent", "status": "busy" }
-        ],
-        "displayHeader": true,
-        "allowAttachments": true,
-        "messages": [
-            {
-                "id": "msg-1",
-                "text": "Hello there! Welcome to our support chat.",
-                "senderId": "support-agent",
-                
-                "timestamp": "2023-06-01T11:15:00.000Z"
-            },
-            {
-                "id": "msg-2",
-                "text": "Hi! Thanks for the quick response.",
-                "senderId": "john-doe",
-                
-                "timestamp": "2023-06-01T11:16:00.000Z"
-            }
-        ]
-    },
-    "usersSettings": {
-        "john-doe": {
-            "name": "John Doe",
-            "avatar": "https://example.com/avatars/john.jpg",
-            "location": "New York, USA",
-            "status": "online"
-        },
-        "support-agent": {
-            "name": "Support Agent",
-            "avatar": "https://example.com/avatars/support.jpg",
-            "location": "Support Team",
-            "status": "online"
-        }
-    }
-}
-```
-
-**Key Benefits of usersSettings:**
-
--   **Consistent Display**: All user information comes from one source across messages, headers, and participant lists
--   **Real-time Updates**: Changes to user settings immediately reflect throughout the UI
--   **Multi-user Support**: Store settings for all participants, not just the current user
--   **Priority System**: usersSettings takes precedence over individual props for reliable display
-    
-
-Note: The previous `settingsChanged` trigger and user-settings events have been removed. 
-User settings are stored directly on each message via the `userSettings` object; there are no separate events for user setting changes.
+ 
 
 Troubleshooting:
 
--   **User information not updating:** User settings are automatically updated across all current user's messages when props change (with a 1-second debounce delay)
+-   **User information not updating:** Ensure participants and per-message `userSettings` contain the desired display values
 -   **Inconsistent user display:** Each message contains its own `userSettings` object - ensure messages have proper user information when added
 -   **Messages showing incorrect sender:** Check that `currentUserId` matches the `senderId` in your messages
 -   **Participant info not showing:** Ensure each message includes proper `userSettings` when adding messages from different participants
@@ -394,4 +339,4 @@ Troubleshooting:
 
 Production content example:
 
-{"uid":"c01ded26-8cd1-411e-b908-7724b45a1daf","name":"Chat 1","wwObjectBaseId":"2c8e3e54-3ea3-48ea-b8c8-e7580e3362a2","libraryComponentBaseId":null,"parentSectionId":"0b7157db-1974-4139-9f41-9a53c4a35e42","parentLibraryComponentId":null,"\_state":{"style":{"mobile":{"padding":"8px"},"tablet":{"padding":"12px"},"default":{"flex":"0 1 auto","width":"500px","height":"800px","display":"flex","overflow":"hidden","customCss":{},"aspectRatio":"unset","borderRadius":"16px"}},"interactions":[{"id":"033cf581-cd67-4cc9-a1d5-58d161a5e821","name":"Insert message","actions":{"40c6dd73-f7c5-4ff4-ac86-c4db3ab1401a":{"id":"40c6dd73-f7c5-4ff4-ac86-c4db3ab1401a","next":"60b36d26-c290-4334-a28f-c625d33e0869","type":"variable","varId":"3e631ef9-8fc9-4dc1-9db7-b8a90d138c8f","internal":false,"varValue":{"code":"event?.['message']","**wwtype":"f"},"arrayUpdateType":"push"},"60b36d26-c290-4334-a28f-c625d33e0869":{"id":"60b36d26-c290-4334-a28f-c625d33e0869","uid":"c01ded26-8cd1-411e-b908-7724b45a1daf","args":[false],"type":"component-action","category":"elements","actionName":"scrollToBottom"}},"trigger":"messageSent","firstAction":"40c6dd73-f7c5-4ff4-ac86-c4db3ab1401a","triggerConditions":null},{"id":"c0c4e408-d063-43bf-9a6f-085e1a7c3744","name":"Settings changed","actions":{"f9ee1978-ae6f-463a-b695-aeac567ed3ac":{"id":"f9ee1978-ae6f-463a-b695-aeac567ed3ac","type":"variable","varId":"3e631ef9-8fc9-4dc1-9db7-b8a90d138c8f","internal":false,"varValue":{"code":"variables['c01ded26-8cd1-411e-b908-7724b45a1daf-chatState']?.['messages']","**wwtype":"f"}}},"trigger":"settingsChanged","firstAction":"f9ee1978-ae6f-463a-b695-aeac567ed3ac","triggerConditions":null}]},"content":{"default":{"locale":"enUS","disabled":false,"sendIcon":"lucide/send","userName":{"code":"variables['8d04d52d-e816-4b54-b6ce-5fa731592f38-value']","**wwtype":"f","defaultValue":"John"},"todayText":"Today","fontFamily":null,"removeIcon":"lucide/x","timeFormat":"h:mm a","userAvatar":{"code":"variables['f8afce9e-e59b-4a97-8c08-3fc6b8ac54e5-value']","**wwtype":"f","defaultValue":"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&q=80"},"userStatus":{"code":"variables['b135e389-bcbd-4abd-b85c-d1d2f4a662ae-value']","__wwtype":"f","defaultValue":"online"},"chatHistory":{"code":"variables['3e631ef9-8fc9-4dc1-9db7-b8a90d138c8f']","__wwtype":"f"},"inputBorder":"1px solid #2d3748","inputHeight":"52px","justNowText":"just now","headerBorder":"none","inputBgColor":"#1e293b","sendIconSize":"20px","userLocation":{"code":"variables['97515301-3723-4779-9c8f-4524bf587e69-value']","\_\_wwtype":"f","defaultValue":"Paris"},"currentUserId":"user-2","displayHeader":true,"headerBgColor":"#1e293b","headerPadding":"16px 24px","messageBorder":"none","sendIconColor":"#3b82f6","yesterdayText":"Yesterday","attachmentIcon":"lucide/paperclip","inputMaxHeight":"120px","inputMinHeight":"48px","inputTextColor":"#ffffff","messageBgColor":"#1e293b","removeIconSize":"16px","backgroundColor":"#121826","containerBorder":"1px solid #2d3748","containerShadow":"0 4px 20px rgba(0, 0, 0, 0.3)","headerBoxShadow":"0 2px 8px rgba(0, 0, 0, 0.2)","headerTextColor":"#ffffff","mappingSenderId":{"code":"context.mapping?.['senderId']","type":"f"},"mappingUserName":{"code":"context.mapping?.['userName']","type":"f"},"removeIconColor":"#f43f5e","allowAttachments":true,"emptyMessageText":"No messages yet","inputPlaceholder":"Ask me anything...","mappingMessageId":{"code":"context.mapping?.['id']","type":"f"},"mappingTimestamp":{"code":"context.mapping?.['timestamp']","type":"f"},"messageTextColor":"#ffffff","ownMessageBorder":"none","showSelfInHeader":false,"emptyMessageColor":"#94a3b8","groupChatTemplate":"Group Chat ({count} participants)","inputBorderRadius":"24px","ownMessageBgColor":"linear-gradient(135deg, #3b82f6, #2563eb)","attachmentIconSize":"20px","headerNameFontSize":"18px","mappingAttachments":{"code":"context.mapping?.['attachments']","type":"f"},"mappingMessageText":{"code":"context.mapping?.['text']","type":"f"},"messagesAreaHeight":"500px","attachmentIconColor":"#64748b","messagesAreaBgColor":"#121826","messagesAreaPadding":"24px","ownMessageTextColor":"#ffffff","dateSeparatorBgColor":"#121826","headerNameFontWeight":"600","containerBorderRadius":"16px","headerLocationOpacity":.7,"inputPlaceholderColor":"#94a3b8","messagesAreaMinHeight":"100px","dateSeparatorLineColor":"#2d3748","dateSeparatorTextColor":"#94a3b8","headerCloseButtonColor":"#64748b","headerLocationFontSize":"14px","headerCloseButtonBgHover":"rgba(0, 0, 0, 0.05)","dateSeparatorBorderRadius":"4px","autoScrollBehavior":"auto"}}}
+{"uid":"c01ded26-8cd1-411e-b908-7724b45a1daf","name":"Chat 1","wwObjectBaseId":"2c8e3e54-3ea3-48ea-b8c8-e7580e3362a2","libraryComponentBaseId":null,"parentSectionId":"0b7157db-1974-4139-9f41-9a53c4a35e42","parentLibraryComponentId":null,"\_state":{"style":{"mobile":{"padding":"8px"},"tablet":{"padding":"12px"},"default":{"flex":"0 1 auto","width":"500px","height":"800px","display":"flex","overflow":"hidden","customCss":{},"aspectRatio":"unset","borderRadius":"16px"}},"interactions":[{"id":"033cf581-cd67-4cc9-a1d5-58d161a5e821","name":"Insert message","actions":{"40c6dd73-f7c5-4ff4-ac86-c4db3ab1401a":{"id":"40c6dd73-f7c5-4ff4-ac86-c4db3ab1401a","next":"60b36d26-c290-4334-a28f-c625d33e0869","type":"variable","varId":"3e631ef9-8fc9-4dc1-9db7-b8a90d138c8f","internal":false,"varValue":{"code":"event?.['message']","**wwtype":"f"},"arrayUpdateType":"push"},"60b36d26-c290-4334-a28f-c625d33e0869":{"id":"60b36d26-c290-4334-a28f-c625d33e0869","uid":"c01ded26-8cd1-411e-b908-7724b45a1daf","args":[false],"type":"component-action","category":"elements","actionName":"scrollToBottom"}},"trigger":"messageSent","firstAction":"40c6dd73-f7c5-4ff4-ac86-c4db3ab1401a","triggerConditions":null}]},"content":{"default":{"locale":"enUS","disabled":false,"sendIcon":"lucide/send","userName":{"code":"variables['8d04d52d-e816-4b54-b6ce-5fa731592f38-value']","**wwtype":"f","defaultValue":"John"},"todayText":"Today","fontFamily":null,"removeIcon":"lucide/x","timeFormat":"h:mm a","userAvatar":{"code":"variables['f8afce9e-e59b-4a97-8c08-3fc6b8ac54e5-value']","**wwtype":"f","defaultValue":"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&q=80"},"userStatus":{"code":"variables['b135e389-bcbd-4abd-b85c-d1d2f4a662ae-value']","__wwtype":"f","defaultValue":"online"},"chatHistory":{"code":"variables['3e631ef9-8fc9-4dc1-9db7-b8a90d138c8f']","__wwtype":"f"},"inputBorder":"1px solid #2d3748","inputHeight":"52px","justNowText":"just now","headerBorder":"none","inputBgColor":"#1e293b","sendIconSize":"20px","userLocation":{"code":"variables['97515301-3723-4779-9c8f-4524bf587e69-value']","\_\_wwtype":"f","defaultValue":"Paris"},"currentUserId":"user-2","displayHeader":true,"headerBgColor":"#1e293b","headerPadding":"16px 24px","messageBorder":"none","sendIconColor":"#3b82f6","yesterdayText":"Yesterday","attachmentIcon":"lucide/paperclip","inputMaxHeight":"120px","inputMinHeight":"48px","inputTextColor":"#ffffff","messageBgColor":"#1e293b","removeIconSize":"16px","backgroundColor":"#121826","containerBorder":"1px solid #2d3748","containerShadow":"0 4px 20px rgba(0, 0, 0, 0.3)","headerBoxShadow":"0 2px 8px rgba(0, 0, 0, 0.2)","headerTextColor":"#ffffff","mappingSenderId":{"code":"context.mapping?.['senderId']","type":"f"},"mappingUserName":{"code":"context.mapping?.['userName']","type":"f"},"removeIconColor":"#f43f5e","allowAttachments":true,"emptyMessageText":"No messages yet","inputPlaceholder":"Ask me anything...","mappingMessageId":{"code":"context.mapping?.['id']","type":"f"},"mappingTimestamp":{"code":"context.mapping?.['timestamp']","type":"f"},"messageTextColor":"#ffffff","ownMessageBorder":"none","showSelfInHeader":false,"emptyMessageColor":"#94a3b8","groupChatTemplate":"Group Chat ({count} participants)","inputBorderRadius":"24px","ownMessageBgColor":"linear-gradient(135deg, #3b82f6, #2563eb)","attachmentIconSize":"20px","headerNameFontSize":"18px","mappingAttachments":{"code":"context.mapping?.['attachments']","type":"f"},"mappingMessageText":{"code":"context.mapping?.['text']","type":"f"},"messagesAreaHeight":"500px","attachmentIconColor":"#64748b","messagesAreaBgColor":"#121826","messagesAreaPadding":"24px","ownMessageTextColor":"#ffffff","dateSeparatorBgColor":"#121826","headerNameFontWeight":"600","containerBorderRadius":"16px","headerLocationOpacity":.7,"inputPlaceholderColor":"#94a3b8","messagesAreaMinHeight":"100px","dateSeparatorLineColor":"#2d3748","dateSeparatorTextColor":"#94a3b8","headerCloseButtonColor":"#64748b","headerLocationFontSize":"14px","headerCloseButtonBgHover":"rgba(0, 0, 0, 0.05)","dateSeparatorBorderRadius":"4px","autoScrollBehavior":"auto"}}}
