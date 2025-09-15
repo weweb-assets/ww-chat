@@ -162,7 +162,7 @@ Message Data Mapping:
 Events:
 
 -   `messageSent`: {message: messageObject} - Triggered when a new message is sent
--   `messageReceived`: {message: messageObject} - Triggered when a new message is received from someone else
+-   `messageReceived`: {message: messageObject} - Triggered when a new message appears in `messages` with a different `senderId` than the current user. The component watches the bound messages array, skips initial history, and emits this event only for newly detected messages from other participants.
 -   `messageRightClick`: {message: messageObject, position: {x, y}} - Triggered when a message is right-clicked
 -   `attachmentClick`: {attachment: attachmentObject} - Triggered when an attachment is clicked
 -   `close`: {} - Triggered when the close button in the header is clicked

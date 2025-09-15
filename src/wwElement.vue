@@ -536,15 +536,40 @@ export default {
 
             scrollToBottom();
 
-            if (newMessageRaw.senderId !== currentUserId.value) {
-                emit('trigger-event', {
-                    name: 'messageReceived',
-                    event: { message: newMessageRaw },
-                });
-            }
-
             return newMessageRaw;
         };
+
+        // Emit messageReceived for new external messages (not initial history, not own messages)
+        let _messagesWatcherInitialized = false;
+        const _seenMessageIds = new Set();
+        watch(
+            () => messages.value,
+            newMessages => {
+                if (isEditing.value) return;
+
+                if (!_messagesWatcherInitialized) {
+                    newMessages.forEach(m => {
+                        if (m && m.id) _seenMessageIds.add(m.id);
+                    });
+                    _messagesWatcherInitialized = true;
+                    return;
+                }
+
+                for (const m of newMessages) {
+                    const id = m?.id;
+                    if (!id) continue;
+                    if (_seenMessageIds.has(id)) continue;
+                    _seenMessageIds.add(id);
+                    if (m.senderId && m.senderId !== currentUserId.value) {
+                        emit('trigger-event', {
+                            name: 'messageReceived',
+                            event: { message: m },
+                        });
+                    }
+                }
+            },
+            { deep: false }
+        );
 
         // Date/time locale configuration
         const locale = computed(() => {
