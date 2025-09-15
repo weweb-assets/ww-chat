@@ -11,6 +11,12 @@ keywords:
 
 #### Chat Component
 
+Structure:
+
+-   Built-in header: The component includes an optional header controlled by the `displayHeader` property. When `displayHeader` is true, the header renders user/participant information and a close button.
+-   Message area: The component always includes the messages area, which displays the conversation and date separators. This area is present regardless of header visibility.
+-   Input area: The component includes the message input and action buttons (send/attachment) at the bottom.
+
 Container Properties:
 
 -   `fontFamily`: `string` - Font family used throughout the chat. Default: `inherit`
