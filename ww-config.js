@@ -205,16 +205,7 @@ export default {
             label: { en: 'On close' },
             event: {},
         },
-        {
-            name: 'settingsChanged',
-            label: { en: 'On user settings changed' },
-            event: {
-                userName: 'New Username',
-                userAvatar: 'https://example.com/new-avatar.jpg',
-                userLocation: 'New Location',
-                userStatus: 'away',
-            },
-        },
+        
     ],
     actions: [
         {
