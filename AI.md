@@ -372,13 +372,10 @@ Example with usersSettings Management:
 -   **Real-time Updates**: Changes to user settings immediately reflect throughout the UI
 -   **Multi-user Support**: Store settings for all participants, not just the current user
 -   **Priority System**: usersSettings takes precedence over individual props for reliable display
--   **Event-Driven**: Automatic events fire when any user setting changes, enabling external integrations
+    
 
-**User Settings Events Usage:**
-
--   **Simple & Clean**: Each event only contains the changed value (e.g., `{userName: 'New Name'}`)
--   **Focused Data**: No complex data structures - just the new value for easy access
--   **Message-Based Storage**: User settings are stored directly with each message in the `userSettings` property, eliminating the need for separate events
+Note: The previous `settingsChanged` trigger and user-settings events have been removed. 
+User settings are stored directly on each message via the `userSettings` object; there are no separate events for user setting changes.
 
 Troubleshooting:
 
