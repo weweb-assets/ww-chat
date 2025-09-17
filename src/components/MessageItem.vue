@@ -71,7 +71,9 @@
                         </div>
                         <div class="ww-message-item__attachment-info">
                             <div class="ww-message-item__attachment-name">{{ attachment.name }}</div>
-                            <div class="ww-message-item__attachment-size">{{ formatFileSize(attachment.size) }}</div>
+                            <div v-if="attachment.size != null" class="ww-message-item__attachment-size">
+                                {{ formatFileSize(attachment.size) }}
+                            </div>
                         </div>
                     </div>
                 </div>
