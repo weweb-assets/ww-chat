@@ -14,6 +14,7 @@ export default {
             [
                 'headerTitle',
                 'displayHeader',
+                'headerShowCloseButton',
                 'headerBgColor',
                 'headerTextColor',
                 'headerBorder',
@@ -520,6 +521,7 @@ export default {
             label: { en: 'Display Close Button' },
             type: 'OnOff',
             section: 'style',
+            order: 1,
             bindable: true,
             classes: true,
             states: true,
