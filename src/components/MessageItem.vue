@@ -31,8 +31,8 @@
             <!-- Attachments if any -->
             <div v-if="formattedAttachments.length" class="ww-message-item__attachments">
                 <div
-                    v-for="attachmentMeta in formattedAttachments"
-                    :key="attachmentMeta.attachment.id"
+                    v-for="(attachmentMeta, index) in formattedAttachments"
+                    :key="attachmentMeta.attachment.id ?? index"
                     class="ww-message-item__attachment"
                     :class="{ 'ww-message-item__attachment--own': isOwnMessage }"
                     @click="handleAttachmentClick(attachmentMeta.attachment)"
