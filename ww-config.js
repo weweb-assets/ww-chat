@@ -521,7 +521,6 @@ export default {
             label: { en: 'Display Close Button' },
             type: 'OnOff',
             section: 'style',
-            order: 1,
             bindable: true,
             classes: true,
             states: true,
