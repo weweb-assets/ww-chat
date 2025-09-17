@@ -29,21 +29,21 @@
             </div>
 
             <!-- Attachments if any -->
-            <div v-if="message.attachments && message.attachments.length" class="ww-message-item__attachments">
+            <div v-if="formattedAttachments.length" class="ww-message-item__attachments">
                 <div
-                    v-for="attachment in message.attachments"
-                    :key="attachment.id"
+                    v-for="attachmentMeta in formattedAttachments"
+                    :key="attachmentMeta.attachment.id"
                     class="ww-message-item__attachment"
                     :class="{ 'ww-message-item__attachment--own': isOwnMessage }"
-                    @click="handleAttachmentClick(attachment)"
+                    @click="handleAttachmentClick(attachmentMeta.attachment)"
                 >
                     <!-- Image preview for image files -->
                     <div
-                        v-if="isImageFile(attachment)"
+                        v-if="attachmentMeta.isImage"
                         class="ww-message-item__attachment-preview"
                         :class="{ 'ww-message-item__attachment-preview--own': isOwnMessage }"
                     >
-                        <img :src="attachment.url" :alt="attachment.name" />
+                        <img :src="attachmentMeta.attachment.url" :alt="attachmentMeta.attachment.name" />
                     </div>
 
                     <!-- File icon for non-image files -->
@@ -70,9 +70,9 @@
                             </svg>
                         </div>
                         <div class="ww-message-item__attachment-info">
-                            <div class="ww-message-item__attachment-name">{{ attachment.name }}</div>
-                            <div v-if="formatFileSize(attachment.size)" class="ww-message-item__attachment-size">
-                                {{ formatFileSize(attachment.size) }}
+                            <div class="ww-message-item__attachment-name">{{ attachmentMeta.attachment.name }}</div>
+                            <div v-if="attachmentMeta.formattedSize" class="ww-message-item__attachment-size">
+                                {{ attachmentMeta.formattedSize }}
                             </div>
                         </div>
                     </div>
@@ -219,6 +219,15 @@ export default {
             return `${parseFloat(value.toFixed(2))} ${sizes[index]}`;
         };
 
+        const formattedAttachments = computed(() => {
+            const attachments = Array.isArray(props.message.attachments) ? props.message.attachments : [];
+            return attachments.map(attachment => ({
+                attachment,
+                isImage: isImageFile(attachment),
+                formattedSize: formatFileSize(attachment.size),
+            }));
+        });
+
         const formatMessageTime = timestamp => {
             return formatTime(timestamp, dateTimeOptions.value);
         };
@@ -239,6 +248,7 @@ export default {
             messageStyles,
             isImageFile,
             formatFileSize,
+            formattedAttachments,
             formatMessageTime,
             handleAttachmentClick,
             handleRightClick,
