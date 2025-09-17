@@ -71,7 +71,7 @@
                         </div>
                         <div class="ww-message-item__attachment-info">
                             <div class="ww-message-item__attachment-name">{{ attachment.name }}</div>
-                            <div v-if="attachment.size != null" class="ww-message-item__attachment-size">
+                            <div v-if="formatFileSize(attachment.size)" class="ww-message-item__attachment-size">
                                 {{ formatFileSize(attachment.size) }}
                             </div>
                         </div>
@@ -208,12 +208,15 @@ export default {
             return attachment.type.startsWith('image/');
         };
 
-        const formatFileSize = bytes => {
-            if (!bytes || bytes === 0) return '0 Bytes';
+        const formatFileSize = rawSize => {
+            const bytes = Number(rawSize);
+            if (!Number.isFinite(bytes) || bytes < 0) return '';
+            if (bytes === 0) return '0 Bytes';
 
             const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(1024));
-            return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${sizes[i]}`;
+            const index = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), sizes.length - 1);
+            const value = bytes / Math.pow(1024, index);
+            return `${parseFloat(value.toFixed(2))} ${sizes[index]}`;
         };
 
         const formatMessageTime = timestamp => {
