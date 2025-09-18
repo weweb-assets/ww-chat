@@ -106,6 +106,13 @@ Unified chat UI: optional header (via `displayHeader`), always-present messages 
 - mappingSenderId: Formula – Extract sender id. Default: context.mapping?.['senderId']
 - mappingTimestamp: Formula – Extract timestamp. Default: context.mapping?.['timestamp']
 - mappingAttachments: Formula – Extract attachments. Default: context.mapping?.['attachments']
+
+Attachments Data (visible only when Attachments mapping is set):
+- mappingAttachmentId: Formula – Attachment id. Example: context.mapping?.['id']
+- mappingAttachmentName: Formula – Attachment name. Example: context.mapping?.['name']
+- mappingAttachmentUrl: Formula – Attachment URL. Example: context.mapping?.['url'] ?? context.mapping?.['href']
+- mappingAttachmentType: Formula – Attachment MIME type. Example: context.mapping?.['type'] ?? context.mapping?.['mime']
+- mappingAttachmentSize: Formula – Attachment size in bytes. Example: context.mapping?.['size'] ?? context.mapping?.['length']
 - mappingParticipantId: Formula – Extract participant id.
 - mappingParticipantName: Formula – Extract participant name.
 - mappingParticipantAvatar: Formula – Extract avatar url.
@@ -133,6 +140,8 @@ Unified chat UI: optional header (via `displayHeader`), always-present messages 
 - scrollToBottom: (smooth?: boolean) Scroll to the latest message; uses `autoScrollBehavior` when arg omitted.
 
 ***Notes:***
+- Attachment id is optional; the renderer falls back to the array index when no id is provided.
+- Event payload shapes: messageSent attachments may include a File (local upload); messageReceived attachments are metadata objects (id, name, url, type, size).
 - IMPORTANT: Do NOT add a custom message input. The component already includes a built-in input area with textarea, send button, and attachment support. Adding another input leads to duplicated UI and broken events.
 - Messages area is always rendered; the header is controlled by `displayHeader`.
 - Enter sends; Shift+Enter inserts a newline.
