@@ -2238,7 +2238,7 @@ export default {
             },
         },
         mappingAttachmentId: {
-            label: { en: 'Attachment ID' },
+            label: { en: 'ID' },
             type: 'Formula',
             options: content => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
@@ -2258,7 +2258,7 @@ export default {
             },
         },
         mappingAttachmentName: {
-            label: { en: 'Attachment Name' },
+            label: { en: 'Name' },
             type: 'Formula',
             options: content => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
@@ -2278,7 +2278,7 @@ export default {
             },
         },
         mappingAttachmentUrl: {
-            label: { en: 'Attachment URL' },
+            label: { en: 'URL' },
             type: 'Formula',
             options: content => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
@@ -2298,7 +2298,7 @@ export default {
             },
         },
         mappingAttachmentType: {
-            label: { en: 'Attachment MIME Type' },
+            label: { en: 'MIME Type' },
             type: 'Formula',
             options: content => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
@@ -2318,7 +2318,7 @@ export default {
             },
         },
         mappingAttachmentSize: {
-            label: { en: 'Attachment Size (bytes)' },
+            label: { en: 'Size (bytes)' },
             type: 'Formula',
             options: content => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
@@ -2388,7 +2388,7 @@ export default {
             /* wwEditor:end */
         },
         mappingParticipantId: {
-            label: { en: 'Participant ID' },
+            label: { en: 'ID' },
             type: 'Formula',
             options: content => ({
                 template:
@@ -2409,7 +2409,7 @@ export default {
             /* wwEditor:end */
         },
         mappingParticipantName: {
-            label: { en: 'Participant Name' },
+            label: { en: 'Name' },
             type: 'Formula',
             options: content => ({
                 template:
@@ -2430,7 +2430,7 @@ export default {
             /* wwEditor:end */
         },
         mappingParticipantAvatar: {
-            label: { en: 'Participant Avatar' },
+            label: { en: 'Avatar URL' },
             type: 'Formula',
             options: content => ({
                 template:
@@ -2451,7 +2451,7 @@ export default {
             /* wwEditor:end */
         },
         mappingParticipantLocation: {
-            label: { en: 'Participant Location' },
+            label: { en: 'Location' },
             type: 'Formula',
             options: content => ({
                 template:
@@ -2469,7 +2469,7 @@ export default {
             /* wwEditor:end */
         },
         mappingParticipantStatus: {
-            label: { en: 'Participant Status' },
+            label: { en: 'Status' },
             type: 'Formula',
             options: content => ({
                 template:
