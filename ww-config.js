@@ -2203,9 +2203,11 @@ export default {
         mappingAttachments: {
             label: { en: 'Attachments' },
             type: 'Formula',
-            options: content => ({
-                template: Array.isArray(content.messages) && content.messages.length ? content.messages[0] : null,
-            }),
+            options: content => {
+                const messages = Array.isArray(content.messages) ? content.messages : [];
+                const msgWithAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
+                return { template: msgWithAtt || (messages.length ? messages[0] : null) };
+            },
             defaultValue: {
                 type: 'f',
                 code: "context.mapping?.['attachments']",
