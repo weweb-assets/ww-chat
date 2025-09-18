@@ -2229,7 +2229,13 @@ export default {
             type: 'Title',
             label: { en: 'Attachments Data' },
             section: 'settings',
-            hidden: (content, _, boundProps) => !boundProps?.mappingAttachments,
+            hidden: (content, _, boundProps) => {
+                const bound = !!(boundProps && (boundProps.mappingAttachments || boundProps['mappingAttachments']));
+                const hasFormula = !!(content && content.mappingAttachments && (content.mappingAttachments.code || content.mappingAttachments.type === 'f'));
+                const visible = bound || hasFormula;
+                try { console.log('[ww-chat] attachmentsDataTitle.hidden', { bound, hasFormula, visible }); } catch (e) {}
+                return !visible;
+            },
         },
         mappingAttachmentId: {
             label: { en: 'Attachment ID' },
@@ -2247,7 +2253,13 @@ export default {
             bindingValidation: { type: 'formula', tooltip: 'Formula that returns the attachment unique id' },
             propertyHelp: { tooltip: 'Unique identifier for the attachment. Optional but recommended for stable rendering.' },
             /* wwEditor:end */
-            hidden: (content, _, boundProps) => !boundProps?.mappingAttachments,
+            hidden: (content, _, boundProps) => {
+                const bound = !!(boundProps && (boundProps.mappingAttachments || boundProps['mappingAttachments']));
+                const hasFormula = !!(content && content.mappingAttachments && (content.mappingAttachments.code || content.mappingAttachments.type === 'f'));
+                const visible = bound || hasFormula;
+                try { console.log('[ww-chat] mappingAttachmentId.hidden', { bound, hasFormula, visible }); } catch (e) {}
+                return !visible;
+            },
         },
         mappingAttachmentName: {
             label: { en: 'Attachment Name' },
@@ -2265,7 +2277,13 @@ export default {
             bindingValidation: { type: 'formula', tooltip: 'Formula that returns the display name' },
             propertyHelp: { tooltip: 'Displayed file name in the UI.' },
             /* wwEditor:end */
-            hidden: (content, _, boundProps) => !boundProps?.mappingAttachments,
+            hidden: (content, _, boundProps) => {
+                const bound = !!(boundProps && (boundProps.mappingAttachments || boundProps['mappingAttachments']));
+                const hasFormula = !!(content && content.mappingAttachments && (content.mappingAttachments.code || content.mappingAttachments.type === 'f'));
+                const visible = bound || hasFormula;
+                try { console.log('[ww-chat] mappingAttachmentName.hidden', { bound, hasFormula, visible }); } catch (e) {}
+                return !visible;
+            },
         },
         mappingAttachmentUrl: {
             label: { en: 'Attachment URL' },
@@ -2283,7 +2301,13 @@ export default {
             bindingValidation: { type: 'formula', tooltip: 'Formula that returns the attachment URL' },
             propertyHelp: { tooltip: 'Used for image previews and click behavior.' },
             /* wwEditor:end */
-            hidden: (content, _, boundProps) => !boundProps?.mappingAttachments,
+            hidden: (content, _, boundProps) => {
+                const bound = !!(boundProps && (boundProps.mappingAttachments || boundProps['mappingAttachments']));
+                const hasFormula = !!(content && content.mappingAttachments && (content.mappingAttachments.code || content.mappingAttachments.type === 'f'));
+                const visible = bound || hasFormula;
+                try { console.log('[ww-chat] mappingAttachmentUrl.hidden', { bound, hasFormula, visible }); } catch (e) {}
+                return !visible;
+            },
         },
         mappingAttachmentType: {
             label: { en: 'Attachment MIME Type' },
@@ -2301,7 +2325,13 @@ export default {
             bindingValidation: { type: 'formula', tooltip: 'Formula that returns the attachment MIME type' },
             propertyHelp: { tooltip: 'Used to detect images (image/...) for previews; otherwise treated as a generic file.' },
             /* wwEditor:end */
-            hidden: (content, _, boundProps) => !boundProps?.mappingAttachments,
+            hidden: (content, _, boundProps) => {
+                const bound = !!(boundProps && (boundProps.mappingAttachments || boundProps['mappingAttachments']));
+                const hasFormula = !!(content && content.mappingAttachments && (content.mappingAttachments.code || content.mappingAttachments.type === 'f'));
+                const visible = bound || hasFormula;
+                try { console.log('[ww-chat] mappingAttachmentType.hidden', { bound, hasFormula, visible }); } catch (e) {}
+                return !visible;
+            },
         },
         mappingAttachmentSize: {
             label: { en: 'Attachment Size (bytes)' },
@@ -2319,7 +2349,13 @@ export default {
             bindingValidation: { type: 'formula', tooltip: 'Formula that returns the attachment size in bytes' },
             propertyHelp: { tooltip: 'Optional. When omitted, the UI hides the size.' },
             /* wwEditor:end */
-            hidden: (content, _, boundProps) => !boundProps?.mappingAttachments,
+            hidden: (content, _, boundProps) => {
+                const bound = !!(boundProps && (boundProps.mappingAttachments || boundProps['mappingAttachments']));
+                const hasFormula = !!(content && content.mappingAttachments && (content.mappingAttachments.code || content.mappingAttachments.type === 'f'));
+                const visible = bound || hasFormula;
+                try { console.log('[ww-chat] mappingAttachmentSize.hidden', { bound, hasFormula, visible }); } catch (e) {}
+                return !visible;
+            },
         },
 
         // Participant data
