@@ -2233,20 +2233,25 @@ export default {
                 const bound = !!(boundProps && (boundProps.mappingAttachments || boundProps['mappingAttachments']));
                 const hasFormula = !!(content && content.mappingAttachments && (content.mappingAttachments.code || content.mappingAttachments.type === 'f'));
                 const visible = bound || hasFormula;
-                try { console.log('[ww-chat] attachmentsDataTitle.hidden', { bound, hasFormula, visible }); } catch (e) {}
+                try {
+                    console.log('[ww-chat] attachmentsDataTitle.hidden', {
+                        bound,
+                        hasFormula,
+                        mappingAttachmentsBoundProp: boundProps && boundProps.mappingAttachments,
+                        visible,
+                    });
+                } catch (e) {}
                 return !visible;
             },
         },
         mappingAttachmentId: {
             label: { en: 'Attachment ID' },
             type: 'Formula',
-            options: content => ({
-                template:
-                    Array.isArray(content.messages) && content.messages.length &&
-                    Array.isArray(content.messages[0]?.attachments) && content.messages[0].attachments.length
-                        ? content.messages[0].attachments[0]
-                        : null,
-            }),
+            options: content => {
+                const messages = Array.isArray(content.messages) ? content.messages : [];
+                const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
+                return { template: withAtt ? withAtt.attachments[0] : null };
+            },
             defaultValue: { type: 'f', code: "context.mapping?.['id']" },
             section: 'settings',
             /* wwEditor:start */
@@ -2257,20 +2262,25 @@ export default {
                 const bound = !!(boundProps && (boundProps.mappingAttachments || boundProps['mappingAttachments']));
                 const hasFormula = !!(content && content.mappingAttachments && (content.mappingAttachments.code || content.mappingAttachments.type === 'f'));
                 const visible = bound || hasFormula;
-                try { console.log('[ww-chat] mappingAttachmentId.hidden', { bound, hasFormula, visible }); } catch (e) {}
+                try {
+                    console.log('[ww-chat] mappingAttachmentId.hidden', {
+                        bound,
+                        hasFormula,
+                        mappingAttachmentsBoundProp: boundProps && boundProps.mappingAttachments,
+                        visible,
+                    });
+                } catch (e) {}
                 return !visible;
             },
         },
         mappingAttachmentName: {
             label: { en: 'Attachment Name' },
             type: 'Formula',
-            options: content => ({
-                template:
-                    Array.isArray(content.messages) && content.messages.length &&
-                    Array.isArray(content.messages[0]?.attachments) && content.messages[0].attachments.length
-                        ? content.messages[0].attachments[0]
-                        : null,
-            }),
+            options: content => {
+                const messages = Array.isArray(content.messages) ? content.messages : [];
+                const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
+                return { template: withAtt ? withAtt.attachments[0] : null };
+            },
             defaultValue: { type: 'f', code: "context.mapping?.['name']" },
             section: 'settings',
             /* wwEditor:start */
@@ -2281,20 +2291,25 @@ export default {
                 const bound = !!(boundProps && (boundProps.mappingAttachments || boundProps['mappingAttachments']));
                 const hasFormula = !!(content && content.mappingAttachments && (content.mappingAttachments.code || content.mappingAttachments.type === 'f'));
                 const visible = bound || hasFormula;
-                try { console.log('[ww-chat] mappingAttachmentName.hidden', { bound, hasFormula, visible }); } catch (e) {}
+                try {
+                    console.log('[ww-chat] mappingAttachmentName.hidden', {
+                        bound,
+                        hasFormula,
+                        mappingAttachmentsBoundProp: boundProps && boundProps.mappingAttachments,
+                        visible,
+                    });
+                } catch (e) {}
                 return !visible;
             },
         },
         mappingAttachmentUrl: {
             label: { en: 'Attachment URL' },
             type: 'Formula',
-            options: content => ({
-                template:
-                    Array.isArray(content.messages) && content.messages.length &&
-                    Array.isArray(content.messages[0]?.attachments) && content.messages[0].attachments.length
-                        ? content.messages[0].attachments[0]
-                        : null,
-            }),
+            options: content => {
+                const messages = Array.isArray(content.messages) ? content.messages : [];
+                const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
+                return { template: withAtt ? withAtt.attachments[0] : null };
+            },
             defaultValue: { type: 'f', code: "context.mapping?.['url'] ?? context.mapping?.['href']" },
             section: 'settings',
             /* wwEditor:start */
@@ -2305,20 +2320,25 @@ export default {
                 const bound = !!(boundProps && (boundProps.mappingAttachments || boundProps['mappingAttachments']));
                 const hasFormula = !!(content && content.mappingAttachments && (content.mappingAttachments.code || content.mappingAttachments.type === 'f'));
                 const visible = bound || hasFormula;
-                try { console.log('[ww-chat] mappingAttachmentUrl.hidden', { bound, hasFormula, visible }); } catch (e) {}
+                try {
+                    console.log('[ww-chat] mappingAttachmentUrl.hidden', {
+                        bound,
+                        hasFormula,
+                        mappingAttachmentsBoundProp: boundProps && boundProps.mappingAttachments,
+                        visible,
+                    });
+                } catch (e) {}
                 return !visible;
             },
         },
         mappingAttachmentType: {
             label: { en: 'Attachment MIME Type' },
             type: 'Formula',
-            options: content => ({
-                template:
-                    Array.isArray(content.messages) && content.messages.length &&
-                    Array.isArray(content.messages[0]?.attachments) && content.messages[0].attachments.length
-                        ? content.messages[0].attachments[0]
-                        : null,
-            }),
+            options: content => {
+                const messages = Array.isArray(content.messages) ? content.messages : [];
+                const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
+                return { template: withAtt ? withAtt.attachments[0] : null };
+            },
             defaultValue: { type: 'f', code: "context.mapping?.['type'] ?? context.mapping?.['mime']" },
             section: 'settings',
             /* wwEditor:start */
@@ -2329,20 +2349,25 @@ export default {
                 const bound = !!(boundProps && (boundProps.mappingAttachments || boundProps['mappingAttachments']));
                 const hasFormula = !!(content && content.mappingAttachments && (content.mappingAttachments.code || content.mappingAttachments.type === 'f'));
                 const visible = bound || hasFormula;
-                try { console.log('[ww-chat] mappingAttachmentType.hidden', { bound, hasFormula, visible }); } catch (e) {}
+                try {
+                    console.log('[ww-chat] mappingAttachmentType.hidden', {
+                        bound,
+                        hasFormula,
+                        mappingAttachmentsBoundProp: boundProps && boundProps.mappingAttachments,
+                        visible,
+                    });
+                } catch (e) {}
                 return !visible;
             },
         },
         mappingAttachmentSize: {
             label: { en: 'Attachment Size (bytes)' },
             type: 'Formula',
-            options: content => ({
-                template:
-                    Array.isArray(content.messages) && content.messages.length &&
-                    Array.isArray(content.messages[0]?.attachments) && content.messages[0].attachments.length
-                        ? content.messages[0].attachments[0]
-                        : null,
-            }),
+            options: content => {
+                const messages = Array.isArray(content.messages) ? content.messages : [];
+                const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
+                return { template: withAtt ? withAtt.attachments[0] : null };
+            },
             defaultValue: { type: 'f', code: "context.mapping?.['size'] ?? context.mapping?.['length']" },
             section: 'settings',
             /* wwEditor:start */
@@ -2353,7 +2378,14 @@ export default {
                 const bound = !!(boundProps && (boundProps.mappingAttachments || boundProps['mappingAttachments']));
                 const hasFormula = !!(content && content.mappingAttachments && (content.mappingAttachments.code || content.mappingAttachments.type === 'f'));
                 const visible = bound || hasFormula;
-                try { console.log('[ww-chat] mappingAttachmentSize.hidden', { bound, hasFormula, visible }); } catch (e) {}
+                try {
+                    console.log('[ww-chat] mappingAttachmentSize.hidden', {
+                        bound,
+                        hasFormula,
+                        mappingAttachmentsBoundProp: boundProps && boundProps.mappingAttachments,
+                        visible,
+                    });
+                } catch (e) {}
                 return !visible;
             },
         },
