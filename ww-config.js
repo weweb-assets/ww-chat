@@ -14,7 +14,6 @@ export default {
             [
                 'headerTitle',
                 'displayHeader',
-                'headerShowCloseButton',
                 'headerBgColor',
                 'headerTextColor',
                 'headerBorder',
@@ -23,6 +22,8 @@ export default {
                 'headerNameFontWeight',
                 'headerLocationFontSize',
                 'headerLocationOpacity',
+                // Close button controls grouped at the end of header
+                'headerShowCloseButton',
                 'headerCloseButtonColor',
                 'headerCloseButtonBgHover',
             ],
@@ -493,7 +494,7 @@ export default {
                     'Sets the color of the close button icon in the chat header.\n\nIf left empty, the close button will inherit the color from the header text color setting. This allows for consistent theming while providing the flexibility to customize the close button separately if needed.\n\n**Examples**:\n- "" - Inherit from header text color (recommended)\n- "#64748b" - Custom gray color\n- "#dc2626" - Red for emphasis',
             },
             /* wwEditor:end */
-            hidden: content => content.displayHeader === false,
+            hidden: content => content.displayHeader === false || content.headerShowCloseButton === false,
         },
         headerCloseButtonBgHover: {
             label: { en: 'Close Button Hover BG' },
@@ -514,7 +515,7 @@ export default {
                     'Sets the background color that appears behind the close button when users hover over it.\n\nThis provides visual feedback to indicate the button is interactive. Using a subtle background color enhances usability without being distracting.\n\n**Examples**:\n- "rgba(0, 0, 0, 0.05)" - Light gray overlay (default)\n- "rgba(255, 0, 0, 0.1)" - Light red tint\n- "transparent" - No hover background',
             },
             /* wwEditor:end */
-            hidden: content => content.displayHeader === false,
+            hidden: content => content.displayHeader === false || content.headerShowCloseButton === false,
         },
 
         headerShowCloseButton: {
