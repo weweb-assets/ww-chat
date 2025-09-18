@@ -129,6 +129,13 @@ export default {
                 'mappingSenderId',
                 'mappingTimestamp',
                 'mappingAttachments',
+                // Attachments Data mapping (visible only when mappingAttachments is bound)
+                'attachmentsDataTitle',
+                'mappingAttachmentId',
+                'mappingAttachmentName',
+                'mappingAttachmentUrl',
+                'mappingAttachmentType',
+                'mappingAttachmentSize',
             ],
             // Participant data
             [
@@ -2215,6 +2222,104 @@ export default {
             },
             /* wwEditor:end */
             hidden: (content, _, boundProps) => !boundProps.messages,
+        },
+
+        // Attachments Data (visible only when mappingAttachments is provided)
+        attachmentsDataTitle: {
+            type: 'Title',
+            label: { en: 'Attachments Data' },
+            section: 'settings',
+            hidden: (content, _, boundProps) => !boundProps?.mappingAttachments,
+        },
+        mappingAttachmentId: {
+            label: { en: 'Attachment ID' },
+            type: 'Formula',
+            options: content => ({
+                template:
+                    Array.isArray(content.messages) && content.messages.length &&
+                    Array.isArray(content.messages[0]?.attachments) && content.messages[0].attachments.length
+                        ? content.messages[0].attachments[0]
+                        : null,
+            }),
+            defaultValue: { type: 'f', code: "context.mapping?.['id']" },
+            section: 'settings',
+            /* wwEditor:start */
+            bindingValidation: { type: 'formula', tooltip: 'Formula that returns the attachment unique id' },
+            propertyHelp: { tooltip: 'Unique identifier for the attachment. Optional but recommended for stable rendering.' },
+            /* wwEditor:end */
+            hidden: (content, _, boundProps) => !boundProps?.mappingAttachments,
+        },
+        mappingAttachmentName: {
+            label: { en: 'Attachment Name' },
+            type: 'Formula',
+            options: content => ({
+                template:
+                    Array.isArray(content.messages) && content.messages.length &&
+                    Array.isArray(content.messages[0]?.attachments) && content.messages[0].attachments.length
+                        ? content.messages[0].attachments[0]
+                        : null,
+            }),
+            defaultValue: { type: 'f', code: "context.mapping?.['name']" },
+            section: 'settings',
+            /* wwEditor:start */
+            bindingValidation: { type: 'formula', tooltip: 'Formula that returns the display name' },
+            propertyHelp: { tooltip: 'Displayed file name in the UI.' },
+            /* wwEditor:end */
+            hidden: (content, _, boundProps) => !boundProps?.mappingAttachments,
+        },
+        mappingAttachmentUrl: {
+            label: { en: 'Attachment URL' },
+            type: 'Formula',
+            options: content => ({
+                template:
+                    Array.isArray(content.messages) && content.messages.length &&
+                    Array.isArray(content.messages[0]?.attachments) && content.messages[0].attachments.length
+                        ? content.messages[0].attachments[0]
+                        : null,
+            }),
+            defaultValue: { type: 'f', code: "context.mapping?.['url'] ?? context.mapping?.['href']" },
+            section: 'settings',
+            /* wwEditor:start */
+            bindingValidation: { type: 'formula', tooltip: 'Formula that returns the attachment URL' },
+            propertyHelp: { tooltip: 'Used for image previews and click behavior.' },
+            /* wwEditor:end */
+            hidden: (content, _, boundProps) => !boundProps?.mappingAttachments,
+        },
+        mappingAttachmentType: {
+            label: { en: 'Attachment MIME Type' },
+            type: 'Formula',
+            options: content => ({
+                template:
+                    Array.isArray(content.messages) && content.messages.length &&
+                    Array.isArray(content.messages[0]?.attachments) && content.messages[0].attachments.length
+                        ? content.messages[0].attachments[0]
+                        : null,
+            }),
+            defaultValue: { type: 'f', code: "context.mapping?.['type'] ?? context.mapping?.['mime']" },
+            section: 'settings',
+            /* wwEditor:start */
+            bindingValidation: { type: 'formula', tooltip: 'Formula that returns the attachment MIME type' },
+            propertyHelp: { tooltip: 'Used to detect images (image/...) for previews; otherwise treated as a generic file.' },
+            /* wwEditor:end */
+            hidden: (content, _, boundProps) => !boundProps?.mappingAttachments,
+        },
+        mappingAttachmentSize: {
+            label: { en: 'Attachment Size (bytes)' },
+            type: 'Formula',
+            options: content => ({
+                template:
+                    Array.isArray(content.messages) && content.messages.length &&
+                    Array.isArray(content.messages[0]?.attachments) && content.messages[0].attachments.length
+                        ? content.messages[0].attachments[0]
+                        : null,
+            }),
+            defaultValue: { type: 'f', code: "context.mapping?.['size'] ?? context.mapping?.['length']" },
+            section: 'settings',
+            /* wwEditor:start */
+            bindingValidation: { type: 'formula', tooltip: 'Formula that returns the attachment size in bytes' },
+            propertyHelp: { tooltip: 'Optional. When omitted, the UI hides the size.' },
+            /* wwEditor:end */
+            hidden: (content, _, boundProps) => !boundProps?.mappingAttachments,
         },
 
         // Participant data

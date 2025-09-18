@@ -281,6 +281,12 @@ export default {
         });
 
         const messages = computed(() => {
+            const mapAttachmentField = (obj, formula, fallbackKey) => {
+                if (!obj || typeof obj !== 'object') return undefined;
+                if (!formula) return obj[fallbackKey];
+                return resolveMappingFormula(formula, obj);
+            };
+
             return rawMessages.value.map(message => {
                 if (!message || typeof message !== 'object') {
                     return {
@@ -308,6 +314,26 @@ export default {
                     userStatus: participant?.status || 'online',
                 };
 
+                // Map attachments with optional field mappings
+                const rawAttachments = resolveMapping(message, props.content?.mappingAttachments, 'attachments');
+                let attachments;
+                if (Array.isArray(rawAttachments)) {
+                    attachments = rawAttachments.map(att => {
+                        if (!att || typeof att !== 'object') return att;
+                        return {
+                            id: mapAttachmentField(att, props.content?.mappingAttachmentId, 'id'),
+                            name: mapAttachmentField(att, props.content?.mappingAttachmentName, 'name'),
+                            url: mapAttachmentField(att, props.content?.mappingAttachmentUrl, 'url'),
+                            type: mapAttachmentField(att, props.content?.mappingAttachmentType, 'type'),
+                            size: mapAttachmentField(att, props.content?.mappingAttachmentSize, 'size'),
+                            // Preserve local upload File if present
+                            file: att.file,
+                        };
+                    });
+                } else {
+                    attachments = rawAttachments;
+                }
+
                 return {
                     id:
                         resolveMapping(message, props.content?.mappingMessageId, 'id') ||
@@ -321,7 +347,7 @@ export default {
                     timestamp:
                         resolveMapping(message, props.content?.mappingTimestamp, 'timestamp') ||
                         new Date().toISOString(),
-                    attachments: resolveMapping(message, props.content?.mappingAttachments, 'attachments'),
+                    attachments,
                     userSettings: userSettings,
                     _originalData: message,
                 };
