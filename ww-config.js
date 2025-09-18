@@ -156,7 +156,13 @@ export default {
                     senderId: 'current-user',
                     userName: 'User',
                     timestamp: new Date().toISOString(),
-                    attachments: [],
+                    attachments: [
+                        {
+                            name: 'demo.txt',
+                            type: 'text/plain',
+                            size: 12,
+                        },
+                    ],
                 },
             },
         },
@@ -170,7 +176,15 @@ export default {
                     senderId: 'other-user',
                     userName: 'Other User',
                     timestamp: new Date().toISOString(),
-                    attachments: [],
+                    attachments: [
+                        {
+                            id: 'file-2',
+                            name: 'spec.pdf',
+                            type: 'application/pdf',
+                            size: 102400,
+                            url: 'https://example.com/spec.pdf',
+                        },
+                    ],
                 },
             },
         },
@@ -184,6 +198,15 @@ export default {
                     senderId: 'user-id',
                     userName: 'User Name',
                     timestamp: new Date().toISOString(),
+                    attachments: [
+                        {
+                            id: 'file-2',
+                            name: 'spec.pdf',
+                            type: 'application/pdf',
+                            size: 102400,
+                            url: 'https://example.com/spec.pdf',
+                        },
+                    ],
                 },
                 position: {
                     x: 100,
