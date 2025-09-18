@@ -427,7 +427,7 @@ export default {
         };
 
         const sendMessage = () => {
-            if (isEditing.value || isDisabled.value || !newMessage.value.trim()) return;
+            if (isEditing.value || isDisabled.value || (!newMessage.value.trim() && pendingAttachments.value.length === 0)) return;
 
             const attachments = [...pendingAttachments.value];
             pendingAttachments.value = [];
