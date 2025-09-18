@@ -2238,6 +2238,7 @@ export default {
                         bound,
                         hasFormula,
                         mappingAttachmentsBoundProp: boundProps && boundProps.mappingAttachments,
+                        contentMappingAttachments: content && content.mappingAttachments,
                         visible,
                     });
                 } catch (e) {}
@@ -2267,6 +2268,7 @@ export default {
                         bound,
                         hasFormula,
                         mappingAttachmentsBoundProp: boundProps && boundProps.mappingAttachments,
+                        contentMappingAttachments: content && content.mappingAttachments,
                         visible,
                     });
                 } catch (e) {}
@@ -2296,6 +2298,7 @@ export default {
                         bound,
                         hasFormula,
                         mappingAttachmentsBoundProp: boundProps && boundProps.mappingAttachments,
+                        contentMappingAttachments: content && content.mappingAttachments,
                         visible,
                     });
                 } catch (e) {}
@@ -2325,6 +2328,7 @@ export default {
                         bound,
                         hasFormula,
                         mappingAttachmentsBoundProp: boundProps && boundProps.mappingAttachments,
+                        contentMappingAttachments: content && content.mappingAttachments,
                         visible,
                     });
                 } catch (e) {}
@@ -2354,6 +2358,7 @@ export default {
                         bound,
                         hasFormula,
                         mappingAttachmentsBoundProp: boundProps && boundProps.mappingAttachments,
+                        contentMappingAttachments: content && content.mappingAttachments,
                         visible,
                     });
                 } catch (e) {}
@@ -2383,6 +2388,7 @@ export default {
                         bound,
                         hasFormula,
                         mappingAttachmentsBoundProp: boundProps && boundProps.mappingAttachments,
+                        contentMappingAttachments: content && content.mappingAttachments,
                         visible,
                     });
                 } catch (e) {}
