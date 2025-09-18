@@ -2229,7 +2229,11 @@ export default {
             type: 'Title',
             label: { en: 'Attachments Data' },
             section: 'settings',
-            hidden: content => !content?.mappingAttachments?.code,
+            hidden: (content, _, boundProps) => {
+                const hasMessages = !!boundProps?.messages;
+                const hasAttachmentsMapping = !!content?.mappingAttachments?.code;
+                return !(hasMessages && hasAttachmentsMapping);
+            },
         },
         mappingAttachmentId: {
             label: { en: 'Attachment ID' },
@@ -2245,7 +2249,11 @@ export default {
             bindingValidation: { type: 'formula', tooltip: 'Formula that returns the attachment unique id' },
             propertyHelp: { tooltip: 'Unique identifier for the attachment. Optional but recommended for stable rendering.' },
             /* wwEditor:end */
-            hidden: content => !content?.mappingAttachments?.code,
+            hidden: (content, _, boundProps) => {
+                const hasMessages = !!boundProps?.messages;
+                const hasAttachmentsMapping = !!content?.mappingAttachments?.code;
+                return !(hasMessages && hasAttachmentsMapping);
+            },
         },
         mappingAttachmentName: {
             label: { en: 'Attachment Name' },
@@ -2261,7 +2269,11 @@ export default {
             bindingValidation: { type: 'formula', tooltip: 'Formula that returns the display name' },
             propertyHelp: { tooltip: 'Displayed file name in the UI.' },
             /* wwEditor:end */
-            hidden: content => !content?.mappingAttachments?.code,
+            hidden: (content, _, boundProps) => {
+                const hasMessages = !!boundProps?.messages;
+                const hasAttachmentsMapping = !!content?.mappingAttachments?.code;
+                return !(hasMessages && hasAttachmentsMapping);
+            },
         },
         mappingAttachmentUrl: {
             label: { en: 'Attachment URL' },
@@ -2277,7 +2289,11 @@ export default {
             bindingValidation: { type: 'formula', tooltip: 'Formula that returns the attachment URL' },
             propertyHelp: { tooltip: 'Used for image previews and click behavior.' },
             /* wwEditor:end */
-            hidden: content => !content?.mappingAttachments?.code,
+            hidden: (content, _, boundProps) => {
+                const hasMessages = !!boundProps?.messages;
+                const hasAttachmentsMapping = !!content?.mappingAttachments?.code;
+                return !(hasMessages && hasAttachmentsMapping);
+            },
         },
         mappingAttachmentType: {
             label: { en: 'Attachment MIME Type' },
@@ -2293,7 +2309,11 @@ export default {
             bindingValidation: { type: 'formula', tooltip: 'Formula that returns the attachment MIME type' },
             propertyHelp: { tooltip: 'Used to detect images (image/...) for previews; otherwise treated as a generic file.' },
             /* wwEditor:end */
-            hidden: content => !content?.mappingAttachments?.code,
+            hidden: (content, _, boundProps) => {
+                const hasMessages = !!boundProps?.messages;
+                const hasAttachmentsMapping = !!content?.mappingAttachments?.code;
+                return !(hasMessages && hasAttachmentsMapping);
+            },
         },
         mappingAttachmentSize: {
             label: { en: 'Attachment Size (bytes)' },
@@ -2309,7 +2329,11 @@ export default {
             bindingValidation: { type: 'formula', tooltip: 'Formula that returns the attachment size in bytes' },
             propertyHelp: { tooltip: 'Optional. When omitted, the UI hides the size.' },
             /* wwEditor:end */
-            hidden: content => !content?.mappingAttachments?.code,
+            hidden: (content, _, boundProps) => {
+                const hasMessages = !!boundProps?.messages;
+                const hasAttachmentsMapping = !!content?.mappingAttachments?.code;
+                return !(hasMessages && hasAttachmentsMapping);
+            },
         },
 
         // Participant data
