@@ -130,7 +130,7 @@ Attachments Data (visible only when Attachments mapping is set):
 - chatState: Full chat state (messages, conversation, currentUser, utils). Path: variables['<current_element_uid>-chatState']
 
 ***Events:***
-- messageSent: Triggered when the user sends a message. Payload: { message }
+– messageSent: Triggered when the user sends a message. Payload: { message }
 - messageReceived: Triggered when a new message appears in `messages` from another sender. Payload: { message }
 - messageRightClick: Triggered on right-click on a message. Payload: { message, position }
 - attachmentClick: Triggered when an attachment is clicked. Payload: { attachment }
@@ -141,11 +141,13 @@ Attachments Data (visible only when Attachments mapping is set):
 
 ***Notes:***
 - Attachment id is optional; the renderer falls back to the array index when no id is provided.
-- Event payload shapes: messageSent attachments may include a File (local upload); messageReceived attachments are metadata objects (id, name, url, type, size).
+- Event payload shapes:
+  - messageSent: attachments is an array of File objects (local uploads only). No id/url are included since File already carries name/type/size.
+  - messageReceived: attachments are metadata objects (id, name, url, type, size) suitable for rendering remote assets.
 - IMPORTANT: Do NOT add a custom message input. The component already includes a built-in input area with textarea, send button, and attachment support. Adding another input leads to duplicated UI and broken events.
 - Messages area is always rendered; the header is controlled by `displayHeader`.
 - Enter sends; Shift+Enter inserts a newline.
-- Attachment File objects may not be visible in some inspectors; ids, name, type, size, and url remain available.
+- Attachment File objects may not be visible in some inspectors; you can still read file.name, file.type, and file.size.
 
 ***Example***:
 <elements>

@@ -456,6 +456,11 @@ export default {
             if (isEditing.value || isDisabled.value || (!newMessage.value.trim() && pendingAttachments.value.length === 0)) return;
 
             const attachments = [...pendingAttachments.value];
+            // For the emitted event, only expose File objects (no id/url metadata)
+            const attachmentsForEvent = attachments
+                .map(att => att && att.file)
+                .filter(file => !!file);
+            // Clear local pending attachments right after snapshotting
             pendingAttachments.value = [];
 
             const message = {
@@ -464,7 +469,8 @@ export default {
                 senderId: currentUserId.value,
                 userName: currentUserParticipant.value?.name || 'You',
                 timestamp: new Date().toISOString(),
-                attachments: attachments.length > 0 ? attachments : undefined,
+                // Emit attachments as File[] only, without id/url/name duplication
+                attachments: attachmentsForEvent.length > 0 ? attachmentsForEvent : undefined,
                 userSettings: currentUserParticipant.value
                     ? {
                           userName: currentUserParticipant.value.name,
