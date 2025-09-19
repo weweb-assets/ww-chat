@@ -2203,9 +2203,18 @@ export default {
         mappingAttachments: {
             label: { en: 'Attachments' },
             type: 'Formula',
-            options: content => {
+            options: (content, _, boundProps) => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const msgWithAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
+                // Debug logs: visibility of incoming data for attachment mapping
+                try {
+                    // Log both content.message and boundProps.message as requested
+                    // Note: content.messages is the primary source, but we surface content.message for debugging
+                    console.log('[ww-chat][mappingAttachments][options.template] content.message:', content?.message);
+                    console.log('[ww-chat][mappingAttachments][options.template] boundProps.message:', boundProps?.message);
+                } catch (e) {
+                    // no-op: avoid breaking editor if console is unavailable
+                }
                 return { template: msgWithAtt || (messages.length ? messages[0] : null) };
             },
             defaultValue: {
@@ -2240,9 +2249,13 @@ export default {
         mappingAttachmentId: {
             label: { en: 'ID' },
             type: 'Formula',
-            options: content => {
+            options: (content, _, boundProps) => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
+                try {
+                    console.log('[ww-chat][mappingAttachmentId][options.template] content.message:', content?.message);
+                    console.log('[ww-chat][mappingAttachmentId][options.template] boundProps.message:', boundProps?.message);
+                } catch (e) {}
                 return { template: withAtt ? withAtt.attachments[0] : null };
             },
             defaultValue: { type: 'f', code: "context.mapping?.['id']" },
@@ -2260,9 +2273,13 @@ export default {
         mappingAttachmentName: {
             label: { en: 'Name' },
             type: 'Formula',
-            options: content => {
+            options: (content, _, boundProps) => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
+                try {
+                    console.log('[ww-chat][mappingAttachmentName][options.template] content.message:', content?.message);
+                    console.log('[ww-chat][mappingAttachmentName][options.template] boundProps.message:', boundProps?.message);
+                } catch (e) {}
                 return { template: withAtt ? withAtt.attachments[0] : null };
             },
             defaultValue: { type: 'f', code: "context.mapping?.['name']" },
@@ -2280,9 +2297,13 @@ export default {
         mappingAttachmentUrl: {
             label: { en: 'URL' },
             type: 'Formula',
-            options: content => {
+            options: (content, _, boundProps) => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
+                try {
+                    console.log('[ww-chat][mappingAttachmentUrl][options.template] content.message:', content?.message);
+                    console.log('[ww-chat][mappingAttachmentUrl][options.template] boundProps.message:', boundProps?.message);
+                } catch (e) {}
                 return { template: withAtt ? withAtt.attachments[0] : null };
             },
             defaultValue: { type: 'f', code: "context.mapping?.['url'] ?? context.mapping?.['href']" },
@@ -2300,9 +2321,13 @@ export default {
         mappingAttachmentType: {
             label: { en: 'MIME Type' },
             type: 'Formula',
-            options: content => {
+            options: (content, _, boundProps) => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
+                try {
+                    console.log('[ww-chat][mappingAttachmentType][options.template] content.message:', content?.message);
+                    console.log('[ww-chat][mappingAttachmentType][options.template] boundProps.message:', boundProps?.message);
+                } catch (e) {}
                 return { template: withAtt ? withAtt.attachments[0] : null };
             },
             defaultValue: { type: 'f', code: "context.mapping?.['type'] ?? context.mapping?.['mime']" },
@@ -2320,9 +2345,13 @@ export default {
         mappingAttachmentSize: {
             label: { en: 'Size (bytes)' },
             type: 'Formula',
-            options: content => {
+            options: (content, _, boundProps) => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
+                try {
+                    console.log('[ww-chat][mappingAttachmentSize][options.template] content.message:', content?.message);
+                    console.log('[ww-chat][mappingAttachmentSize][options.template] boundProps.message:', boundProps?.message);
+                } catch (e) {}
                 return { template: withAtt ? withAtt.attachments[0] : null };
             },
             defaultValue: { type: 'f', code: "context.mapping?.['size'] ?? context.mapping?.['length']" },
