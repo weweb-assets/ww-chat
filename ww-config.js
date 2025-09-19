@@ -2203,11 +2203,38 @@ export default {
         mappingAttachments: {
             label: { en: 'Attachments' },
             type: 'Formula',
-            options: (content, _, boundProps) => {
+            options: content => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
-                const msgWithAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
-                
-                return { template: msgWithAtt || (messages.length ? messages[0] : null) };
+                const mapping = content?.mappingAttachments;
+                const evalCode = (code, type, ctx) => {
+                    try {
+                        if (typeof code !== 'string') return undefined;
+                        const body = type === 'js' ? code : `return (${code});`;
+                        // eslint-disable-next-line no-new-func
+                        const fn = new Function('context', body);
+                        return fn(ctx);
+                    } catch (e) {
+                        return undefined;
+                    }
+                };
+
+                let templateMsg = null;
+                if (mapping?.code && messages.length) {
+                    for (const msg of messages) {
+                        const res = evalCode(mapping.code, mapping.type || 'f', { mapping: msg });
+                        if (Array.isArray(res) && res.length) {
+                            templateMsg = msg;
+                            break;
+                        }
+                    }
+                }
+
+                if (!templateMsg) {
+                    const fallback = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
+                    templateMsg = fallback || (messages.length ? messages[0] : null);
+                }
+
+                return { template: templateMsg };
             },
             defaultValue: {
                 type: 'f',
@@ -2241,11 +2268,35 @@ export default {
         mappingAttachmentId: {
             label: { en: 'ID' },
             type: 'Formula',
-            options: (content, _, boundProps) => {
+            options: content => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
-                const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
-                
-                return { template: withAtt ? withAtt.attachments[0] : null };
+                const mapping = content?.mappingAttachments;
+                const evalCode = (code, type, ctx) => {
+                    try {
+                        if (typeof code !== 'string') return undefined;
+                        const body = type === 'js' ? code : `return (${code});`;
+                        // eslint-disable-next-line no-new-func
+                        const fn = new Function('context', body);
+                        return fn(ctx);
+                    } catch (e) {
+                        return undefined;
+                    }
+                };
+                let attachment = null;
+                if (mapping?.code && messages.length) {
+                    for (const msg of messages) {
+                        const arr = evalCode(mapping.code, mapping.type || 'f', { mapping: msg });
+                        if (Array.isArray(arr) && arr.length) {
+                            attachment = arr[0];
+                            break;
+                        }
+                    }
+                }
+                if (!attachment) {
+                    const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
+                    attachment = withAtt ? withAtt.attachments[0] : null;
+                }
+                return { template: attachment };
             },
             defaultValue: { type: 'f', code: "context.mapping?.['id']" },
             section: 'settings',
@@ -2262,11 +2313,35 @@ export default {
         mappingAttachmentName: {
             label: { en: 'Name' },
             type: 'Formula',
-            options: (content, _, boundProps) => {
+            options: content => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
-                const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
-                
-                return { template: withAtt ? withAtt.attachments[0] : null };
+                const mapping = content?.mappingAttachments;
+                const evalCode = (code, type, ctx) => {
+                    try {
+                        if (typeof code !== 'string') return undefined;
+                        const body = type === 'js' ? code : `return (${code});`;
+                        // eslint-disable-next-line no-new-func
+                        const fn = new Function('context', body);
+                        return fn(ctx);
+                    } catch (e) {
+                        return undefined;
+                    }
+                };
+                let attachment = null;
+                if (mapping?.code && messages.length) {
+                    for (const msg of messages) {
+                        const arr = evalCode(mapping.code, mapping.type || 'f', { mapping: msg });
+                        if (Array.isArray(arr) && arr.length) {
+                            attachment = arr[0];
+                            break;
+                        }
+                    }
+                }
+                if (!attachment) {
+                    const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
+                    attachment = withAtt ? withAtt.attachments[0] : null;
+                }
+                return { template: attachment };
             },
             defaultValue: { type: 'f', code: "context.mapping?.['name']" },
             section: 'settings',
@@ -2283,11 +2358,35 @@ export default {
         mappingAttachmentUrl: {
             label: { en: 'URL' },
             type: 'Formula',
-            options: (content, _, boundProps) => {
+            options: content => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
-                const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
-                
-                return { template: withAtt ? withAtt.attachments[0] : null };
+                const mapping = content?.mappingAttachments;
+                const evalCode = (code, type, ctx) => {
+                    try {
+                        if (typeof code !== 'string') return undefined;
+                        const body = type === 'js' ? code : `return (${code});`;
+                        // eslint-disable-next-line no-new-func
+                        const fn = new Function('context', body);
+                        return fn(ctx);
+                    } catch (e) {
+                        return undefined;
+                    }
+                };
+                let attachment = null;
+                if (mapping?.code && messages.length) {
+                    for (const msg of messages) {
+                        const arr = evalCode(mapping.code, mapping.type || 'f', { mapping: msg });
+                        if (Array.isArray(arr) && arr.length) {
+                            attachment = arr[0];
+                            break;
+                        }
+                    }
+                }
+                if (!attachment) {
+                    const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
+                    attachment = withAtt ? withAtt.attachments[0] : null;
+                }
+                return { template: attachment };
             },
             defaultValue: { type: 'f', code: "context.mapping?.['url'] ?? context.mapping?.['href']" },
             section: 'settings',
@@ -2304,11 +2403,35 @@ export default {
         mappingAttachmentType: {
             label: { en: 'MIME Type' },
             type: 'Formula',
-            options: (content, _, boundProps) => {
+            options: content => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
-                const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
-                
-                return { template: withAtt ? withAtt.attachments[0] : null };
+                const mapping = content?.mappingAttachments;
+                const evalCode = (code, type, ctx) => {
+                    try {
+                        if (typeof code !== 'string') return undefined;
+                        const body = type === 'js' ? code : `return (${code});`;
+                        // eslint-disable-next-line no-new-func
+                        const fn = new Function('context', body);
+                        return fn(ctx);
+                    } catch (e) {
+                        return undefined;
+                    }
+                };
+                let attachment = null;
+                if (mapping?.code && messages.length) {
+                    for (const msg of messages) {
+                        const arr = evalCode(mapping.code, mapping.type || 'f', { mapping: msg });
+                        if (Array.isArray(arr) && arr.length) {
+                            attachment = arr[0];
+                            break;
+                        }
+                    }
+                }
+                if (!attachment) {
+                    const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
+                    attachment = withAtt ? withAtt.attachments[0] : null;
+                }
+                return { template: attachment };
             },
             defaultValue: { type: 'f', code: "context.mapping?.['type'] ?? context.mapping?.['mime']" },
             section: 'settings',
@@ -2325,11 +2448,35 @@ export default {
         mappingAttachmentSize: {
             label: { en: 'Size (bytes)' },
             type: 'Formula',
-            options: (content, _, boundProps) => {
+            options: content => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
-                const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
-                
-                return { template: withAtt ? withAtt.attachments[0] : null };
+                const mapping = content?.mappingAttachments;
+                const evalCode = (code, type, ctx) => {
+                    try {
+                        if (typeof code !== 'string') return undefined;
+                        const body = type === 'js' ? code : `return (${code});`;
+                        // eslint-disable-next-line no-new-func
+                        const fn = new Function('context', body);
+                        return fn(ctx);
+                    } catch (e) {
+                        return undefined;
+                    }
+                };
+                let attachment = null;
+                if (mapping?.code && messages.length) {
+                    for (const msg of messages) {
+                        const arr = evalCode(mapping.code, mapping.type || 'f', { mapping: msg });
+                        if (Array.isArray(arr) && arr.length) {
+                            attachment = arr[0];
+                            break;
+                        }
+                    }
+                }
+                if (!attachment) {
+                    const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
+                    attachment = withAtt ? withAtt.attachments[0] : null;
+                }
+                return { template: attachment };
             },
             defaultValue: { type: 'f', code: "context.mapping?.['size'] ?? context.mapping?.['length']" },
             section: 'settings',
