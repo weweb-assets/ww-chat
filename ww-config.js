@@ -2208,14 +2208,8 @@ export default {
                 const msgWithAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
                 // Debug logs: visibility of incoming data for attachment mapping
                 try {
-                    // Previous specific logs
-                    console.log('[ww-chat][mappingAttachments][options.template] content.message:', content?.message);
-                    console.log('[ww-chat][mappingAttachments][options.template] boundProps.message:', boundProps?.message);
-                    // New: full payloads for deeper debugging
-                    console.log('[ww-chat][mappingAttachments][options.template] content:', content);
                     console.log('[ww-chat][mappingAttachments][options.template] content.messages:', content?.messages);
-                    console.log('[ww-chat][mappingAttachments][options.template] secondArg(_):', _);
-                    console.log('[ww-chat][mappingAttachments][options.template] boundProps:', boundProps);
+                    console.log('[ww-chat][mappingAttachments][options.template] boundProps.messages:', boundProps?.messages);
                 } catch (e) {
                     // no-op: avoid breaking editor if console is unavailable
                 }
@@ -2257,12 +2251,8 @@ export default {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
                 try {
-                    console.log('[ww-chat][mappingAttachmentId][options.template] content.message:', content?.message);
-                    console.log('[ww-chat][mappingAttachmentId][options.template] boundProps.message:', boundProps?.message);
-                    console.log('[ww-chat][mappingAttachmentId][options.template] content:', content);
                     console.log('[ww-chat][mappingAttachmentId][options.template] content.messages:', content?.messages);
-                    console.log('[ww-chat][mappingAttachmentId][options.template] secondArg(_):', _);
-                    console.log('[ww-chat][mappingAttachmentId][options.template] boundProps:', boundProps);
+                    console.log('[ww-chat][mappingAttachmentId][options.template] boundProps.messages:', boundProps?.messages);
                 } catch (e) {}
                 return { template: withAtt ? withAtt.attachments[0] : null };
             },
@@ -2285,12 +2275,8 @@ export default {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
                 try {
-                    console.log('[ww-chat][mappingAttachmentName][options.template] content.message:', content?.message);
-                    console.log('[ww-chat][mappingAttachmentName][options.template] boundProps.message:', boundProps?.message);
-                    console.log('[ww-chat][mappingAttachmentName][options.template] content:', content);
                     console.log('[ww-chat][mappingAttachmentName][options.template] content.messages:', content?.messages);
-                    console.log('[ww-chat][mappingAttachmentName][options.template] secondArg(_):', _);
-                    console.log('[ww-chat][mappingAttachmentName][options.template] boundProps:', boundProps);
+                    console.log('[ww-chat][mappingAttachmentName][options.template] boundProps.messages:', boundProps?.messages);
                 } catch (e) {}
                 return { template: withAtt ? withAtt.attachments[0] : null };
             },
@@ -2313,12 +2299,8 @@ export default {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
                 try {
-                    console.log('[ww-chat][mappingAttachmentUrl][options.template] content.message:', content?.message);
-                    console.log('[ww-chat][mappingAttachmentUrl][options.template] boundProps.message:', boundProps?.message);
-                    console.log('[ww-chat][mappingAttachmentUrl][options.template] content:', content);
                     console.log('[ww-chat][mappingAttachmentUrl][options.template] content.messages:', content?.messages);
-                    console.log('[ww-chat][mappingAttachmentUrl][options.template] secondArg(_):', _);
-                    console.log('[ww-chat][mappingAttachmentUrl][options.template] boundProps:', boundProps);
+                    console.log('[ww-chat][mappingAttachmentUrl][options.template] boundProps.messages:', boundProps?.messages);
                 } catch (e) {}
                 return { template: withAtt ? withAtt.attachments[0] : null };
             },
@@ -2341,12 +2323,8 @@ export default {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
                 try {
-                    console.log('[ww-chat][mappingAttachmentType][options.template] content.message:', content?.message);
-                    console.log('[ww-chat][mappingAttachmentType][options.template] boundProps.message:', boundProps?.message);
-                    console.log('[ww-chat][mappingAttachmentType][options.template] content:', content);
                     console.log('[ww-chat][mappingAttachmentType][options.template] content.messages:', content?.messages);
-                    console.log('[ww-chat][mappingAttachmentType][options.template] secondArg(_):', _);
-                    console.log('[ww-chat][mappingAttachmentType][options.template] boundProps:', boundProps);
+                    console.log('[ww-chat][mappingAttachmentType][options.template] boundProps.messages:', boundProps?.messages);
                 } catch (e) {}
                 return { template: withAtt ? withAtt.attachments[0] : null };
             },
@@ -2369,12 +2347,8 @@ export default {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
                 try {
-                    console.log('[ww-chat][mappingAttachmentSize][options.template] content.message:', content?.message);
-                    console.log('[ww-chat][mappingAttachmentSize][options.template] boundProps.message:', boundProps?.message);
-                    console.log('[ww-chat][mappingAttachmentSize][options.template] content:', content);
                     console.log('[ww-chat][mappingAttachmentSize][options.template] content.messages:', content?.messages);
-                    console.log('[ww-chat][mappingAttachmentSize][options.template] secondArg(_):', _);
-                    console.log('[ww-chat][mappingAttachmentSize][options.template] boundProps:', boundProps);
+                    console.log('[ww-chat][mappingAttachmentSize][options.template] boundProps.messages:', boundProps?.messages);
                 } catch (e) {}
                 return { template: withAtt ? withAtt.attachments[0] : null };
             },
