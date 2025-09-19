@@ -2206,12 +2206,7 @@ export default {
             options: (content, _, boundProps) => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const msgWithAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
-                // Debug logs: visibility of incoming data for attachment mapping
-                try {
-                    // logs removed
-                } catch (e) {
-                    // no-op: avoid breaking editor if console is unavailable
-                }
+                
                 return { template: msgWithAtt || (messages.length ? messages[0] : null) };
             },
             defaultValue: {
@@ -2249,9 +2244,7 @@ export default {
             options: (content, _, boundProps) => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
-                try {
-                    // logs removed
-                } catch (e) {}
+                
                 return { template: withAtt ? withAtt.attachments[0] : null };
             },
             defaultValue: { type: 'f', code: "context.mapping?.['id']" },
@@ -2272,9 +2265,7 @@ export default {
             options: (content, _, boundProps) => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
-                try {
-                    // logs removed
-                } catch (e) {}
+                
                 return { template: withAtt ? withAtt.attachments[0] : null };
             },
             defaultValue: { type: 'f', code: "context.mapping?.['name']" },
@@ -2295,9 +2286,7 @@ export default {
             options: (content, _, boundProps) => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
-                try {
-                    // logs removed
-                } catch (e) {}
+                
                 return { template: withAtt ? withAtt.attachments[0] : null };
             },
             defaultValue: { type: 'f', code: "context.mapping?.['url'] ?? context.mapping?.['href']" },
@@ -2318,9 +2307,7 @@ export default {
             options: (content, _, boundProps) => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
-                try {
-                    // logs removed
-                } catch (e) {}
+                
                 return { template: withAtt ? withAtt.attachments[0] : null };
             },
             defaultValue: { type: 'f', code: "context.mapping?.['type'] ?? context.mapping?.['mime']" },
@@ -2341,9 +2328,7 @@ export default {
             options: (content, _, boundProps) => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
-                try {
-                    // logs removed
-                } catch (e) {}
+                
                 return { template: withAtt ? withAtt.attachments[0] : null };
             },
             defaultValue: { type: 'f', code: "context.mapping?.['size'] ?? context.mapping?.['length']" },
