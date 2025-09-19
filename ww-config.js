@@ -1,3 +1,38 @@
+// Common helpers for mappingAttachments evaluation
+const __evalCode = (code, type, ctx) => {
+    try {
+        if (typeof code !== 'string') return undefined;
+        const body = type === 'js' ? code : `return (${code});`;
+        // eslint-disable-next-line no-new-func
+        const fn = new Function('context', body);
+        return fn(ctx);
+    } catch {
+        return undefined;
+    }
+};
+
+const __pickTemplateMessageByMapping = (messages, mapping) => {
+    if (mapping?.code && Array.isArray(messages) && messages.length) {
+        for (const msg of messages) {
+            const res = __evalCode(mapping.code, mapping.type || 'f', { mapping: msg });
+            if (Array.isArray(res) && res.length) return msg;
+        }
+    }
+    const fallback = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
+    return fallback || (messages.length ? messages[0] : null);
+};
+
+const __pickFirstAttachmentByMapping = (messages, mapping) => {
+    if (mapping?.code && Array.isArray(messages) && messages.length) {
+        for (const msg of messages) {
+            const arr = __evalCode(mapping.code, mapping.type || 'f', { mapping: msg });
+            if (Array.isArray(arr) && arr.length) return arr[0];
+        }
+    }
+    const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
+    return withAtt ? withAtt.attachments[0] : null;
+};
+
 export default {
     inherit: {
         type: 'ww-layout',
@@ -2206,35 +2241,7 @@ export default {
             options: content => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const mapping = content?.mappingAttachments;
-                const evalCode = (code, type, ctx) => {
-                    try {
-                        if (typeof code !== 'string') return undefined;
-                        const body = type === 'js' ? code : `return (${code});`;
-                        // eslint-disable-next-line no-new-func
-                        const fn = new Function('context', body);
-                        return fn(ctx);
-                    } catch (e) {
-                        return undefined;
-                    }
-                };
-
-                let templateMsg = null;
-                if (mapping?.code && messages.length) {
-                    for (const msg of messages) {
-                        const res = evalCode(mapping.code, mapping.type || 'f', { mapping: msg });
-                        if (Array.isArray(res) && res.length) {
-                            templateMsg = msg;
-                            break;
-                        }
-                    }
-                }
-
-                if (!templateMsg) {
-                    const fallback = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
-                    templateMsg = fallback || (messages.length ? messages[0] : null);
-                }
-
-                return { template: templateMsg };
+                return { template: __pickTemplateMessageByMapping(messages, mapping) };
             },
             defaultValue: {
                 type: 'f',
@@ -2271,32 +2278,7 @@ export default {
             options: content => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const mapping = content?.mappingAttachments;
-                const evalCode = (code, type, ctx) => {
-                    try {
-                        if (typeof code !== 'string') return undefined;
-                        const body = type === 'js' ? code : `return (${code});`;
-                        // eslint-disable-next-line no-new-func
-                        const fn = new Function('context', body);
-                        return fn(ctx);
-                    } catch (e) {
-                        return undefined;
-                    }
-                };
-                let attachment = null;
-                if (mapping?.code && messages.length) {
-                    for (const msg of messages) {
-                        const arr = evalCode(mapping.code, mapping.type || 'f', { mapping: msg });
-                        if (Array.isArray(arr) && arr.length) {
-                            attachment = arr[0];
-                            break;
-                        }
-                    }
-                }
-                if (!attachment) {
-                    const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
-                    attachment = withAtt ? withAtt.attachments[0] : null;
-                }
-                return { template: attachment };
+                return { template: __pickFirstAttachmentByMapping(messages, mapping) };
             },
             defaultValue: { type: 'f', code: "context.mapping?.['id']" },
             section: 'settings',
@@ -2316,32 +2298,7 @@ export default {
             options: content => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const mapping = content?.mappingAttachments;
-                const evalCode = (code, type, ctx) => {
-                    try {
-                        if (typeof code !== 'string') return undefined;
-                        const body = type === 'js' ? code : `return (${code});`;
-                        // eslint-disable-next-line no-new-func
-                        const fn = new Function('context', body);
-                        return fn(ctx);
-                    } catch (e) {
-                        return undefined;
-                    }
-                };
-                let attachment = null;
-                if (mapping?.code && messages.length) {
-                    for (const msg of messages) {
-                        const arr = evalCode(mapping.code, mapping.type || 'f', { mapping: msg });
-                        if (Array.isArray(arr) && arr.length) {
-                            attachment = arr[0];
-                            break;
-                        }
-                    }
-                }
-                if (!attachment) {
-                    const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
-                    attachment = withAtt ? withAtt.attachments[0] : null;
-                }
-                return { template: attachment };
+                return { template: __pickFirstAttachmentByMapping(messages, mapping) };
             },
             defaultValue: { type: 'f', code: "context.mapping?.['name']" },
             section: 'settings',
@@ -2361,32 +2318,7 @@ export default {
             options: content => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const mapping = content?.mappingAttachments;
-                const evalCode = (code, type, ctx) => {
-                    try {
-                        if (typeof code !== 'string') return undefined;
-                        const body = type === 'js' ? code : `return (${code});`;
-                        // eslint-disable-next-line no-new-func
-                        const fn = new Function('context', body);
-                        return fn(ctx);
-                    } catch (e) {
-                        return undefined;
-                    }
-                };
-                let attachment = null;
-                if (mapping?.code && messages.length) {
-                    for (const msg of messages) {
-                        const arr = evalCode(mapping.code, mapping.type || 'f', { mapping: msg });
-                        if (Array.isArray(arr) && arr.length) {
-                            attachment = arr[0];
-                            break;
-                        }
-                    }
-                }
-                if (!attachment) {
-                    const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
-                    attachment = withAtt ? withAtt.attachments[0] : null;
-                }
-                return { template: attachment };
+                return { template: __pickFirstAttachmentByMapping(messages, mapping) };
             },
             defaultValue: { type: 'f', code: "context.mapping?.['url'] ?? context.mapping?.['href']" },
             section: 'settings',
@@ -2406,32 +2338,7 @@ export default {
             options: content => {
                 const messages = Array.isArray(content.messages) ? content.messages : [];
                 const mapping = content?.mappingAttachments;
-                const evalCode = (code, type, ctx) => {
-                    try {
-                        if (typeof code !== 'string') return undefined;
-                        const body = type === 'js' ? code : `return (${code});`;
-                        // eslint-disable-next-line no-new-func
-                        const fn = new Function('context', body);
-                        return fn(ctx);
-                    } catch (e) {
-                        return undefined;
-                    }
-                };
-                let attachment = null;
-                if (mapping?.code && messages.length) {
-                    for (const msg of messages) {
-                        const arr = evalCode(mapping.code, mapping.type || 'f', { mapping: msg });
-                        if (Array.isArray(arr) && arr.length) {
-                            attachment = arr[0];
-                            break;
-                        }
-                    }
-                }
-                if (!attachment) {
-                    const withAtt = messages.find(m => Array.isArray(m?.attachments) && m.attachments.length);
-                    attachment = withAtt ? withAtt.attachments[0] : null;
-                }
-                return { template: attachment };
+                return { template: __pickFirstAttachmentByMapping(messages, mapping) };
             },
             defaultValue: { type: 'f', code: "context.mapping?.['type'] ?? context.mapping?.['mime']" },
             section: 'settings',
