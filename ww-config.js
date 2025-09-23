@@ -160,9 +160,7 @@ export default {
         ],
         customSettingsPropertiesOrder: [
             // Chat settings
-            ['chatSettingsTitle', 'groupChatText', 'allowAttachments', 'disabled', 'autoScrollBehavior'],
-            // Group chat avatar settings
-            ['groupAvatarSettingsTitle', 'groupChatAvatar'],
+            ['chatSettingsTitle', 'groupChatText', 'groupChatAvatar', 'allowAttachments', 'disabled', 'autoScrollBehavior'],
             // Chat data + message mapping
             [
                 'chatDataTitle',
@@ -1980,12 +1978,6 @@ export default {
         chatSettingsTitle: {
             type: 'Title',
             label: { en: 'Chat Settings' },
-            section: 'settings',
-        },
-        // Group avatar (image) for group chats
-        groupAvatarSettingsTitle: {
-            type: 'Title',
-            label: { en: 'Group Avatar' },
             section: 'settings',
         },
         groupChatAvatar: {
