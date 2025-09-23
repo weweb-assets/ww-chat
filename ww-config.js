@@ -648,6 +648,48 @@ export default {
             /* wwEditor:end */
         },
 
+        // Attachment thumbnails (messages area)
+        messagesAttachmentThumbMaxWidth: {
+            label: { en: 'Attachment Max Width' },
+            type: 'Length',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '250px',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'Maximum width of image attachment thumbnails in the messages area',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the maximum width for image thumbnails displayed inside messages.\n\nUse this to make previews more compact or larger depending on your layout. The image will keep its aspect ratio and never exceed this width.\n\n**Examples**:\n- "180px" - Compact previews\n- "220px" - Medium size\n- "300px" - Larger previews',
+            },
+            /* wwEditor:end */
+        },
+        messagesAttachmentThumbMaxHeight: {
+            label: { en: 'Attachment Max Height' },
+            type: 'Length',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '200px',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'Maximum height of image attachment thumbnails in the messages area',
+            },
+            propertyHelp: {
+                tooltip:
+                    'Sets the maximum height for image thumbnails displayed inside messages.\n\nLower values create smaller thumbnails. The image scales proportionally and will not exceed this height.\n\n**Examples**:\n- "120px" - Small thumbnails\n- "160px" - Medium thumbnails\n- "220px" - Larger thumbnails',
+            },
+            /* wwEditor:end */
+        },
+
         emptyMessageText: {
             label: { en: 'Empty Message Text' },
             type: 'Text',

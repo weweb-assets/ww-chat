@@ -334,8 +334,8 @@ export default {
     }
 
     &__attachment-preview {
-        max-width: 250px;
-        max-height: 200px;
+        max-width: var(--ww-chat-attachment-thumb-max-width, 250px);
+        max-height: var(--ww-chat-attachment-thumb-max-height, 200px);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -346,7 +346,7 @@ export default {
 
         img {
             max-width: 100%;
-            max-height: 200px;
+            max-height: var(--ww-chat-attachment-thumb-max-height, 200px);
             object-fit: contain;
             border-radius: 6px;
         }
