@@ -54,6 +54,7 @@
             <label
                 v-if="allowAttachments"
                 class="ww-chat-input-area__attachment-btn"
+                :class="{ 'ww-chat-input-area__attachment-btn--disabled': isUiDisabled }"
                 :style="attachmentButtonStyle"
             >
                 <input
@@ -61,7 +62,7 @@
                     class="ww-chat-input-area__attachment-input"
                     multiple
                     @change="handleAttachment"
-                    :disabled="isDisabled"
+                    :disabled="isUiDisabled"
                 />
                 <span
                     class="ww-chat-input-area__icon"
@@ -77,7 +78,7 @@
                     v-model="inputValue"
                     class="ww-chat-input-area__input"
                     :placeholder="placeholder"
-                    :disabled="isDisabled"
+                    :disabled="isUiDisabled"
                     :style="inputStyles"
                     @keydown.enter.prevent="onEnterPress"
                 ></textarea>
@@ -87,8 +88,8 @@
             <button
                 type="button"
                 class="ww-chat-input-area__send-btn"
-                :class="{ 'ww-chat-input-area__send-btn--disabled': !canSend || isDisabled }"
-                :disabled="!canSend || isDisabled"
+                :class="{ 'ww-chat-input-area__send-btn--disabled': !canSend || isUiDisabled }"
+                :disabled="!canSend || isUiDisabled"
                 :style="sendButtonStyle"
                 @click="sendMessage"
             >
@@ -334,6 +335,7 @@ export default {
         });
 
         const canSend = computed(() => inputValue.value.trim().length > 0 || props.pendingAttachments.length > 0);
+        const isUiDisabled = computed(() => props.isDisabled || isEditing.value);
 
         const alignItemsCss = computed(() => {
             if (props.actionAlign === 'start') return 'flex-start';
@@ -432,6 +434,7 @@ export default {
                 textareaRef,
                 inputValue,
                 canSend,
+                isUiDisabled,
                 sendIconHtml,
                 attachmentIconHtml,
                 removeIconHtml,
@@ -609,6 +612,14 @@ export default {
             background: var(--btn-hover-bg, #f1f5f9);
             transform: translateY(-1px);
             box-shadow: var(--btn-hover-shadow, 0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        &--disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+            box-shadow: none;
+            transform: none;
         }
 
         &:active {
