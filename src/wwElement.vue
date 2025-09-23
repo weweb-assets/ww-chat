@@ -538,9 +538,10 @@ export default {
             // Debug: surface pending attachment clicks in the console for easier testing
             // eslint-disable-next-line no-console
             console.log('[ww-chat] pendingAttachmentClick (wwElement)', { attachment, index });
+            const file = attachment && attachment.file ? attachment.file : attachment;
             emit('trigger-event', {
                 name: 'pendingAttachmentClick',
-                event: { attachment, index },
+                event: { attachment: file, index },
             });
         };
 

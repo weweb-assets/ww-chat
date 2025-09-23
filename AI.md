@@ -147,7 +147,7 @@ Attachments Data (visible only when Attachments mapping is set):
   - position.elementX / position.elementY: coordinates relative to the chat container
   - position.viewportX / position.viewportY: coordinates relative to the page top-left
 - attachmentClick: Triggered when a message attachment is clicked. Payload: { attachment }
-- pendingAttachmentClick: Triggered when a pending (unsent) attachment in the input area is clicked. Payload: { attachment, index }
+- pendingAttachmentClick: Triggered when a pending (unsent) attachment in the input area is clicked. Payload: { attachment, index } where `attachment` is a File object.
 - close: Triggered when the header close button is clicked. Payload: {}
 
 ***Exposed Element Actions:***

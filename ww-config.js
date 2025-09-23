@@ -281,12 +281,12 @@ export default {
             name: 'pendingAttachmentClick',
             label: { en: 'On pending attachment click' },
             event: {
+                // attachment is a File object (unsent local upload)
                 attachment: {
-                    id: 'file-1',
                     name: 'image.png',
                     type: 'image/png',
                     size: 204800,
-                    url: 'blob:https://app/abc-123',
+                    // lastModified: 1695489600000
                 },
                 index: 0,
             },
