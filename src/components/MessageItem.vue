@@ -348,7 +348,7 @@ export default {
             max-width: 100%;
             max-height: var(--ww-chat-attachment-thumb-max-height, 200px);
             object-fit: contain;
-            border-radius: 6px;
+            border-radius: var(--ww-chat-attachment-thumb-radius, 6px);
         }
     }
 

@@ -429,11 +429,10 @@ export default {
         const dateSeparatorBorderRadius = computed(() => props.content?.dateSeparatorBorderRadius || '8px');
 
         // Messages attachments thumbnail sizing (in messages area)
-        const messagesAttachmentThumbMaxWidth = computed(
-            () => props.content?.messagesAttachmentThumbMaxWidth || '250px'
-        );
-        const messagesAttachmentThumbMaxHeight = computed(
-            () => props.content?.messagesAttachmentThumbMaxHeight || '200px'
+        const messagesAttachmentThumbMaxWidth = computed(() => props.content?.messagesAttachmentThumbMaxWidth || '250px');
+        const messagesAttachmentThumbMaxHeight = computed(() => props.content?.messagesAttachmentThumbMaxHeight || '200px');
+        const messagesAttachmentThumbBorderRadius = computed(
+            () => props.content?.messagesAttachmentThumbBorderRadius || '6px'
         );
 
         watch(
@@ -1035,6 +1034,7 @@ export default {
             // exposed for CSS variables
             messagesAttachmentThumbMaxWidth,
             messagesAttachmentThumbMaxHeight,
+            messagesAttachmentThumbBorderRadius,
         };
     },
     methods: {
@@ -1088,6 +1088,7 @@ export default {
     /* Attachment thumbnails in messages area */
     --ww-chat-attachment-thumb-max-width: v-bind('messagesAttachmentThumbMaxWidth');
     --ww-chat-attachment-thumb-max-height: v-bind('messagesAttachmentThumbMaxHeight');
+    --ww-chat-attachment-thumb-radius: v-bind('messagesAttachmentThumbBorderRadius');
 
     --ww-chat-input-bg: v-bind('inputBgColor');
     --ww-chat-input-text: v-bind('inputTextColor');

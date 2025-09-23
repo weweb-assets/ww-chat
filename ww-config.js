@@ -130,6 +130,10 @@ export default {
                 'removeIcon',
                 'removeIconColor',
                 'removeIconSize',
+                'imagePreviewTitle',
+                'messagesAttachmentThumbMaxWidth',
+                'messagesAttachmentThumbMaxHeight',
+                'messagesAttachmentThumbBorderRadius',
             ],
             // Send button styles
             [
@@ -686,6 +690,24 @@ export default {
             propertyHelp: {
                 tooltip:
                     'Sets the maximum height for image thumbnails displayed inside messages.\n\nLower values create smaller thumbnails. The image scales proportionally and will not exceed this height.\n\n**Examples**:\n- "120px" - Small thumbnails\n- "160px" - Medium thumbnails\n- "220px" - Larger thumbnails',
+            },
+            /* wwEditor:end */
+        },
+
+        messagesAttachmentThumbBorderRadius: {
+            label: { en: 'Attachment Border Radius' },
+            type: 'Length',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '6px',
+            /* wwEditor:start */
+            bindingValidation: { type: 'string', tooltip: 'Border radius of image attachment thumbnails' },
+            propertyHelp: {
+                tooltip:
+                    'Sets the corner radius for image thumbnails shown inside messages.\n\nThis controls only the image preview, not the message bubble.\n\n**Examples**:\n- "6px" - Default rounded corners\n- "0px" - Sharp corners\n- "12px" - More rounded',
             },
             /* wwEditor:end */
         },
@@ -1691,6 +1713,13 @@ export default {
                     'Sets the size of the remove attachment button icon.\n\nThis icon appears on attachment previews and should be large enough to interact with easily while not overwhelming the attachment preview. Typically smaller than main action icons.\n\n**Examples**:\n- "16px" - Compact size for attachment previews\n- "18px" - Slightly larger for easier interaction\n- "14px" - Smaller for minimal design',
             },
             /* wwEditor:end */
+        },
+
+        // Image preview (thumbnails inside messages)
+        imagePreviewTitle: {
+            type: 'Title',
+            label: { en: 'Image Preview' },
+            section: 'style',
         },
 
         // Send button styles

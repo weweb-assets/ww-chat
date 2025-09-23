@@ -32,8 +32,9 @@ Unified chat UI: optional header (via `displayHeader`), always-present messages 
 
 - messagesAreaBgColor: string – Messages area background. Example: '#ffffff'
 - messagesAreaPadding: string – Messages area padding. Example: '16px'
- - messagesAttachmentThumbMaxWidth: string – Max width for image attachment thumbnails in messages. Example: '220px'
- - messagesAttachmentThumbMaxHeight: string – Max height for image attachment thumbnails in messages. Example: '160px'
+- messagesAttachmentThumbMaxWidth: string – Max width for image attachment thumbnails in messages. Example: '220px'
+- messagesAttachmentThumbMaxHeight: string – Max height for image attachment thumbnails in messages. Example: '160px'
+ - messagesAttachmentThumbBorderRadius: string – Border radius of image thumbnails. Example: '6px'
 
 - messageBgColor: string – Others’ message bg. Example: '#f1f5f9'
 - messageTextColor: string – Others’ message text. Example: '#334155'
@@ -85,6 +86,7 @@ Unified chat UI: optional header (via `displayHeader`), always-present messages 
 - Applies to image attachments displayed inside message bubbles; non-image file chips keep their current layout.
 - Defaults preserve existing behavior: width 250px, height 200px.
 - CSS variables for advanced theming: `--ww-chat-attachment-thumb-max-width`, `--ww-chat-attachment-thumb-max-height`.
+  Also: `--ww-chat-attachment-thumb-radius`.
 
 - sendButtonBgColor: string – Send button bg/gradient. Example: 'linear-gradient(135deg, #3b82f6, #2563eb)'
 - sendButtonHoverBgColor: string – Send button hover bg. Example: 'linear-gradient(135deg, #2563eb, #1d4ed8)'
