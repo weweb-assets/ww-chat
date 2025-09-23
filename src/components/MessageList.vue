@@ -237,7 +237,7 @@ export default {
             emit('attachment-click', attachment);
         };
 
-        const handleRightClick = ({ message, elementX, elementY, viewportX, viewportY, x, y }) => {
+        const handleRightClick = ({ message, elementX, elementY, viewportX, viewportY }) => {
             if (isEditing.value) return;
             emit('message-right-click', {
                 message,
@@ -246,9 +246,6 @@ export default {
                     elementY,
                     viewportX,
                     viewportY,
-                    // Back-compat
-                    x,
-                    y,
                 },
             });
         };

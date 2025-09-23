@@ -259,14 +259,10 @@ export default {
                     ],
                 },
                 position: {
-                    // New recommended fields
                     elementX: 50, // relative to chat element
                     elementY: 20,
                     viewportX: 320, // relative to page top-left
                     viewportY: 480,
-                    // Back-compat
-                    x: 12, // relative to clicked sub-element
-                    y: 8,
                 },
             },
         },

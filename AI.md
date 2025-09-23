@@ -144,6 +144,8 @@ Attachments Data (visible only when Attachments mapping is set):
 – messageSent: Triggered when the user sends a message. Payload: { message }
 - messageReceived: Triggered when a new message appears in `messages` from another sender. Payload: { message }
 - messageRightClick: Triggered on right-click on a message. Payload: { message, position }
+  - position.elementX / position.elementY: coordinates relative to the chat container
+  - position.viewportX / position.viewportY: coordinates relative to the page top-left
 - attachmentClick: Triggered when an attachment is clicked. Payload: { attachment }
 - close: Triggered when the header close button is clicked. Payload: {}
 

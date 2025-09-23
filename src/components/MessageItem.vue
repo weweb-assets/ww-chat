@@ -239,35 +239,30 @@ export default {
         };
 
         const handleRightClick = event => {
-            // Back-compat: coordinates relative to the clicked element (previous behavior)
-            const targetRect = event.target.getBoundingClientRect();
-            const x = event.clientX - targetRect.left;
-            const y = event.clientY - targetRect.top;
-
-            // New: coordinates relative to the chat root element
-            let elementX = x;
-            let elementY = y;
+            // Coordinates relative to the chat root element
+            let elementX = 0;
+            let elementY = 0;
             const root = chatRootEl && chatRootEl.value ? chatRootEl.value : null;
             if (root && typeof root.getBoundingClientRect === 'function') {
                 const chatRect = root.getBoundingClientRect();
                 elementX = event.clientX - chatRect.left;
                 elementY = event.clientY - chatRect.top;
+            } else {
+                // Fallback: treat client coords as element-relative if root not found
+                elementX = event.clientX;
+                elementY = event.clientY;
             }
 
-            // New: coordinates relative to page top-left
+            // Coordinates relative to page top-left
             const viewportX = event.pageX;
             const viewportY = event.pageY;
 
             emit('right-click', {
                 message: props.message,
-                // Recommended new fields
                 elementX,
                 elementY,
                 viewportX,
                 viewportY,
-                // Back-compat fields (relative to clicked sub-element)
-                x,
-                y,
             });
         };
 
