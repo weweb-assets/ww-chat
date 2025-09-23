@@ -414,6 +414,8 @@ export default {
 
         const onPendingAttachmentClick = (attachment, index) => {
             if (props.isDisabled) return;
+            // eslint-disable-next-line no-console
+            console.log('[ww-chat] pending-attachment-click (InputArea)', { attachment, index });
             emit('pending-attachment-click', { attachment, index });
         };
 
