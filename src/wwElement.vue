@@ -1050,6 +1050,7 @@ export default {
             sendMessage,
             handleAttachment,
             handleRemoveAttachment,
+            handlePendingAttachmentClick,
             handleAttachmentClick,
             handleMessageRightClick,
             handleClose,
