@@ -295,7 +295,6 @@ export default {
                     sendIconText.value = await getIcon(props.sendIcon);
                 }
             } catch (error) {
-                console.error('Failed to load send icon:', error);
                 sendIconText.value = null;
             }
         });
@@ -306,7 +305,6 @@ export default {
                     attachmentIconText.value = await getIcon(props.attachmentIcon);
                 }
             } catch (error) {
-                console.error('Failed to load attachment icon:', error);
                 attachmentIconText.value = null;
             }
         });
@@ -317,7 +315,6 @@ export default {
                     removeIconText.value = await getIcon(props.removeIcon);
                 }
             } catch (error) {
-                console.error('Failed to load remove icon:', error);
                 removeIconText.value = null;
             }
         });
@@ -414,8 +411,6 @@ export default {
 
         const onPendingAttachmentClick = (attachment, index) => {
             if (props.isDisabled) return;
-            // eslint-disable-next-line no-console
-            console.log('[ww-chat] pending-attachment-click (InputArea)', { attachment, index });
             emit('pending-attachment-click', { attachment, index });
         };
 
