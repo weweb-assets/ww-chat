@@ -97,6 +97,7 @@
             @send="sendMessage"
             @attachment="handleAttachment"
             @remove-attachment="handleRemoveAttachment"
+            @pending-attachment-click="handlePendingAttachmentClick"
         />
     </div>
 </template>
@@ -530,6 +531,15 @@ export default {
             emit('trigger-event', {
                 name: 'attachmentClick',
                 event: { attachment },
+            });
+        };
+
+        const handlePendingAttachmentClick = ({ attachment, index }) => {
+            if (isEditing.value) return;
+
+            emit('trigger-event', {
+                name: 'pendingAttachmentClick',
+                event: { attachment, index },
             });
         };
 

@@ -6,6 +6,7 @@
                 v-for="(attachment, index) in pendingAttachments"
                 :key="attachment.id"
                 class="ww-chat-input-area__attachment"
+                @click="onPendingAttachmentClick(attachment, index)"
             >
                 <!-- File info display (for all file types) -->
                 <div class="ww-chat-input-area__attachment-file">
@@ -227,7 +228,7 @@ export default {
             default: '12px',
         },
     },
-    emits: ['update:modelValue', 'send', 'attachment', 'remove-attachment'],
+    emits: ['update:modelValue', 'send', 'attachment', 'remove-attachment', 'pending-attachment-click'],
     setup(props, { emit }) {
         const isEditing = inject(
             'isEditing',
@@ -409,6 +410,11 @@ export default {
             emit('remove-attachment', index);
         };
 
+        const onPendingAttachmentClick = (attachment, index) => {
+            if (isEditing.value || props.isDisabled) return;
+            emit('pending-attachment-click', { attachment, index });
+        };
+
         const isImageFile = attachment => {
             if (!attachment.type) return false;
             return attachment.type.startsWith('image/');
@@ -456,6 +462,7 @@ export default {
             sendMessage,
             handleAttachment,
             removeAttachment,
+            onPendingAttachmentClick,
         };
     },
 };
@@ -507,6 +514,7 @@ export default {
         border: 1px solid #e2e8f0;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
         gap: 8px;
+        cursor: pointer;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
         &:hover {

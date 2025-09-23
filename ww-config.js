@@ -280,6 +280,20 @@ export default {
             },
         },
         {
+            name: 'pendingAttachmentClick',
+            label: { en: 'On pending attachment click' },
+            event: {
+                attachment: {
+                    id: 'file-1',
+                    name: 'image.png',
+                    type: 'image/png',
+                    size: 204800,
+                    url: 'blob:https://app/abc-123',
+                },
+                index: 0,
+            },
+        },
+        {
             name: 'close',
             label: { en: 'On close' },
             event: {},
