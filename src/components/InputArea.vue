@@ -504,6 +504,8 @@ export default {
         padding: 6px;
         border-radius: 12px;
         background-color: rgba(0, 0, 0, 0.02);
+        position: relative;
+        z-index: 2;
     }
 
     &__attachment {
