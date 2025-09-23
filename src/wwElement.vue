@@ -535,8 +535,6 @@ export default {
         };
 
         const handlePendingAttachmentClick = ({ attachment, index }) => {
-            if (isEditing.value) return;
-
             emit('trigger-event', {
                 name: 'pendingAttachmentClick',
                 event: { attachment, index },

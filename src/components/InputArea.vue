@@ -413,7 +413,7 @@ export default {
         };
 
         const onPendingAttachmentClick = (attachment, index) => {
-            if (isEditing.value || props.isDisabled) return;
+            if (props.isDisabled) return;
             emit('pending-attachment-click', { attachment, index });
         };
 
