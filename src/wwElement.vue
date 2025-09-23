@@ -1,5 +1,5 @@
 <template>
-    <div class="ww-chat" :class="{ 'ww-chat--disabled': isDisabled }" :style="containerStyles">
+    <div ref="chatRoot" class="ww-chat" :class="{ 'ww-chat--disabled': isDisabled }" :style="containerStyles">
         <!-- Chat Header -->
         <ChatHeader
             v-if="displayHeader"
@@ -190,6 +190,7 @@ export default {
     },
     emits: ['trigger-event'],
     setup(props, { emit }) {
+        const chatRoot = ref(null);
         const messagesContainer = ref(null);
         const newMessage = ref('');
         const isScrolling = ref(false);
@@ -695,6 +696,7 @@ export default {
         }));
 
         provide('dateTimeOptions', dateTimeOptions);
+        provide('chatRootEl', chatRoot);
 
         const chatPartners = computed(() => {
             // If no messages, return current user info as fallback
@@ -936,6 +938,7 @@ export default {
         });
 
         return {
+            chatRoot,
             messagesContainer,
             newMessage,
             messages,
