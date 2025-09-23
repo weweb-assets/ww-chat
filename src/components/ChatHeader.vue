@@ -59,6 +59,11 @@ export default {
             default: 'online',
             validator: value => ['online', 'offline', 'away', 'busy'].includes(value),
         },
+        // Optional override for avatar background color when using text initials
+        avatarBgColor: {
+            type: String,
+            default: '',
+        },
         participants: {
             type: String,
             default: '',
@@ -158,7 +163,7 @@ export default {
         }));
 
         const avatarStyles = computed(() => ({
-            backgroundColor: getAvatarColor(props.userName),
+            backgroundColor: props.avatarBgColor || getAvatarColor(props.userName),
             color: '#ffffff',
         }));
 

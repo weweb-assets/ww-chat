@@ -7,6 +7,7 @@
             :user-avatar="headerUserAvatar"
             :user-location="headerUserLocation"
             :user-status="headerUserStatus"
+            :avatar-bg-color="headerAvatarBgColor"
             :header-bg-color="headerBgColor"
             :text-color="headerTextColor"
             :header-border="headerBorder"
@@ -698,7 +699,7 @@ export default {
         const chatPartners = computed(() => {
             // If no messages, return current user info as fallback
             if (participants.value.length === 0) {
-                return { name: '', avatar: '', location: '', status: 'online', participants: [], participantsString: '' };
+                return { name: '', avatar: '', location: '', status: 'online', participants: [], participantsString: '', isGroup: false };
             }
 
             if (messages.value.length === 0) {
@@ -709,6 +710,7 @@ export default {
                     status: currentUserParticipant.value?.status || 'online',
                     participants: [],
                     participantsString: '',
+                    isGroup: false,
                 };
             }
 
@@ -743,6 +745,7 @@ export default {
                     status: p?.status || 'online',
                     participants: names,
                     participantsString,
+                    isGroup: false,
                 };
             }
 
@@ -774,6 +777,7 @@ export default {
                 status: 'online',
                 participants,
                 participantsString,
+                isGroup: true,
             };
         });
 
@@ -782,6 +786,12 @@ export default {
         const headerUserLocation = computed(() => chatPartners.value?.location || '');
         const headerUserStatus = computed(() => chatPartners.value?.status || 'online');
         const headerParticipants = computed(() => chatPartners.value?.participantsString || '');
+        const headerAvatarBgColor = computed(() => {
+            if (chatPartners.value?.isGroup) {
+                return props.content?.groupChatAvatarColor || '';
+            }
+            return '';
+        });
 
         // Local context functionality
         const currentLocalContext = ref({});
@@ -1035,6 +1045,7 @@ export default {
             messagesAttachmentThumbMaxWidth,
             messagesAttachmentThumbMaxHeight,
             messagesAttachmentThumbBorderRadius,
+            headerAvatarBgColor,
         };
     },
     methods: {

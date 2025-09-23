@@ -17,6 +17,7 @@ Unified chat UI: optional header (via `displayHeader`), always-present messages 
 - allowAttachments: boolean – Enable file attachments. Example: true
 - disabled: boolean – Disable input/actions. Example: false
 - autoScrollBehavior: 'auto'|'smooth' – Scroll mode for new messages. Example: 'auto'
+- groupChatAvatar: string – URL for a custom group chat avatar image. Example: 'https://.../group.png'
 
 - headerBgColor: string – Header background. Example: '#ffffff'
 - headerTextColor: string – Header text color. Example: '#1e293b'
@@ -29,6 +30,7 @@ Unified chat UI: optional header (via `displayHeader`), always-present messages 
 - headerCloseButtonColor: string – Close icon color. Example: '#64748b'
 - headerCloseButtonBgHover: string – Close hover bg. Example: 'rgba(0,0,0,.05)'
 - headerShowCloseButton: boolean – Show the header close button. Example: true
+- groupChatAvatarColor: string – Background color for group avatar initials. Example: '#4f46e5'
 
 - messagesAreaBgColor: string – Messages area background. Example: '#ffffff'
 - messagesAreaPadding: string – Messages area padding. Example: '16px'

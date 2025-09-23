@@ -57,6 +57,8 @@ export default {
                 'headerNameFontWeight',
                 'headerLocationFontSize',
                 'headerLocationOpacity',
+                // Group chat avatar styling
+                'groupChatAvatarColor',
                 // Close button controls grouped at the end of header
                 'headerShowCloseButton',
                 'headerCloseButtonColor',
@@ -159,6 +161,8 @@ export default {
         customSettingsPropertiesOrder: [
             // Chat settings
             ['chatSettingsTitle', 'groupChatText', 'allowAttachments', 'disabled', 'autoScrollBehavior'],
+            // Group chat avatar settings
+            ['groupAvatarSettingsTitle', 'groupChatAvatar'],
             // Chat data + message mapping
             [
                 'chatDataTitle',
@@ -424,6 +428,26 @@ export default {
             propertyHelp: {
                 tooltip:
                     'Controls the internal spacing around content in the chat header.\n\nUses the advanced Spacing interface allowing you to set different padding for each side (top, right, bottom, left) or uniform padding.\n\n**Examples**:\n- "16px" - Uniform 16px padding on all sides\n- "12px 16px" - 12px top/bottom, 16px left/right\n- "8px 16px 12px 16px" - Different padding for each side',
+            },
+            /* wwEditor:end */
+            hidden: content => content.displayHeader === false,
+        },
+
+        // Group chat avatar color (for initials fallback)
+        groupChatAvatarColor: {
+            label: { en: 'Group Avatar Color' },
+            type: 'Color',
+            section: 'style',
+            bindable: true,
+            classes: true,
+            states: true,
+            responsive: true,
+            defaultValue: '#4f46e5',
+            /* wwEditor:start */
+            bindingValidation: { type: 'string', tooltip: 'Background color for the group avatar initials' },
+            propertyHelp: {
+                tooltip:
+                    'Controls the background color of the group chat avatar when showing text initials (i.e., when no custom Group Avatar URL is set).\n\nUse this to ensure consistent avatars in a chat list UI. If a Group Avatar URL is provided, this color is ignored.',
             },
             /* wwEditor:end */
             hidden: content => content.displayHeader === false,
