@@ -1982,6 +1982,26 @@ export default {
             label: { en: 'Chat Settings' },
             section: 'settings',
         },
+        // Group avatar (image) for group chats
+        groupAvatarSettingsTitle: {
+            type: 'Title',
+            label: { en: 'Group Avatar' },
+            section: 'settings',
+        },
+        groupChatAvatar: {
+            label: { en: 'Group Avatar URL' },
+            type: 'Text',
+            section: 'settings',
+            bindable: true,
+            defaultValue: '',
+            /* wwEditor:start */
+            bindingValidation: { type: 'string', tooltip: 'URL of the image used as the group chat avatar' },
+            propertyHelp: {
+                tooltip:
+                    'Sets a custom image for the group chat avatar when there are 3 or more participants.\n\nIf empty, the header falls back to text initials. Provide a direct image URL or bind to a field that returns a URL.',
+            },
+            /* wwEditor:end */
+        },
         groupChatText: {
             label: { en: 'Group Chat Text' },
             type: 'Text',
