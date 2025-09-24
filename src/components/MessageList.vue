@@ -24,10 +24,18 @@
                     :same-sender-as-next="isSameSenderAsNext(index)"
                     :message-bg-color="messageBgColor"
                     :message-text-color="messageTextColor"
+                    :message-font-size="messageFontSize"
+                    :message-font-weight="messageFontWeight"
+                    :message-font-family="messageFontFamily"
                     :message-border="messageBorder"
+                    :message-radius="messageRadius"
                     :own-message-bg-color="ownMessageBgColor"
                     :own-message-text-color="ownMessageTextColor"
+                    :own-message-font-size="ownMessageFontSize"
+                    :own-message-font-weight="ownMessageFontWeight"
+                    :own-message-font-family="ownMessageFontFamily"
                     :own-message-border="ownMessageBorder"
+                    :own-message-radius="ownMessageRadius"
                     @attachment-click="handleAttachmentClick"
                     @right-click="handleRightClick"
                 />
@@ -63,9 +71,25 @@ export default {
             type: String,
             default: '#334155',
         },
+        messageFontSize: {
+            type: String,
+            default: '0.875rem',
+        },
+        messageFontWeight: {
+            type: String,
+            default: '400',
+        },
+        messageFontFamily: {
+            type: String,
+            default: 'inherit',
+        },
         messageBorder: {
             type: String,
             default: '1px solid #e2e8f0',
+        },
+        messageRadius: {
+            type: String,
+            default: '18px 18px 18px 18px',
         },
         ownMessageBgColor: {
             type: String,
@@ -75,9 +99,25 @@ export default {
             type: String,
             default: '#1e40af',
         },
+        ownMessageFontSize: {
+            type: String,
+            default: '0.875rem',
+        },
+        ownMessageFontWeight: {
+            type: String,
+            default: '400',
+        },
+        ownMessageFontFamily: {
+            type: String,
+            default: 'inherit',
+        },
         ownMessageBorder: {
             type: String,
             default: '1px solid #bfdbfe',
+        },
+        ownMessageRadius: {
+            type: String,
+            default: '18px 18px 18px 18px',
         },
         emptyMessageText: {
             type: String,
@@ -197,9 +237,17 @@ export default {
             emit('attachment-click', attachment);
         };
 
-        const handleRightClick = ({ message, x, y }) => {
+        const handleRightClick = ({ message, elementX, elementY, viewportX, viewportY }) => {
             if (isEditing.value) return;
-            emit('message-right-click', { message, position: { x, y } });
+            emit('message-right-click', {
+                message,
+                position: {
+                    elementX,
+                    elementY,
+                    viewportX,
+                    viewportY,
+                },
+            });
         };
 
         return {
@@ -226,8 +274,6 @@ export default {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 100%;
-        min-height: 100px;
         opacity: 0.5;
     }
 

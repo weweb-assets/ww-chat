@@ -6,10 +6,31 @@
                 v-for="(attachment, index) in pendingAttachments"
                 :key="attachment.id"
                 class="ww-chat-input-area__attachment"
+                @click="onPendingAttachmentClick(attachment, index)"
             >
-                <!-- Simple file name display -->
-                <div class="ww-chat-input-area__attachment-name">
-                    {{ attachment.name }}
+                <!-- File info display (for all file types) -->
+                <div class="ww-chat-input-area__attachment-file">
+                    <div class="ww-chat-input-area__attachment-icon">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                        </svg>
+                    </div>
+                    <div class="ww-chat-input-area__attachment-info">
+                        <div class="ww-chat-input-area__attachment-name">{{ attachment.name }}</div>
+                        <div class="ww-chat-input-area__attachment-size">{{ formatFileSize(attachment.size) }}</div>
+                    </div>
                 </div>
 
                 <!-- Remove button -->
@@ -28,19 +49,20 @@
             </div>
         </div>
 
-        <div class="ww-chat-input-area__input-row">
+        <div class="ww-chat-input-area__input-row" :style="{ alignItems: alignItemsCss }">
             <!-- Attachment button -->
             <label
                 v-if="allowAttachments"
                 class="ww-chat-input-area__attachment-btn"
-                :style="{ color: attachmentIconColor }"
+                :class="{ 'ww-chat-input-area__attachment-btn--disabled': isUiDisabled }"
+                :style="attachmentButtonStyle"
             >
                 <input
                     type="file"
                     class="ww-chat-input-area__attachment-input"
                     multiple
                     @change="handleAttachment"
-                    :disabled="isDisabled"
+                    :disabled="isUiDisabled"
                 />
                 <span
                     class="ww-chat-input-area__icon"
@@ -56,9 +78,9 @@
                     v-model="inputValue"
                     class="ww-chat-input-area__input"
                     :placeholder="placeholder"
-                    :disabled="isDisabled"
+                    :disabled="isUiDisabled"
+                    :style="inputStyles"
                     @keydown.enter.prevent="onEnterPress"
-                    @input="resizeTextarea"
                 ></textarea>
             </div>
 
@@ -66,9 +88,9 @@
             <button
                 type="button"
                 class="ww-chat-input-area__send-btn"
-                :class="{ 'ww-chat-input-area__send-btn--disabled': !canSend || isDisabled }"
-                :disabled="!canSend || isDisabled"
-                :style="{ color: sendIconColor }"
+                :class="{ 'ww-chat-input-area__send-btn--disabled': !canSend || isUiDisabled }"
+                :disabled="!canSend || isUiDisabled"
+                :style="sendButtonStyle"
                 @click="sendMessage"
             >
                 <span
@@ -91,6 +113,20 @@ export default {
             type: String,
             default: '',
         },
+        // Alignment and button styles
+        actionAlign: { type: String, default: 'end' },
+        sendButtonBgColor: { type: String, default: 'linear-gradient(135deg, #3b82f6, #2563eb)' },
+        sendButtonHoverBgColor: { type: String, default: 'linear-gradient(135deg, #2563eb, #1d4ed8)' },
+        sendButtonBorder: { type: String, default: 'none' },
+        sendButtonBorderRadius: { type: String, default: '12px' },
+        sendButtonSize: { type: String, default: '42px' },
+        sendButtonBoxShadow: { type: String, default: '0 2px 4px rgba(59, 130, 246, 0.3)' },
+        attachmentButtonBgColor: { type: String, default: '#f8fafc' },
+        attachmentButtonHoverBgColor: { type: String, default: '#f1f5f9' },
+        attachmentButtonBorder: { type: String, default: '1px solid #e2e8f0' },
+        attachmentButtonBorderRadius: { type: String, default: '12px' },
+        attachmentButtonSize: { type: String, default: '42px' },
+        attachmentButtonBoxShadow: { type: String, default: '0 1px 2px rgba(0, 0, 0, 0.06)' },
         isDisabled: {
             type: Boolean,
             default: false,
@@ -111,19 +147,39 @@ export default {
             type: String,
             default: '#334155',
         },
+        inputFontSize: {
+            type: String,
+            default: '0.875rem',
+        },
+        inputFontWeight: {
+            type: String,
+            default: '400',
+        },
+        inputFontFamily: {
+            type: String,
+            default: 'inherit',
+        },
         inputPlaceholderColor: {
             type: String,
             default: '#94a3b8',
         },
-        inputBorder: {
+        inputAreaBorder: {
             type: String,
             default: '1px solid #e2e8f0',
         },
-        inputMaxHeight: {
+        textareaBorder: {
             type: String,
-            default: '120px',
+            default: '1px solid #e2e8f0',
         },
-        inputMinHeight: {
+        textareaBorderHover: {
+            type: String,
+            default: '1px solid #cbd5e1',
+        },
+        textareaBorderFocus: {
+            type: String,
+            default: '1px solid #3b82f6',
+        },
+        inputHeight: {
             type: String,
             default: '38px',
         },
@@ -173,7 +229,7 @@ export default {
             default: '12px',
         },
     },
-    emits: ['update:modelValue', 'send', 'attachment', 'remove-attachment'],
+    emits: ['update:modelValue', 'send', 'attachment', 'remove-attachment', 'pending-attachment-click'],
     setup(props, { emit }) {
         const isEditing = inject(
             'isEditing',
@@ -239,7 +295,6 @@ export default {
                     sendIconText.value = await getIcon(props.sendIcon);
                 }
             } catch (error) {
-                console.error('Failed to load send icon:', error);
                 sendIconText.value = null;
             }
         });
@@ -250,7 +305,6 @@ export default {
                     attachmentIconText.value = await getIcon(props.attachmentIcon);
                 }
             } catch (error) {
-                console.error('Failed to load attachment icon:', error);
                 attachmentIconText.value = null;
             }
         });
@@ -261,7 +315,6 @@ export default {
                     removeIconText.value = await getIcon(props.removeIcon);
                 }
             } catch (error) {
-                console.error('Failed to load remove icon:', error);
                 removeIconText.value = null;
             }
         });
@@ -279,6 +332,35 @@ export default {
         });
 
         const canSend = computed(() => inputValue.value.trim().length > 0 || props.pendingAttachments.length > 0);
+        const isUiDisabled = computed(() => props.isDisabled || isEditing.value);
+
+        const alignItemsCss = computed(() => {
+            if (props.actionAlign === 'start') return 'flex-start';
+            if (props.actionAlign === 'center') return 'center';
+            return 'flex-end';
+        });
+
+        const sendButtonStyle = computed(() => ({
+            color: props.sendIconColor,
+            background: props.sendButtonBgColor,
+            border: props.sendButtonBorder,
+            borderRadius: props.sendButtonBorderRadius,
+            width: props.sendButtonSize,
+            height: props.sendButtonSize,
+            boxShadow: props.sendButtonBoxShadow,
+            '--btn-hover-bg': props.sendButtonHoverBgColor,
+        }));
+
+        const attachmentButtonStyle = computed(() => ({
+            color: props.attachmentIconColor,
+            background: props.attachmentButtonBgColor,
+            border: props.attachmentButtonBorder,
+            borderRadius: props.attachmentButtonBorderRadius,
+            width: props.attachmentButtonSize,
+            height: props.attachmentButtonSize,
+            boxShadow: props.attachmentButtonBoxShadow,
+            '--btn-hover-bg': props.attachmentButtonHoverBgColor,
+        }));
 
         watch(
             () => props.modelValue,
@@ -292,13 +374,8 @@ export default {
         });
 
         const resizeTextarea = () => {
-            const textarea = textareaRef.value;
-            if (!textarea) return;
-
-            textarea.style.height = 'auto';
-
-            const newHeight = Math.min(textarea.scrollHeight, parseInt(props.inputMaxHeight));
-            textarea.style.height = `${newHeight}px`;
+            // No longer needed since we use fixed height
+            // The textarea will maintain its fixed height
         };
 
         const onEnterPress = event => {
@@ -306,9 +383,8 @@ export default {
 
             if (!event.shiftKey && canSend.value && !props.isDisabled) {
                 sendMessage();
-            } else if (event.shiftKey) {
-                nextTick(resizeTextarea);
             }
+            // Note: Shift+Enter still works for new lines, just without resizing
         };
 
         const sendMessage = () => {
@@ -316,10 +392,6 @@ export default {
 
             emit('send');
             inputValue.value = '';
-
-            if (textareaRef.value) {
-                textareaRef.value.style.height = 'auto';
-            }
         };
 
         const handleAttachment = event => {
@@ -337,6 +409,11 @@ export default {
             emit('remove-attachment', index);
         };
 
+        const onPendingAttachmentClick = (attachment, index) => {
+            if (props.isDisabled) return;
+            emit('pending-attachment-click', { attachment, index });
+        };
+
         const isImageFile = attachment => {
             if (!attachment.type) return false;
             return attachment.type.startsWith('image/');
@@ -350,24 +427,29 @@ export default {
             return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${sizes[i]}`;
         };
 
-        return {
-            textareaRef,
-            inputValue,
-            canSend,
-            sendIconHtml,
-            attachmentIconHtml,
-            removeIconHtml,
-            inputAreaStyles: computed(() => ({
-                borderTop: props.inputBorder,
-            })),
+            return {
+                textareaRef,
+                inputValue,
+                canSend,
+                isUiDisabled,
+                sendIconHtml,
+                attachmentIconHtml,
+                removeIconHtml,
+                alignItemsCss,
+                sendButtonStyle,
+                attachmentButtonStyle,
+                inputAreaStyles: computed(() => ({
+                    borderTop: props.inputAreaBorder,
+                })),
             inputStyles: computed(() => ({
                 backgroundColor: props.inputBgColor,
                 color: props.inputTextColor,
-                border: props.inputBorder,
                 '--placeholder-color': props.inputPlaceholderColor,
-                maxHeight: props.inputMaxHeight,
-                minHeight: props.inputMinHeight,
+                height: props.inputHeight,
                 borderRadius: props.inputBorderRadius,
+                '--textarea-border': props.textareaBorder,
+                '--textarea-border-hover': props.textareaBorderHover,
+                '--textarea-border-focus': props.textareaBorderFocus,
             })),
             iconBtnStyles: computed(() => ({
                 color: props.inputTextColor,
@@ -375,11 +457,12 @@ export default {
             })),
             isImageFile,
             formatFileSize,
-            resizeTextarea,
+
             onEnterPress,
             sendMessage,
             handleAttachment,
             removeAttachment,
+            onPendingAttachmentClick,
         };
     },
 };
@@ -389,29 +472,35 @@ export default {
 .ww-chat-input-area {
     display: flex;
     flex-direction: column;
-    padding: 12px 16px;
-    gap: 8px;
-    border-top: v-bind('inputBorder');
+    padding: 16px 20px;
+    gap: 12px;
+    border-top: v-bind('inputAreaBorder');
     width: 100%;
     flex-shrink: 0;
     background-color: v-bind('inputBgColor');
     position: relative;
+    box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.06);
 
     &__input-row {
         display: flex;
         align-items: flex-end;
-        gap: 8px;
+        gap: 12px;
         width: 100%;
     }
 
     &__attachments {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 8px;
+        gap: 10px;
+        margin-bottom: 4px;
         max-height: 120px;
-        overflow-y: auto;
-        padding: 4px;
+        /* Hide scrollbar by default; show when focused for multiline */
+        overflow-y: hidden;
+        padding: 6px;
+        border-radius: 12px;
+        background-color: rgba(0, 0, 0, 0.02);
+        position: relative;
+        z-index: 2;
     }
 
     &__attachment {
@@ -419,46 +508,122 @@ export default {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-radius: 16px;
-        background-color: rgba(0, 0, 0, 0.05);
-        padding: 4px 4px 4px 4px;
-        height: 28px;
-        max-width: 200px;
+        border-radius: 12px;
+        background-color: #f8fafc;
+        padding: 8px 10px;
+        max-width: 220px;
         flex-shrink: 0;
-        border: 1px solid rgba(0, 0, 0, 0.08);
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+        gap: 8px;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+    }
+
+    &__attachment-file {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__attachment-info {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        flex: 1;
     }
 
     &__attachment-name {
-        display: block;
-        font-size: 0.75rem;
+        font-size: 0.8125rem;
+        font-weight: 600;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 150px;
+        line-height: 1.3;
+        color: #334155;
+    }
+
+    &__attachment-size {
+        font-size: 0.75rem;
+        opacity: 0.65;
+        line-height: 1.2;
+        color: #64748b;
+        font-weight: 500;
     }
 
     &__attachment-icon {
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-right: 6px;
-        color: var(--ww-color-content-secondary, #64748b);
+        color: #64748b;
+        flex-shrink: 0;
+        width: 18px;
+        height: 18px;
+        border-radius: 4px;
+        background-color: #f1f5f9;
+    }
+
+    &__attachment-remove {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 2px solid #ffffff;
+        background: linear-gradient(135deg, #f87171, #ef4444);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        color: white;
+
+        &:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
     }
 
     &__attachment-btn {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
         cursor: pointer;
-        transition: background-color 0.2s;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         flex-shrink: 0;
+        align-self: auto;
 
         &:hover {
-            background-color: rgba(0, 0, 0, 0.05);
+            background: var(--btn-hover-bg, #f1f5f9);
+            transform: translateY(-1px);
+            box-shadow: var(--btn-hover-shadow, 0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        &--disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+            box-shadow: none;
+            transform: none;
+        }
+
+        &:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
     }
 
@@ -484,34 +649,59 @@ export default {
     &__input-container {
         position: relative;
         flex: 1;
+        align-self: flex-end;
+        display: flex;
+        align-items: flex-end;
     }
 
     &__input {
         width: 100%;
         resize: none;
-        min-height: v-bind('inputMinHeight');
-        max-height: v-bind('inputMaxHeight');
-        padding: 8px 12px;
+        height: v-bind('inputHeight');
+        /* Center a single text line vertically based on height and line-height */
+        padding: calc((v-bind('inputHeight') - 1.5em) / 2) 16px;
         border-radius: v-bind('inputBorderRadius');
-        font-size: 0.9375rem;
-        line-height: 1.4;
+        font-size: v-bind('inputFontSize');
+        font-weight: v-bind('inputFontWeight');
+        font-family: v-bind('inputFontFamily');
+        line-height: 1.5;
         overflow-y: auto;
-        transition: border-color 0.2s;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         background-color: v-bind('inputBgColor');
         color: v-bind('inputTextColor');
-        border: v-bind('inputBorder');
+        border: var(--textarea-border);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        vertical-align: bottom;
+        align-self: flex-end;
+        margin: 0;
+
+        &::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
 
         &::placeholder {
             color: v-bind('inputPlaceholderColor');
+            font-weight: 400;
+        }
+
+        &:hover {
+            border: var(--textarea-border-hover);
         }
 
         &:focus {
             outline: none;
+            border: var(--textarea-border-focus);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
         }
 
         &:disabled {
-            opacity: 0.7;
+            opacity: 0.6;
             cursor: not-allowed;
+            background-color: #f8fafc;
         }
     }
 
@@ -519,22 +709,35 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
         border: none;
-        background: transparent;
         cursor: pointer;
-        transition: background-color 0.2s;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         flex-shrink: 0;
+        align-self: auto;
 
         &:hover:not(:disabled) {
-            background-color: rgba(0, 0, 0, 0.05);
+            background: var(--btn-hover-bg, linear-gradient(135deg, #2563eb, #1d4ed8));
+            transform: translateY(-1px);
+            box-shadow: var(--btn-hover-shadow, 0 4px 8px rgba(59, 130, 246, 0.4));
+        }
+
+        &:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
         }
 
         &:disabled {
             cursor: not-allowed;
-            opacity: 0.5;
+            opacity: 0.4;
+            background: #94a3b8;
+            box-shadow: none;
+            transform: none;
+        }
+
+        &--disabled {
+            background: #e2e8f0;
+            color: #94a3b8;
+            box-shadow: none;
         }
     }
 }

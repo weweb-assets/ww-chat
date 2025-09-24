@@ -1,249 +1,169 @@
 ---
 name: ww-chat
-description: A comprehensive chat interface component with customizable styling, user details, and support for messages and attachments.
-keywords:
-    - chat
-    - messaging
-    - conversation
-    - communication
-    - interface
+description: Configurable chat interface with optional header, always-present message area, and an input supporting attachments and events.
+keywords: [chat, messaging, conversation, interface]
 ---
 
-#### Chat Component
+#### ww-chat
 
-Container Properties:
+***Purpose:***
+Unified chat UI: optional header (via `displayHeader`), always-present messages area, and a message input with send/attachment actions. Supports custom styles, mappings, and interaction events.
 
--   `backgroundColor`: `string` - Background color of the chat container. Default: `#f5f7fb`
--   `containerBorder`: `string` - Border of the chat container. Default: `1px solid #e2e8f0`
--   `containerBorderRadius`: `string` - Border radius of the chat container. Default: `8px`
--   `containerShadow`: `string` - Box shadow of the chat container. Default: `0 2px 8px rgba(0, 0, 0, 0.05)`
--   `fontFamily`: `string` - Font family used throughout the chat. Default: `inherit`
+***Properties:***
+- fontFamily: string – Global font family. Example: 'Inter, sans-serif'
+- displayHeader: boolean – Toggle header visibility. Example: true
+- messages: array – Conversation data. Example: [{ id, text, senderId, timestamp, attachments? }]
+- participants: array – [{ id, name?, avatar?, location?, status?, isCurrentUser? }]
+- allowAttachments: boolean – Enable file attachments. Example: true
+- disabled: boolean – Disable input/actions. Example: false
+- autoScrollBehavior: 'auto'|'smooth' – Scroll mode for new messages. Example: 'auto'
+- groupChatAvatar: string – URL for a custom group chat avatar image. Example: 'https://.../group.png'
 
-Header Style Properties:
+- headerBgColor: string – Header background. Example: '#ffffff'
+- headerTextColor: string – Header text color. Example: '#1e293b'
+- headerBorder: string – Header bottom border. Example: '1px solid #e2e8f0'
+- headerPadding: string – Header padding. Example: '12px 16px'
+- headerNameFontSize: string – Header name size. Example: '1rem'
+- headerNameFontWeight: string – Header name weight. Example: '600'
+- headerLocationFontSize: string – Header location size. Example: '0.875rem'
+- headerLocationOpacity: number – Location opacity. Example: 0.7
+- headerCloseButtonColor: string – Close icon color. Example: '#64748b'
+- headerCloseButtonBgHover: string – Close hover bg. Example: 'rgba(0,0,0,.05)'
+- headerShowCloseButton: boolean – Show the header close button. Example: true
+- groupChatAvatarColor: string – Background color for group avatar initials. Example: '#4f46e5'
 
--   `displayHeader`: `boolean` - Whether to display the chat header. Default: `true`
--   `headerBgColor`: `string` - Background color of the chat header. Default: `#ffffff`
--   `headerTextColor`: `string` - Text color in the chat header. Default: `#1e293b`
--   `headerBorder`: `string` - Border of the chat header. Default: `1px solid #e2e8f0`
--   `headerBoxShadow`: `string` - Box shadow of the chat header. Default: `0 1px 2px rgba(0, 0, 0, 0.05)`
--   `headerPadding`: `string` - Padding of the chat header. Default: `12px 16px`
--   `headerNameFontSize`: `string` - Font size of the user name in header. Default: `1rem`
--   `headerNameFontWeight`: `string` - Font weight of the user name in header. Default: `600`
--   `headerLocationFontSize`: `string` - Font size of the location text in header. Default: `0.875rem`
--   `headerLocationOpacity`: `number` - Opacity of the location text in header. Default: `0.7`
--   `headerCloseButtonColor`: `string` - Color of the close button (leave empty to inherit). Default: ``
--   `headerCloseButtonBgHover`: `string` - Background color of the close button on hover. Default: `rgba(0, 0, 0, 0.05)`
+- messagesAreaBgColor: string – Messages area background. Example: '#ffffff'
+- messagesAreaPadding: string – Messages area padding. Example: '16px'
+- messagesAttachmentThumbMaxWidth: string – Max width for image attachment thumbnails in messages. Example: '220px'
+- messagesAttachmentThumbMaxHeight: string – Max height for image attachment thumbnails in messages. Example: '160px'
+ - messagesAttachmentThumbBorderRadius: string – Border radius of image thumbnails. Example: '6px'
 
-Messages Area Properties:
+- messageBgColor: string – Others’ message bg. Example: '#f1f5f9'
+- messageTextColor: string – Others’ message text. Example: '#334155'
+- messageBorder: string – Others’ message border. Example: '1px solid #e2e8f0'
+- messageRadius: string – Others’ border radius. Example: '18px'
+- messageFontSize: string – Others’ font size. Example: '0.9375rem'
+- messageFontWeight: string – Others’ font weight. Example: '400'
+- messageFontFamily: string – Others’ font family. Example: 'inherit'
 
--   `messagesAreaBgColor`: `string` - Background color of the messages area. Default: `#ffffff`
--   `messagesAreaPadding`: `string` - Padding inside the messages area. Default: `16px`
--   `messagesAreaHeight`: `string` - Height of the messages area. Use 'auto' to fill available space. Default: `auto`
--   `emptyMessageText`: `string` - Text to display when there are no messages. Default: `No messages yet`
--   `emptyMessageColor`: `string` - Color of the empty message text. Default: `#64748b`
+- ownMessageBgColor: string – Own message bg. Example: 'linear-gradient(135deg, #3b82f6, #2563eb)'
+- ownMessageTextColor: string – Own message text. Example: '#ffffff'
+- ownMessageBorder: string – Own message border. Example: 'none'
+- ownMessageRadius: string – Own border radius. Example: '18px'
+- ownMessageFontSize: string – Own font size. Example: '0.9375rem'
+- ownMessageFontWeight: string – Own font weight. Example: '400'
+- ownMessageFontFamily: string – Own font family. Example: 'inherit'
 
-Date Separator Properties:
+- dateSeparatorTextColor: string – Date text color. Example: '#64748b'
+- dateSeparatorLineColor: string – Date line color. Example: '#e2e8f0'
+- dateSeparatorBgColor: string – Date bg. Example: '#ffffff'
+- dateSeparatorBorderRadius: string – Date radius. Example: '8px'
 
--   `dateSeparatorTextColor`: `string` - Text color of the date separator. Default: `#64748b`
--   `dateSeparatorLineColor`: `string` - Color of the date separator divider line. Default: `#e2e8f0`
--   `dateSeparatorBgColor`: `string` - Background color behind the date text. Default: `#ffffff`
--   `dateSeparatorBorderRadius`: `string` - Border radius of the date separator. Default: `4px`
+- inputBgColor: string – Input area container bg. Example: '#ffffff'
+- inputAreaBorder: string – Input area top border. Example: '1px solid #e2e8f0'
+- textareaBorder: string – Textarea border. Example: '1px solid #e2e8f0'
+- textareaBorderHover: string – Textarea hover border. Example: '1px solid #cbd5e1'
+- textareaBorderFocus: string – Textarea focus border. Example: '1px solid #3b82f6'
+- inputTextColor: string – Textarea text color. Example: '#334155'
+- inputFontSize: string – Textarea font size. Example: '0.875rem'
+- inputFontWeight: string – Textarea font weight. Example: '400'
+- inputFontFamily: string – Textarea font family. Example: 'inherit'
+- inputPlaceholderColor: string – Placeholder color. Example: '#94a3b8'
+- inputHeight: string – Textarea height. Example: '38px'
+- inputBorderRadius: string – Textarea radius. Example: '20px'
+- inputPlaceholder: string – Placeholder text. Example: 'Type a message...'
+- inputActionAlign: 'start'|'center'|'end' – Vertical alignment of action buttons. Example: 'end'
 
-Message Style Properties:
+- sendIcon: string – Send icon name. Example: 'send'
+- sendIconColor: string – Send icon color. Example: '#334155'
+- sendIconSize: string – Send icon size. Example: '20px'
+- attachmentIcon: string – Attachment icon name. Example: 'paperclip'
+- attachmentIconColor: string – Attachment icon color. Example: '#334155'
+- attachmentIconSize: string – Attachment icon size. Example: '20px'
+- removeIcon: string – Remove icon name. Example: 'x'
+- removeIconColor: string – Remove icon color. Example: '#f43f5e'
+- removeIconSize: string – Remove icon size. Example: '12px'
 
--   `messageBgColor`: `string` - Background color of messages from others. Default: `#f1f5f9`
--   `messageTextColor`: `string` - Text color of messages from others. Default: `#334155`
--   `messageBorder`: `string` - Border of messages from others. Default: `1px solid #e2e8f0`
--   `ownMessageBgColor`: `string` - Background color of your own messages. Default: `#dbeafe`
--   `ownMessageTextColor`: `string` - Text color of your own messages. Default: `#1e40af`
--   `ownMessageBorder`: `string` - Border of your own messages. Default: `1px solid #bfdbfe`
+***Notes (thumbnails):***
+- Applies to image attachments displayed inside message bubbles; non-image file chips keep their current layout.
+- Defaults preserve existing behavior: width 250px, height 200px.
+- CSS variables for advanced theming: `--ww-chat-attachment-thumb-max-width`, `--ww-chat-attachment-thumb-max-height`.
+  Also: `--ww-chat-attachment-thumb-radius`.
 
-Input Area Properties:
+- sendButtonBgColor: string – Send button bg/gradient. Example: 'linear-gradient(135deg, #3b82f6, #2563eb)'
+- sendButtonHoverBgColor: string – Send button hover bg. Example: 'linear-gradient(135deg, #2563eb, #1d4ed8)'
+- sendButtonBorder: string – Send button border. Example: 'none'
+- sendButtonBorderRadius: string – Send button radius. Example: '12px'
+- sendButtonSize: string – Send button size. Example: '42px'
+- sendButtonBoxShadow: string – Send button shadow. Example: '0 2px 4px rgba(59,130,246,.3)'
+- attachmentButtonBgColor: string – Attachment button bg. Example: '#f8fafc'
+- attachmentButtonHoverBgColor: string – Attachment button hover bg. Example: '#f1f5f9'
+- attachmentButtonBorder: string – Attachment button border. Example: '1px solid #e2e8f0'
+- attachmentButtonBorderRadius: string – Attachment button radius. Example: '12px'
+- attachmentButtonSize: string – Attachment button size. Example: '42px'
+- attachmentButtonBoxShadow: string – Attachment button shadow. Example: '0 1px 2px rgba(0,0,0,.06)'
 
--   `inputBgColor`: `string` - Background color of the message input. Default: `#ffffff`
--   `inputTextColor`: `string` - Text color of the message input. Default: `#334155`
--   `inputPlaceholderColor`: `string` - Placeholder text color in the message input. Default: `#94a3b8`
--   `inputBorder`: `string` - Border of the message input. Default: `1px solid #e2e8f0`
--   `inputMaxHeight`: `string` - Maximum height of the input area before scrolling. Default: `120px`
--   `inputMinHeight`: `string` - Minimum height of the input area. Default: `38px`
--   `inputBorderRadius`: `string` - Border radius of the input field. Default: `20px`
--   `inputPlaceholder`: `string` - Placeholder text for the message input. Default: `Type a message...`
+- emptyMessageText: string – Text when no messages. Example: 'No messages yet'
+- emptyMessageColor: string – Empty state color. Example: '#64748b'
 
-Icon Properties:
+- locale: string – Date-fns locale key. Example: 'enUS'
+- timeFormat: string – Time display format. Example: 'h:mm a'
+- todayText: string – Label for today. Example: 'Today'
+- yesterdayText: string – Label for yesterday. Example: 'Yesterday'
+- justNowText: string – Label for recent time. Example: 'just now'
 
--   `sendIcon`: `string` - Icon for the send button. Default: `send`
--   `sendIconColor`: `string` - Color of the send button icon. Default: `#334155`
--   `sendIconSize`: `string` - Size of the send button icon. Default: `20px`
--   `attachmentIcon`: `string` - Icon for the attachment button. Default: `paperclip`
--   `attachmentIconColor`: `string` - Color of the attachment button icon. Default: `#334155`
--   `attachmentIconSize`: `string` - Size of the attachment button icon. Default: `20px`
--   `removeIcon`: `string` - Icon for the remove attachment button. Default: `x`
--   `removeIconColor`: `string` - Color of the remove attachment button icon. Default: `#f43f5e`
--   `removeIconSize`: `string` - Size of the remove attachment button icon. Default: `16px`
+- mappingMessageId: Formula – Extract message id. Default: context.mapping?.['id']
+- mappingMessageText: Formula – Extract text. Default: context.mapping?.['text']
+- mappingSenderId: Formula – Extract sender id. Default: context.mapping?.['senderId']
+- mappingTimestamp: Formula – Extract timestamp. Default: context.mapping?.['timestamp']
+- mappingAttachments: Formula – Extract attachments. Default: context.mapping?.['attachments']
 
-User Properties:
+Attachments Data (visible only when Attachments mapping is set):
+- mappingAttachmentId: Formula – Attachment id. Example: context.mapping?.['id']
+- mappingAttachmentName: Formula – Attachment name. Example: context.mapping?.['name']
+- mappingAttachmentUrl: Formula – Attachment URL. Example: context.mapping?.['url'] ?? context.mapping?.['href']
+- mappingAttachmentType: Formula – Attachment MIME type. Example: context.mapping?.['type'] ?? context.mapping?.['mime']
+- mappingAttachmentSize: Formula – Attachment size in bytes. Example: context.mapping?.['size'] ?? context.mapping?.['length']
+- mappingParticipantId: Formula – Extract participant id.
+- mappingParticipantName: Formula – Extract participant name.
+- mappingParticipantAvatar: Formula – Extract avatar url.
+- mappingParticipantLocation: Formula – Extract location.
+- mappingParticipantStatus: Formula – Extract status.
+- mappingIsCurrentUser: Formula – Extract isCurrentUser.
 
--   `userName`: `string` - Name to display for the current user. Default: `User`
--   `userAvatar`: `string` - URL of the user avatar image (initials will be used if empty). Default: ``
--   `userLocation`: `string` - Location to display under the user name (optional). Default: ``
--   `userStatus`: `string` - Current status of the user. Options: `online`, `offline`, `away`, `busy`. Default: `online`
--   `currentUserId`: `string` - Unique identifier for the current user (used to identify your messages). Default: `current-user`
--   `showSelfInHeader`: `boolean` - If enabled, shows the current user in the header instead of the chat partner. Default: `false`
+***Context data (only accessible to this element and its children):***
+- context.local.data?.['chat']?.['messages'] – Normalized messages with display info.
+- context.local.data?.['chat']?.['conversation'] – Conversation metadata (type, participants, counts).
+- context.local.data?.['chat']?.['currentUser'] – Current user info.
+- context.local.data?.['chat']?.['utils'] – State: messageCount, isDisabled, allowAttachments, displayHeader.
 
-Chat Settings:
+***Exposed Variables:***
+- chatState: Full chat state (messages, conversation, currentUser, utils). Path: variables['<current_element_uid>-chatState']
 
--   `groupChatTemplate`: `string` - Template for group chat header text. Use {count} as placeholder for number of participants. Default: `Group Chat ({count} participants)`
--   `allowAttachments`: `boolean` - Whether to allow file attachments. Default: `false`
--   `disabled`: `boolean` - Whether the chat component is disabled. Default: `false`
+***Events:***
+– messageSent: Triggered when the user sends a message. Payload: { message }
+- messageReceived: Triggered when a new message appears in `messages` from another sender. Payload: { message }
+- messageRightClick: Triggered on right-click on a message. Payload: { message, position }
+  - position.elementX / position.elementY: coordinates relative to the chat container
+  - position.viewportX / position.viewportY: coordinates relative to the page top-left
+- attachmentClick: Triggered when a message attachment is clicked. Payload: { attachment }
+- pendingAttachmentClick: Triggered when a pending (unsent) attachment in the input area is clicked. Payload: { attachment, index } where `attachment` is a File object.
+- close: Triggered when the header close button is clicked. Payload: {}
 
-Localization Properties:
+***Exposed Element Actions:***
+- scrollToBottom: (smooth?: boolean) Scroll to the latest message; uses `autoScrollBehavior` when arg omitted.
 
--   `locale`: `string` - Locale code for date/time formatting. Supports over 40 languages and regional variants including:
-    -   English (US, UK, Canada, Australia, New Zealand, Ireland, India, South Africa)
-    -   French (France, Canada, Switzerland)
-    -   German (Germany, Austria)
-    -   Spanish
-    -   Italian (Italy, Switzerland)
-    -   Portuguese (Portugal, Brazil)
-    -   Russian
-    -   Japanese (including Hiragana)
-    -   Chinese (Simplified, Hong Kong, Taiwan)
-    -   Korean
-    -   Arabic (multiple variants)
-    -   Hindi, Bengali
-    -   And many more European and Asian languages.
-        Default: `enUS`
--   `timeFormat`: `string` - Format for time display using date-fns format pattern. Default: `h:mm a`
--   `todayText`: `string` - Text to display for today's date. Default: `Today`
--   `yesterdayText`: `string` - Text to display for yesterday's date. Default: `Yesterday`
--   `justNowText`: `string` - Text to display for very recent messages. Default: `just now`
+***Notes:***
+- Attachment id is optional; the renderer falls back to the array index when no id is provided.
+- Event payload shapes:
+  - messageSent: attachments is an array of File objects (local uploads only). No id/url are included since File already carries name/type/size.
+  - messageReceived: attachments are metadata objects (id, name, url, type, size) suitable for rendering remote assets.
+- IMPORTANT: Do NOT add a custom message input. The component already includes a built-in input area with textarea, send button, and attachment support. Adding another input leads to duplicated UI and broken events.
+- Messages area is always rendered; the header is controlled by `displayHeader`.
+- Enter sends; Shift+Enter inserts a newline.
+- Attachment File objects may not be visible in some inspectors; you can still read file.name, file.type, and file.size.
 
-Chat Data:
-
--   `chatHistory`: `array` - Array of message objects for the chat history. Each message contains:
-    -   `id`: `string` - Unique identifier for the message
-    -   `text`: `string` - Message text content
-    -   `senderId`: `string` - ID of the message sender
-    -   `userName`: `string` - Display name of the message sender
-    -   `timestamp`: `string` - ISO timestamp of when the message was sent
-    -   `attachments`: `array` (optional) - Array of attachment objects
-    -   `avatar` or `avatarUrl`: `string` (optional) - URL of sender's avatar image
-
-Message Data Mapping:
-
--   `mappingMessageId`: `Formula` - Formula to extract message ID from your data. Default: `context.mapping?.['id']`
--   `mappingMessageText`: `Formula` - Formula to extract message text from your data. Default: `context.mapping?.['text']`
--   `mappingSenderId`: `Formula` - Formula to extract sender ID from your data. Default: `context.mapping?.['senderId']`
--   `mappingUserName`: `Formula` - Formula to extract user name from your data. Default: `context.mapping?.['userName']`
--   `mappingTimestamp`: `Formula` - Formula to extract timestamp from your data. Default: `context.mapping?.['timestamp']`
--   `mappingAttachments`: `Formula` - Formula to extract attachments from your data. Default: `context.mapping?.['attachments']`
-
-Events:
-
--   `messageSent`: {message: messageObject} - Triggered when a new message is sent
--   `messageReceived`: {message: messageObject} - Triggered when a new message is received from someone else
--   `messageRightClick`: {message: messageObject, position: {x, y}} - Triggered when a message is right-clicked
--   `attachmentClick`: {attachment: attachmentObject} - Triggered when an attachment is clicked
--   `close`: {} - Triggered when the close button in the header is clicked
-
-Actions:
-
--   `scrollToBottom`: Scrolls the message area to the bottom. Args: `smooth` (boolean, optional) - Whether to use smooth scrolling animation. Default: `false`
--   `clearMessages`: Clears all messages from the chat history
--   `addMessage`: Adds a new message to the chat. Args: message (object with text, senderId, and userName properties)
-
-Variables:
-
--   `chatHistory`: array - The full conversation history as an array of message objects
-
-Special Features:
-
--   User status indicator (online, offline, away, busy)
--   Chat partner detection that automatically updates the header based on conversation participants
--   Group chat support with customizable display template and participant count
--   Message grouping by sender
--   Date separators with "Today", "Yesterday", or date labels, fully customizable
--   Empty message state with customizable text and styling
--   File attachments with image preview support
--   Auto-scrolling to latest messages
--   Context menu support via right-click events on messages
--   Responsive input that expands as user types
--   Shift+Enter support for multiline messages
--   Customizable styling for all elements
--   Formula-based data mapping for flexible message structure
-
-Important Implementation Notes:
-
--   The chat component is designed for real-time messaging but doesn't include built-in socket connections
--   For large chat histories, consider pagination or virtual scrolling
--   The component uses reactive Vue 3 styling with v-bind for dynamic property updates
--   All styling properties are bindable for dynamic theming
--   The header will automatically display the chat partner's information based on message history
--   Right-click events provide coordinates for showing custom context menus at the correct position
--   Responsive design adapts to container size but may need additional styling for small screens
-
-Example Basic Implementation:
-
-```json
-{
-    "tag": "ww-chat",
-    "content": {
-        "userName": "John Doe",
-        "userStatus": "online",
-        "currentUserId": "john-doe",
-        "displayHeader": true,
-        "allowAttachments": true,
-        "chatHistory": [
-            {
-                "id": "msg-1",
-                "text": "Hello there! Welcome to our support chat.",
-                "senderId": "support-agent",
-                "userName": "Support Agent",
-                "timestamp": "2023-06-01T11:15:00.000Z"
-            }
-        ]
-    }
-}
-```
-
-Example Styled Implementation:
-
-```json
-{
-    "tag": "ww-chat",
-    "content": {
-        "userName": "John Doe",
-        "userAvatar": "https://example.com/avatars/john.jpg",
-        "userStatus": "online",
-        "currentUserId": "john-doe",
-        "backgroundColor": "#f0f4f8",
-        "containerBorder": "1px solid #d0d7de",
-        "containerBorderRadius": "12px",
-        "messageBgColor": "#ffffff",
-        "messageTextColor": "#24292f",
-        "messageBorder": "1px solid #d0d7de",
-        "ownMessageBgColor": "#ddf4ff",
-        "ownMessageTextColor": "#0969da",
-        "ownMessageBorder": "1px solid #54aeff",
-        "emptyMessageText": "No conversations yet. Start chatting!",
-        "emptyMessageColor": "#6e7781",
-        "dateSeparatorTextColor": "#57606a",
-        "dateSeparatorLineColor": "#d0d7de",
-        "dateSeparatorBgColor": "#f0f4f8",
-        "dateSeparatorBorderRadius": "12px",
-        "inputBgColor": "#ffffff",
-        "inputTextColor": "#24292f",
-        "inputBorder": "1px solid #d0d7de"
-    }
-}
-```
-
-Troubleshooting:
-
--   **Messages showing incorrect sender:** Check that `currentUserId` matches the `senderId` in your messages
--   **Attachments not working:** Ensure `allowAttachments` is set to `true` and file URLs are accessible
--   **Chat not scrolling to bottom:** Call `scrollToBottom` action after programmatically adding messages
--   **User avatar not displaying:** Verify the avatar URL is valid (initials will be shown as fallback)
--   **Right-click event not firing:** Make sure the component is not in editing mode
--   **Group chat header not showing correctly:** Check that you have messages from multiple different senders
--   **messageReceived event not triggering:** Verify that the incoming message has a different senderId than currentUserId
+***Example***:
+<elements>
+{"uid":"0","tag":"ww-chat","settings":{},"props":{"default":{"locale":"enUS","disabled":false,"messages":{"js":"return collections['07a4f487-4af6-4fb8-9c00-116cb5cba5de']?.['data']"},"sendIcon":"lucide/alarm-clock-check","userName":{"defaultValue":"User","js":"return wwFormulas.lookup(variables['fc812afb-c75d-4494-ad68-5053345dcff1-value'],collections['e59a6d10-891b-49ab-8fa5-89a5082620a6']?.['data'],\"user_id\").full_name"},"todayText":"Today","fontFamily":"inherit","removeIcon":"lucide/album","timeFormat":"h:mm a","userAvatar":{"defaultValue":"","js":"return wwFormulas.lookup(variables['fc812afb-c75d-4494-ad68-5053345dcff1-value'],collections['e59a6d10-891b-49ab-8fa5-89a5082620a6']?.['data'],\"user_id\").avatar_url"},"userStatus":{"defaultValue":"online","js":"return wwFormulas.lookup(variables['fc812afb-c75d-4494-ad68-5053345dcff1-value'],collections['e59a6d10-891b-49ab-8fa5-89a5082620a6']?.['data'],\"user_id\").about"},"chatHistory":{"filter":{"link":"$or","conditions":[]},"defaultValue":[{"id":"msg-1","text":"Hello there!","senderId":"user-1","userName":"John Doe","timestamp":"2025-08-29T08:11:48.015Z","attachments":[]}],"js":"return collections['07a4f487-4af6-4fb8-9c00-116cb5cba5de']?.['data']"},"inputHeight":"60px","justNowText":"just now","headerBorder":"1px solid #e2e8f0","inputBgColor":"#ffffff","participants":{"js":"return collections['e59a6d10-891b-49ab-8fa5-89a5082620a6']?.['data']"},"sendIconSize":"47px","userLocation":{"defaultValue":"","js":"return wwFormulas.lookup(variables['fc812afb-c75d-4494-ad68-5053345dcff1-value'],collections['e59a6d10-891b-49ab-8fa5-89a5082620a6']?.['data'],\"user_id\").location"},"currentUserId":{"defaultValue":"user-1","js":"return variables['fc812afb-c75d-4494-ad68-5053345dcff1-value']"},"displayHeader":true,"groupChatText":"","headerBgColor":"#f0f7ff","headerPadding":"12px 16px","inputFontSize":"0.875rem","messageBorder":"1px solid #e2e8f0","messageRadius":"0px 6px 6px 12px","sendIconColor":"#7105FF","yesterdayText":"Yesterday","attachmentIcon":"paperclip","inputTextColor":"#334155","messageBgColor":"#f1f5f9","removeIconSize":"16px","textareaBorder":"1px solid #e2e8f0","headerTextColor":"#1e293b","inputAreaBorder":"1px solid #e2e8f0","inputFontFamily":"inherit","inputFontWeight":"400","mappingSenderId":{"js":"return context.mapping?.['user_id']"},"mappingUserName":{"js":"return wwFormulas.lookup(context.mapping?.['user_id'],collections['e59a6d10-891b-49ab-8fa5-89a5082620a6']?.['data'],\"user_id\").full_name"},"messageFontSize":"0.875rem","removeIconColor":"#334155","allowAttachments":true,"emptyMessageText":"No messages yet","mappingMessageId":{"js":"return context.mapping?.['id']"},"mappingTimestamp":{"js":"return context.mapping?.['send_at']"},"messageTextColor":"#334155","ownMessageBorder":"1px solid #bfdbfe","ownMessageRadius":"6px 0px 6px 6px","showSelfInHeader":false,"emptyMessageColor":"#64748b","inputBorderRadius":"20px","messageFontFamily":"inherit","messageFontWeight":"400","ownMessageBgColor":"#dbeafe","attachmentIconSize":"20px","autoScrollBehavior":"smooth","headerNameFontSize":"1rem","mappingAttachments":{"js":"return context.mapping?.['attachment']"},"mappingMessageText":{"js":"return context.mapping?.['message']"},"ownMessageFontSize":"0.875rem","attachmentIconColor":"#334155","messagesAreaBgColor":"#ffffff","messagesAreaPadding":"16px","ownMessageTextColor":"#1e40af","textareaBorderFocus":"1px solid #3b82f6","textareaBorderHover":"1px solid #cbd5e1","dateSeparatorBgColor":"#ffffff","headerNameFontWeight":"600","mappingIsCurrentUser":{"js":"return context.mapping?.['user_id'] == variables['fc812afb-c75d-4494-ad68-5053345dcff1-value']"},"mappingParticipantId":{"js":"return context.mapping?.['user_id']"},"ownMessageFontFamily":"inherit","ownMessageFontWeight":"400","headerLocationOpacity":0.7,"inputPlaceholderColor":"#94a3b8","dateSeparatorLineColor":"#e2e8f0","dateSeparatorTextColor":"#64748b","headerCloseButtonColor":"","headerLocationFontSize":"0.875rem","mappingParticipantName":{"js":"return context.mapping?.['full_name']"},"headerCloseButtonBgHover":"rgba(0, 0, 0, 0.05)","mappingParticipantAvatar":{"js":"return context.mapping?.['avatar_url']"},"mappingParticipantStatus":{"js":"return context.mapping?.['about']"},"dateSeparatorBorderRadius":"4px","mappingParticipantLocation":{"js":"return context.mapping?.['location']"}}},"styles":{"default":{"width":"90%","display":"block","maxHeight":"800px","minHeight":"400px"}}}
+</elements>

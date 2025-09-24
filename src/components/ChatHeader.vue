@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-        <button class="ww-chat-header__close" :style="closeButtonStyles" @click="$emit('close')">
+        <button v-if="showCloseButton" class="ww-chat-header__close" :style="closeButtonStyles" @click="$emit('close')">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -59,6 +59,11 @@ export default {
             default: 'online',
             validator: value => ['online', 'offline', 'away', 'busy'].includes(value),
         },
+        // Optional override for avatar background color when using text initials
+        avatarBgColor: {
+            type: String,
+            default: '',
+        },
         participants: {
             type: String,
             default: '',
@@ -75,10 +80,7 @@ export default {
             type: String,
             default: '1px solid #e2e8f0',
         },
-        headerBoxShadow: {
-            type: String,
-            default: '0 1px 2px rgba(0, 0, 0, 0.05)',
-        },
+
         headerPadding: {
             type: String,
             default: '12px 16px',
@@ -106,6 +108,10 @@ export default {
         closeButtonBgHover: {
             type: String,
             default: 'rgba(0, 0, 0, 0.05)',
+        },
+        showCloseButton: {
+            type: Boolean,
+            default: true,
         },
     },
     emits: ['close'],
@@ -138,7 +144,6 @@ export default {
             backgroundColor: props.headerBgColor,
             color: props.textColor,
             borderBottom: props.headerBorder,
-            boxShadow: props.headerBoxShadow,
             padding: props.headerPadding,
         }));
 
@@ -158,7 +163,7 @@ export default {
         }));
 
         const avatarStyles = computed(() => ({
-            backgroundColor: getAvatarColor(props.userName),
+            backgroundColor: props.avatarBgColor || getAvatarColor(props.userName),
             color: '#ffffff',
         }));
 
@@ -187,6 +192,8 @@ export default {
             return colors[index];
         };
 
+        const showCloseButton = computed(() => props.showCloseButton !== false);
+
         return {
             isEditing,
             userInitials,
@@ -196,6 +203,7 @@ export default {
             locationStyles,
             closeButtonStyles,
             avatarStyles,
+            showCloseButton,
         };
     },
 };
