@@ -91,83 +91,175 @@
 import { computed, inject } from 'vue';
 import { formatTime } from '../utils/dateTimeFormatter';
 
+/**
+ * @module MessageItem
+ * @description A component that displays a single message in the chat, including text, attachments, and metadata.
+ */
 export default {
     name: 'MessageItem',
     props: {
+        /**
+         * The message object to display.
+         * @type {Object}
+         */
         message: {
             type: Object,
             required: true,
         },
+        /**
+         * Whether the message is sent by the current user.
+         * @type {boolean}
+         */
         isOwnMessage: {
             type: Boolean,
             default: false,
         },
+        /**
+         * Whether the previous message has the same sender.
+         * @type {boolean}
+         */
         sameSenderAsPrevious: {
             type: Boolean,
             default: false,
         },
+        /**
+         * Whether the next message has the same sender.
+         * @type {boolean}
+         */
         sameSenderAsNext: {
             type: Boolean,
             default: false,
         },
+        /**
+         * The background color of received messages.
+         * @type {string}
+         */
         messageBgColor: {
             type: String,
             default: '#f1f5f9',
         },
+        /**
+         * The text color of received messages.
+         * @type {string}
+         */
         messageTextColor: {
             type: String,
             default: '#334155',
         },
+        /**
+         * The font size of received messages.
+         * @type {string}
+         */
         messageFontSize: {
             type: String,
             default: '0.875rem',
         },
+        /**
+         * The font weight of received messages.
+         * @type {string}
+         */
         messageFontWeight: {
             type: String,
             default: '400',
         },
+        /**
+         * The font family of received messages.
+         * @type {string}
+         */
         messageFontFamily: {
             type: String,
             default: 'inherit',
         },
+        /**
+         * The border of received messages.
+         * @type {string}
+         */
         messageBorder: {
             type: String,
             default: '1px solid #e2e8f0',
         },
+        /**
+         * The background color of sent messages.
+         * @type {string}
+         */
         ownMessageBgColor: {
             type: String,
             default: '#dbeafe',
         },
+        /**
+         * The text color of sent messages.
+         * @type {string}
+         */
         ownMessageTextColor: {
             type: String,
             default: '#1e40af',
         },
+        /**
+         * The font size of sent messages.
+         * @type {string}
+         */
         ownMessageFontSize: {
             type: String,
             default: '0.875rem',
         },
+        /**
+         * The font weight of sent messages.
+         * @type {string}
+         */
         ownMessageFontWeight: {
             type: String,
             default: '400',
         },
+        /**
+         * The font family of sent messages.
+         * @type {string}
+         */
         ownMessageFontFamily: {
             type: String,
             default: 'inherit',
         },
+        /**
+         * The border of sent messages.
+         * @type {string}
+         */
         ownMessageBorder: {
             type: String,
             default: '1px solid #bfdbfe',
         },
+        /**
+         * The border radius of received messages.
+         * @type {string}
+         */
         messageRadius: {
             type: String,
             default: '18px 18px 18px 18px',
         },
+        /**
+         * The border radius of sent messages.
+         * @type {string}
+         */
         ownMessageRadius: {
             type: String,
             default: '18px 18px 18px 18px',
         },
     },
-    emits: ['attachment-click', 'right-click'],
+    emits: [
+        /**
+         * Emitted when an attachment is clicked.
+         * @param {Object} attachment - The attachment that was clicked.
+         */
+        'attachment-click',
+        /**
+         * Emitted when a message is right-clicked.
+         * @param {Object} payload - The event payload.
+         * @param {Object} payload.message - The message that was right-clicked.
+         * @param {number} payload.elementX - The x-coordinate of the click relative to the chat root element.
+         * @param {number} payload.elementY - The y-coordinate of the click relative to the chat root element.
+         * @param {number} payload.viewportX - The x-coordinate of the click relative to the viewport.
+         * @param {number} payload.viewportY - The y-coordinate of the click relative to the viewport.
+         */
+        'right-click',
+    ],
     setup(props, { emit }) {
         const isEditing = inject(
             'isEditing',
@@ -204,11 +296,21 @@ export default {
             }
         });
 
+        /**
+         * Checks if an attachment is an image file.
+         * @param {Object} attachment - The attachment to check.
+         * @returns {boolean} True if the attachment is an image file.
+         */
         const isImageFile = attachment => {
             if (!attachment.type) return false;
             return attachment.type.startsWith('image/');
         };
 
+        /**
+         * Formats a file size in bytes into a human-readable string.
+         * @param {number} rawSize - The file size in bytes.
+         * @returns {string} The formatted file size.
+         */
         const formatFileSize = rawSize => {
             const bytes = Number(rawSize);
             if (!Number.isFinite(bytes) || bytes < 0) return '';
@@ -229,15 +331,28 @@ export default {
             }));
         });
 
+        /**
+         * Formats a timestamp into a time string.
+         * @param {Date|string|number} timestamp - The timestamp to format.
+         * @returns {string} The formatted time string.
+         */
         const formatMessageTime = timestamp => {
             return formatTime(timestamp, dateTimeOptions.value);
         };
 
+        /**
+         * Handles the click event on an attachment.
+         * @param {Object} attachment - The clicked attachment.
+         */
         const handleAttachmentClick = attachment => {
             if (isEditing.value) return;
             emit('attachment-click', attachment);
         };
 
+        /**
+         * Handles the right-click event on a message.
+         * @param {MouseEvent} event - The mouse event.
+         */
         const handleRightClick = event => {
             // Coordinates relative to the chat root element
             let elementX = 0;

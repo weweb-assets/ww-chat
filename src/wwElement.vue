@@ -162,6 +162,10 @@ import {
     uk,
 } from 'date-fns/locale';
 
+/**
+ * @module Chat
+ * @description The main chat component that orchestrates the header, message list, and input area.
+ */
 export default {
     name: 'Chat',
     components: {
@@ -170,26 +174,50 @@ export default {
         InputArea,
     },
     props: {
+        /**
+         * The content of the chat component.
+         * @type {Object}
+         */
         content: {
             type: Object,
             required: true,
         },
+        /**
+         * The state of the WeWeb editor.
+         * @type {Object}
+         */
         /* wwEditor:start */
         wwEditorState: {
             type: Object,
             required: true,
         },
         /* wwEditor:end */
+        /**
+         * The unique ID of the component.
+         * @type {string}
+         */
         uid: {
             type: String,
             required: true,
         },
+        /**
+         * The state of the WeWeb element.
+         * @type {Object}
+         */
         wwElementState: {
             type: Object,
             required: true,
         },
     },
-    emits: ['trigger-event'],
+    emits: [
+        /**
+         * Emitted when a chat event is triggered.
+         * @param {Object} payload - The event payload.
+         * @param {string} payload.name - The name of the event.
+         * @param {Object} payload.event - The event data.
+         */
+        'trigger-event',
+    ],
     setup(props, { emit }) {
         const chatRoot = ref(null);
         const messagesContainer = ref(null);
@@ -197,6 +225,12 @@ export default {
         const isScrolling = ref(false);
         const pendingAttachments = ref([]);
 
+        /**
+         * Debounces a function to limit the rate at which it gets called.
+         * @param {Function} func - The function to debounce.
+         * @param {number} delay - The number of milliseconds to delay.
+         * @returns {Function} The debounced function.
+         */
         const debounce = (func, delay) => {
             let timeoutId;
             return (...args) => {
@@ -225,6 +259,13 @@ export default {
 
         const { resolveMappingFormula } = wwLib.wwFormula.useFormula();
 
+        /**
+         * Resolves a mapping formula for a given message.
+         * @param {Object} message - The message object.
+         * @param {string} mappingFormula - The mapping formula to resolve.
+         * @param {string} defaultProp - The default property to use if the formula is not provided.
+         * @returns {*} The resolved value.
+         */
         const resolveMapping = (message, mappingFormula, defaultProp) => {
             if (!message || typeof message !== 'object') return '';
             if (!mappingFormula) return message[defaultProp];
@@ -239,7 +280,13 @@ export default {
             return false;
         });
 
-        // Participants mapping
+        /**
+         * Resolves a mapping formula for a participant object.
+         * @param {Object} obj - The participant object.
+         * @param {string} formula - The mapping formula to resolve.
+         * @param {string} fallbackKey - The default property to use if the formula is not provided.
+         * @returns {*} The resolved value.
+         */
         const resolveParticipantMapping = (obj, formula, fallbackKey) => {
             if (!obj || typeof obj !== 'object') return undefined;
             if (!formula) return obj[fallbackKey];
@@ -446,8 +493,10 @@ export default {
             { deep: true }
         );
 
-        // Removed user settings watcher and debounced updater; participants now drive user info
-
+        /**
+         * Scrolls the message container to the bottom.
+         * @param {boolean|null} smooth - Whether to use smooth scrolling.
+         */
         const scrollToBottom = async (smooth = null) => {
             await nextTick();
             if (messagesContainer.value) {
@@ -462,6 +511,9 @@ export default {
             }
         };
 
+        /**
+         * Sends a new message.
+         */
         const sendMessage = () => {
             if (isEditing.value || isDisabled.value || (!newMessage.value.trim() && pendingAttachments.value.length === 0)) return;
 
@@ -499,6 +551,10 @@ export default {
             });
         };
 
+        /**
+         * Handles the attachment of files.
+         * @param {FileList} files - The files to attach.
+         */
         const handleAttachment = files => {
             if (isEditing.value || isDisabled.value) return;
 
@@ -514,6 +570,10 @@ export default {
             pendingAttachments.value = [...pendingAttachments.value, ...attachmentFiles];
         };
 
+        /**
+         * Removes a pending attachment.
+         * @param {number} index - The index of the attachment to remove.
+         */
         const handleRemoveAttachment = index => {
             if (isEditing.value || isDisabled.value) return;
 
@@ -525,6 +585,10 @@ export default {
             pendingAttachments.value.splice(index, 1);
         };
 
+        /**
+         * Handles the click event on an attachment.
+         * @param {Object} attachment - The clicked attachment.
+         */
         const handleAttachmentClick = attachment => {
             if (isEditing.value) return;
 
@@ -534,6 +598,12 @@ export default {
             });
         };
 
+        /**
+         * Handles the click event on a pending attachment.
+         * @param {Object} payload - The event payload.
+         * @param {Object} payload.attachment - The clicked attachment.
+         * @param {number} payload.index - The index of the attachment.
+         */
         const handlePendingAttachmentClick = ({ attachment, index }) => {
             const file = attachment && attachment.file ? attachment.file : attachment;
             emit('trigger-event', {
@@ -542,6 +612,12 @@ export default {
             });
         };
 
+        /**
+         * Handles the right-click event on a message.
+         * @param {Object} payload - The event payload.
+         * @param {Object} payload.message - The message that was right-clicked.
+         * @param {Object} payload.position - The position of the click.
+         */
         const handleMessageRightClick = ({ message, position }) => {
             if (isEditing.value) return;
 
@@ -551,6 +627,9 @@ export default {
             });
         };
 
+        /**
+         * Handles the close event.
+         */
         const handleClose = () => {
             if (isEditing.value) return;
 
@@ -560,6 +639,11 @@ export default {
             });
         };
 
+        /**
+         * Adds a message to the chat.
+         * @param {Object} message - The message to add.
+         * @returns {Object} The added message.
+         */
         const addMessage = message => {
             if (isEditing.value) return;
 
@@ -804,9 +888,14 @@ export default {
             return '';
         });
 
-        // Local context functionality
         const currentLocalContext = ref({});
 
+        /**
+         * Registers the chat local context with WeWeb.
+         * @param {Object} payload - The payload to register.
+         * @param {Object} payload.data - The data to register.
+         * @param {string} payload.markdown - The markdown documentation for the data.
+         */
         const registerChatLocalContext = ({ data, markdown }) => {
             wwLib.wwElement.useRegisterElementLocalContext('chat', data, {}, markdown);
             currentLocalContext.value = { data, markdown };
@@ -1062,6 +1151,10 @@ export default {
         };
     },
     methods: {
+        /**
+         * Scrolls the message container to the bottom. This method is exposed to be called from WeWeb workflows.
+         * @param {boolean} [smooth=false] - Whether to use smooth scrolling.
+         */
         actionScrollToBottom(smooth = false) {
             this.scrollToBottom(smooth);
         },

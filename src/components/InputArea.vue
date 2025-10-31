@@ -106,130 +106,315 @@
 <script>
 import { ref, computed, watch, nextTick, onMounted, inject, watchEffect } from 'vue';
 
+/**
+ * @module InputArea
+ * @description A component for composing messages, handling text input and file attachments.
+ */
 export default {
     name: 'InputArea',
     props: {
+        /**
+         * The current value of the input field.
+         * @type {string}
+         */
         modelValue: {
             type: String,
             default: '',
         },
-        // Alignment and button styles
+        /**
+         * The alignment of the action buttons.
+         * @type {string}
+         */
         actionAlign: { type: String, default: 'end' },
+        /**
+         * The background color of the send button.
+         * @type {string}
+         */
         sendButtonBgColor: { type: String, default: 'linear-gradient(135deg, #3b82f6, #2563eb)' },
+        /**
+         * The background color of the send button when hovered.
+         * @type {string}
+         */
         sendButtonHoverBgColor: { type: String, default: 'linear-gradient(135deg, #2563eb, #1d4ed8)' },
+        /**
+         * The border of the send button.
+         * @type {string}
+         */
         sendButtonBorder: { type: String, default: 'none' },
+        /**
+         * The border radius of the send button.
+         * @type {string}
+         */
         sendButtonBorderRadius: { type: String, default: '12px' },
+        /**
+         * The size of the send button.
+         * @type {string}
+         */
         sendButtonSize: { type: String, default: '42px' },
+        /**
+         * The box shadow of the send button.
+         * @type {string}
+         */
         sendButtonBoxShadow: { type: String, default: '0 2px 4px rgba(59, 130, 246, 0.3)' },
+        /**
+         * The background color of the attachment button.
+         * @type {string}
+         */
         attachmentButtonBgColor: { type: String, default: '#f8fafc' },
+        /**
+         * The background color of the attachment button when hovered.
+         * @type {string}
+         */
         attachmentButtonHoverBgColor: { type: String, default: '#f1f5f9' },
+        /**
+         * The border of the attachment button.
+         * @type {string}
+         */
         attachmentButtonBorder: { type: String, default: '1px solid #e2e8f0' },
+        /**
+         * The border radius of the attachment button.
+         * @type {string}
+         */
         attachmentButtonBorderRadius: { type: String, default: '12px' },
+        /**
+         * The size of the attachment button.
+         * @type {string}
+         */
         attachmentButtonSize: { type: String, default: '42px' },
+        /**
+         * The box shadow of the attachment button.
+         * @type {string}
+         */
         attachmentButtonBoxShadow: { type: String, default: '0 1px 2px rgba(0, 0, 0, 0.06)' },
+        /**
+         * Whether the input area is disabled.
+         * @type {boolean}
+         */
         isDisabled: {
             type: Boolean,
             default: false,
         },
+        /**
+         * Whether to allow file attachments.
+         * @type {boolean}
+         */
         allowAttachments: {
             type: Boolean,
             default: false,
         },
+        /**
+         * An array of pending attachments.
+         * @type {Array}
+         */
         pendingAttachments: {
             type: Array,
             default: () => [],
         },
+        /**
+         * The background color of the input area.
+         * @type {string}
+         */
         inputBgColor: {
             type: String,
             default: '#ffffff',
         },
+        /**
+         * The text color of the input.
+         * @type {string}
+         */
         inputTextColor: {
             type: String,
             default: '#334155',
         },
+        /**
+         * The font size of the input.
+         * @type {string}
+         */
         inputFontSize: {
             type: String,
             default: '0.875rem',
         },
+        /**
+         * The font weight of the input.
+         * @type {string}
+         */
         inputFontWeight: {
             type: String,
             default: '400',
         },
+        /**
+         * The font family of the input.
+         * @type {string}
+         */
         inputFontFamily: {
             type: String,
             default: 'inherit',
         },
+        /**
+         * The color of the placeholder text.
+         * @type {string}
+         */
         inputPlaceholderColor: {
             type: String,
             default: '#94a3b8',
         },
+        /**
+         * The border of the input area.
+         * @type {string}
+         */
         inputAreaBorder: {
             type: String,
             default: '1px solid #e2e8f0',
         },
+        /**
+         * The border of the textarea.
+         * @type {string}
+         */
         textareaBorder: {
             type: String,
             default: '1px solid #e2e8f0',
         },
+        /**
+         * The border of the textarea when hovered.
+         * @type {string}
+         */
         textareaBorderHover: {
             type: String,
             default: '1px solid #cbd5e1',
         },
+        /**
+         * The border of the textarea when focused.
+         * @type {string}
+         */
         textareaBorderFocus: {
             type: String,
             default: '1px solid #3b82f6',
         },
+        /**
+         * The height of the input.
+         * @type {string}
+         */
         inputHeight: {
             type: String,
             default: '38px',
         },
+        /**
+         * The border radius of the input.
+         * @type {string}
+         */
         inputBorderRadius: {
             type: String,
             default: '20px',
         },
+        /**
+         * The placeholder text for the input.
+         * @type {string}
+         */
         placeholder: {
             type: String,
             default: 'Type a message...',
         },
-        // Icon properties
+        /**
+         * The icon to use for the send button.
+         * @type {string}
+         */
         sendIcon: {
             type: String,
             default: 'send',
         },
+        /**
+         * The color of the send icon.
+         * @type {string}
+         */
         sendIconColor: {
             type: String,
             default: '#334155',
         },
+        /**
+         * The size of the send icon.
+         * @type {string}
+         */
         sendIconSize: {
             type: String,
             default: '20px',
         },
+        /**
+         * The icon to use for the attachment button.
+         * @type {string}
+         */
         attachmentIcon: {
             type: String,
             default: 'paperclip',
         },
+        /**
+         * The color of the attachment icon.
+         * @type {string}
+         */
         attachmentIconColor: {
             type: String,
             default: '#334155',
         },
+        /**
+         * The size of the attachment icon.
+         * @type {string}
+         */
         attachmentIconSize: {
             type: String,
             default: '20px',
         },
+        /**
+         * The icon to use for the remove attachment button.
+         * @type {string}
+         */
         removeIcon: {
             type: String,
             default: 'x',
         },
+        /**
+         * The color of the remove attachment icon.
+         * @type {string}
+         */
         removeIconColor: {
             type: String,
             default: '#f43f5e',
         },
+        /**
+         * The size of the remove attachment icon.
+         * @type {string}
+         */
         removeIconSize: {
             type: String,
             default: '12px',
         },
     },
-    emits: ['update:modelValue', 'send', 'attachment', 'remove-attachment', 'pending-attachment-click'],
+    emits: [
+        /**
+         * Emitted when the input value changes.
+         * @param {string} value - The new value of the input.
+         */
+        'update:modelValue',
+        /**
+         * Emitted when the send button is clicked.
+         */
+        'send',
+        /**
+         * Emitted when a file is attached.
+         * @param {FileList} files - The attached files.
+         */
+        'attachment',
+        /**
+         * Emitted when a pending attachment is removed.
+         * @param {number} index - The index of the attachment to remove.
+         */
+        'remove-attachment',
+        /**
+         * Emitted when a pending attachment is clicked.
+         * @param {Object} payload - The event payload.
+         * @param {Object} payload.attachment - The attachment that was clicked.
+         * @param {number} payload.index - The index of the attachment.
+         */
+        'pending-attachment-click',
+    ],
     setup(props, { emit }) {
         const isEditing = inject(
             'isEditing',
@@ -373,11 +558,18 @@ export default {
             emit('update:modelValue', newValue);
         });
 
+        /**
+         * Resizes the textarea to fit its content.
+         */
         const resizeTextarea = () => {
             // No longer needed since we use fixed height
             // The textarea will maintain its fixed height
         };
 
+        /**
+         * Handles the Enter key press event.
+         * @param {KeyboardEvent} event - The keyboard event.
+         */
         const onEnterPress = event => {
             if (isEditing.value) return;
 
@@ -387,6 +579,9 @@ export default {
             // Note: Shift+Enter still works for new lines, just without resizing
         };
 
+        /**
+         * Sends the current message.
+         */
         const sendMessage = () => {
             if (isEditing.value || !canSend.value || props.isDisabled) return;
 
@@ -394,6 +589,10 @@ export default {
             inputValue.value = '';
         };
 
+        /**
+         * Handles the file attachment event.
+         * @param {Event} event - The file input change event.
+         */
         const handleAttachment = event => {
             if (isEditing.value || props.isDisabled) return;
 
@@ -404,21 +603,40 @@ export default {
             }
         };
 
+        /**
+         * Removes a pending attachment.
+         * @param {number} index - The index of the attachment to remove.
+         */
         const removeAttachment = index => {
             if (isEditing.value || props.isDisabled) return;
             emit('remove-attachment', index);
         };
 
+        /**
+         * Handles the click event on a pending attachment.
+         * @param {Object} attachment - The clicked attachment.
+         * @param {number} index - The index of the attachment.
+         */
         const onPendingAttachmentClick = (attachment, index) => {
             if (props.isDisabled) return;
             emit('pending-attachment-click', { attachment, index });
         };
 
+        /**
+         * Checks if an attachment is an image file.
+         * @param {Object} attachment - The attachment to check.
+         * @returns {boolean} True if the attachment is an image file.
+         */
         const isImageFile = attachment => {
             if (!attachment.type) return false;
             return attachment.type.startsWith('image/');
         };
 
+        /**
+         * Formats a file size in bytes into a human-readable string.
+         * @param {number} bytes - The file size in bytes.
+         * @returns {string} The formatted file size.
+         */
         const formatFileSize = bytes => {
             if (!bytes || bytes === 0) return '0 Bytes';
 

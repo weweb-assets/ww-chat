@@ -39,82 +39,158 @@
 <script>
 import { computed, inject } from 'vue';
 
+/**
+ * @module ChatHeader
+ * @description A component that displays the header of the chat, including user information and a close button.
+ */
 export default {
     name: 'ChatHeader',
     props: {
+        /**
+         * The name of the user.
+         * @type {string}
+         */
         userName: {
             type: String,
             required: true,
         },
+        /**
+         * The URL of the user's avatar.
+         * @type {string}
+         */
         userAvatar: {
             type: String,
             default: '',
         },
+        /**
+         * The location of the user.
+         * @type {string}
+         */
         userLocation: {
             type: String,
             default: '',
         },
+        /**
+         * The status of the user.
+         * @type {string}
+         * @values 'online', 'offline', 'away', 'busy'
+         */
         userStatus: {
             type: String,
             default: 'online',
             validator: value => ['online', 'offline', 'away', 'busy'].includes(value),
         },
-        // Optional override for avatar background color when using text initials
+        /**
+         * The background color of the avatar when using initials.
+         * @type {string}
+         */
         avatarBgColor: {
             type: String,
             default: '',
         },
+        /**
+         * A string of participant names.
+         * @type {string}
+         */
         participants: {
             type: String,
             default: '',
         },
+        /**
+         * The background color of the header.
+         * @type {string}
+         */
         headerBgColor: {
             type: String,
             default: '#ffffff',
         },
+        /**
+         * The text color of the header.
+         * @type {string}
+         */
         textColor: {
             type: String,
             default: '#1e293b',
         },
+        /**
+         * The border of the header.
+         * @type {string}
+         */
         headerBorder: {
             type: String,
             default: '1px solid #e2e8f0',
         },
-
+        /**
+         * The padding of the header.
+         * @type {string}
+         */
         headerPadding: {
             type: String,
             default: '12px 16px',
         },
+        /**
+         * The font size of the user's name.
+         * @type {string}
+         */
         nameFontSize: {
             type: String,
             default: '1rem',
         },
+        /**
+         * The font weight of the user's name.
+         * @type {string}
+         */
         nameFontWeight: {
             type: String,
             default: '600',
         },
+        /**
+         * The font size of the user's location.
+         * @type {string}
+         */
         locationFontSize: {
             type: String,
             default: '0.875rem',
         },
+        /**
+         * The opacity of the user's location.
+         * @type {string}
+         */
         locationOpacity: {
             type: String,
             default: '0.7',
         },
+        /**
+         * The color of the close button.
+         * @type {string}
+         */
         closeButtonColor: {
             type: String,
             default: '',
         },
+        /**
+         * The background color of the close button when hovered.
+         * @type {string}
+         */
         closeButtonBgHover: {
             type: String,
             default: 'rgba(0, 0, 0, 0.05)',
         },
+        /**
+         * Whether to show the close button.
+         * @type {boolean}
+         */
         showCloseButton: {
             type: Boolean,
             default: true,
         },
     },
-    emits: ['close'],
+    emits: [
+        /**
+         * Emitted when the close button is clicked.
+         */
+        'close',
+    ],
     setup(props) {
         const isEditing = inject(
             'isEditing',
@@ -167,6 +243,11 @@ export default {
             color: '#ffffff',
         }));
 
+        /**
+         * Generates a color for the avatar based on the user's name.
+         * @param {string} name - The name of the user.
+         * @returns {string} The generated color.
+         */
         const getAvatarColor = name => {
             const colors = [
                 '#4f46e5',

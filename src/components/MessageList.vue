@@ -49,102 +49,207 @@ import { computed, inject } from 'vue';
 import MessageItem from './MessageItem.vue';
 import { formatDate } from '../utils/dateTimeFormatter';
 
+/**
+ * @module MessageList
+ * @description A component that displays a list of messages, including date separators.
+ */
 export default {
     name: 'MessageList',
     components: {
         MessageItem,
     },
     props: {
+        /**
+         * An array of message objects to display.
+         * @type {Array}
+         */
         messages: {
             type: Array,
             default: () => [],
         },
+        /**
+         * The ID of the current user.
+         * @type {string}
+         */
         currentUserId: {
             type: String,
             required: true,
         },
+        /**
+         * The background color of received messages.
+         * @type {string}
+         */
         messageBgColor: {
             type: String,
             default: '#f1f5f9',
         },
+        /**
+         * The text color of received messages.
+         * @type {string}
+         */
         messageTextColor: {
             type: String,
             default: '#334155',
         },
+        /**
+         * The font size of received messages.
+         * @type {string}
+         */
         messageFontSize: {
             type: String,
             default: '0.875rem',
         },
+        /**
+         * The font weight of received messages.
+         * @type {string}
+         */
         messageFontWeight: {
             type: String,
             default: '400',
         },
+        /**
+         * The font family of received messages.
+         * @type {string}
+         */
         messageFontFamily: {
             type: String,
             default: 'inherit',
         },
+        /**
+         * The border of received messages.
+         * @type {string}
+         */
         messageBorder: {
             type: String,
             default: '1px solid #e2e8f0',
         },
+        /**
+         * The border radius of received messages.
+         * @type {string}
+         */
         messageRadius: {
             type: String,
             default: '18px 18px 18px 18px',
         },
+        /**
+         * The background color of sent messages.
+         * @type {string}
+         */
         ownMessageBgColor: {
             type: String,
             default: '#dbeafe',
         },
+        /**
+         * The text color of sent messages.
+         * @type {string}
+         */
         ownMessageTextColor: {
             type: String,
             default: '#1e40af',
         },
+        /**
+         * The font size of sent messages.
+         * @type {string}
+         */
         ownMessageFontSize: {
             type: String,
             default: '0.875rem',
         },
+        /**
+         * The font weight of sent messages.
+         * @type {string}
+         */
         ownMessageFontWeight: {
             type: String,
             default: '400',
         },
+        /**
+         * The font family of sent messages.
+         * @type {string}
+         */
         ownMessageFontFamily: {
             type: String,
             default: 'inherit',
         },
+        /**
+         * The border of sent messages.
+         * @type {string}
+         */
         ownMessageBorder: {
             type: String,
             default: '1px solid #bfdbfe',
         },
+        /**
+         * The border radius of sent messages.
+         * @type {string}
+         */
         ownMessageRadius: {
             type: String,
             default: '18px 18px 18px 18px',
         },
+        /**
+         * The text to display when there are no messages.
+         * @type {string}
+         */
         emptyMessageText: {
             type: String,
             default: 'No messages yet',
         },
+        /**
+         * The color of the empty message text.
+         * @type {string}
+         */
         emptyMessageColor: {
             type: String,
             default: '#64748b',
         },
+        /**
+         * The text color of the date separator.
+         * @type {string}
+         */
         dateSeparatorTextColor: {
             type: String,
             default: '#64748b',
         },
+        /**
+         * The line color of the date separator.
+         * @type {string}
+         */
         dateSeparatorLineColor: {
             type: String,
             default: '#e2e8f0',
         },
+        /**
+         * The background color of the date separator.
+         * @type {string}
+         */
         dateSeparatorBgColor: {
             type: String,
             default: '#ffffff',
         },
+        /**
+         * The border radius of the date separator.
+         * @type {string}
+         */
         dateSeparatorBorderRadius: {
             type: String,
             default: '4px',
         },
     },
-    emits: ['attachment-click', 'message-right-click'],
+    emits: [
+        /**
+         * Emitted when an attachment is clicked.
+         * @param {Object} attachment - The attachment that was clicked.
+         */
+        'attachment-click',
+        /**
+         * Emitted when a message is right-clicked.
+         * @param {Object} payload - The event payload.
+         * @param {Object} payload.message - The message that was right-clicked.
+         * @param {Object} payload.position - The position of the click.
+         */
+        'message-right-click',
+    ],
     setup(props, { emit }) {
         const isEditing = inject(
             'isEditing',
@@ -196,6 +301,11 @@ export default {
             return result;
         });
 
+        /**
+         * Checks if the message at a given index has the same sender as the previous message.
+         * @param {number} index - The index of the message to check.
+         * @returns {boolean} True if the sender is the same as the previous message.
+         */
         const isSameSenderAsPrevious = index => {
             if (index === 0) return false;
 
@@ -214,6 +324,11 @@ export default {
             return false;
         };
 
+        /**
+         * Checks if the message at a given index has the same sender as the next message.
+         * @param {number} index - The index of the message to check.
+         * @returns {boolean} True if the sender is the same as the next message.
+         */
         const isSameSenderAsNext = index => {
             if (index === groupedMessages.value.length - 1) return false;
 
@@ -232,11 +347,24 @@ export default {
             return false;
         };
 
+        /**
+         * Handles the click event on an attachment.
+         * @param {Object} attachment - The clicked attachment.
+         */
         const handleAttachmentClick = attachment => {
             if (isEditing.value) return;
             emit('attachment-click', attachment);
         };
 
+        /**
+         * Handles the right-click event on a message.
+         * @param {Object} payload - The event payload.
+         * @param {Object} payload.message - The message that was right-clicked.
+         * @param {number} payload.elementX - The x-coordinate of the click.
+         * @param {number} payload.elementY - The y-coordinate of the click.
+         * @param {number} payload.viewportX - The x-coordinate of the click relative to the viewport.
+         * @param {number} payload.viewportY - The y-coordinate of the click relative to the viewport.
+         */
         const handleRightClick = ({ message, elementX, elementY, viewportX, viewportY }) => {
             if (isEditing.value) return;
             emit('message-right-click', {
