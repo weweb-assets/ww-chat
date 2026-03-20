@@ -293,6 +293,7 @@ export default {
                     ],
                 },
             },
+            description: "Run when a message is sent.",
         },
         {
             name: 'messageReceived',
@@ -315,6 +316,7 @@ export default {
                     ],
                 },
             },
+            description: "Run when a message is received.",
         },
         {
             name: 'messageRightClick',
@@ -343,6 +345,7 @@ export default {
                     viewportY: 480,
                 },
             },
+            description: "Run when a message is right-clicked.",
         },
         {
             name: 'attachmentClick',
@@ -356,6 +359,7 @@ export default {
                     url: 'https://example.com/document.pdf',
                 },
             },
+            description: "Run when an attachment is clicked.",
         },
         {
             name: 'pendingAttachmentClick',
@@ -370,11 +374,13 @@ export default {
                 },
                 index: 0,
             },
+            description: "Run when a pending attachment is clicked.",
         },
         {
             name: 'close',
             label: { en: 'On close' },
             event: {},
+            description: "Run when chat is closed.",
         },
     ],
     actions: [
