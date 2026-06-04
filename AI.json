@@ -44,97 +44,145 @@
             "name": "mappingMessageId",
             "description": "Formula to extract the unique message ID from each item in `messages`. ONLY include when the bound data shape differs from the default `id` field. Always use `context.mapping?.['fieldName']` form — never a bare field name.",
             "type": "formula",
-            "defaultValue": { "type": "f", "code": "context.mapping?.['id']" }
+            "defaultValue": {
+                "type": "f",
+                "code": "context.mapping?.['id']"
+            }
         },
         {
             "name": "mappingMessageText",
             "description": "Formula to extract the message body text from each item in `messages`. ONLY include when the bound data shape differs from the default `text` field. Always use `context.mapping?.['fieldName']` form — never a bare field name.",
             "type": "formula",
-            "defaultValue": { "type": "f", "code": "context.mapping?.['text']" }
+            "defaultValue": {
+                "type": "f",
+                "code": "context.mapping?.['text']"
+            }
         },
         {
             "name": "mappingSenderId",
             "description": "Formula to extract the sender ID from each item in `messages`. The result must match one `participants[].id` (or its mapped equivalent). ONLY include when the bound data shape differs from the default `senderId` field. Always use `context.mapping?.['fieldName']` form — never a bare field name.",
             "type": "formula",
-            "defaultValue": { "type": "f", "code": "context.mapping?.['senderId']" }
+            "defaultValue": {
+                "type": "f",
+                "code": "context.mapping?.['senderId']"
+            }
         },
         {
             "name": "mappingTimestamp",
             "description": "Formula to extract the message timestamp (ISO string or Date) from each item in `messages`. ONLY include when the bound data shape differs from the default `timestamp` field. Always use `context.mapping?.['fieldName']` form — never a bare field name.",
             "type": "formula",
-            "defaultValue": { "type": "f", "code": "context.mapping?.['timestamp']" }
+            "defaultValue": {
+                "type": "f",
+                "code": "context.mapping?.['timestamp']"
+            }
         },
         {
             "name": "mappingAttachments",
             "description": "Formula returning the attachments array of each message. ONLY include when the bound data shape differs from the default `attachments` field. Always use `context.mapping?.['fieldName']` form — never a bare field name.",
             "type": "formula",
-            "defaultValue": { "type": "f", "code": "context.mapping?.['attachments']" }
+            "defaultValue": {
+                "type": "f",
+                "code": "context.mapping?.['attachments']"
+            }
         },
         {
             "name": "mappingAttachmentId",
             "description": "Formula to extract the unique ID of an attachment. Only relevant when `mappingAttachments` is set. Always use `context.mapping?.['fieldName']` form — never a bare field name.",
             "type": "formula",
-            "defaultValue": { "type": "f", "code": "context.mapping?.['id']" }
+            "defaultValue": {
+                "type": "f",
+                "code": "context.mapping?.['id']"
+            }
         },
         {
             "name": "mappingAttachmentName",
             "description": "Formula to extract the display name of an attachment. Only relevant when `mappingAttachments` is set. Always use `context.mapping?.['fieldName']` form — never a bare field name.",
             "type": "formula",
-            "defaultValue": { "type": "f", "code": "context.mapping?.['name']" }
+            "defaultValue": {
+                "type": "f",
+                "code": "context.mapping?.['name']"
+            }
         },
         {
             "name": "mappingAttachmentUrl",
             "description": "Formula to extract the file URL of an attachment. Only relevant when `mappingAttachments` is set. Always use `context.mapping?.['fieldName']` form — never a bare field name.",
             "type": "formula",
-            "defaultValue": { "type": "f", "code": "context.mapping?.['url'] ?? context.mapping?.['href']" }
+            "defaultValue": {
+                "type": "f",
+                "code": "context.mapping?.['url'] ?? context.mapping?.['href']"
+            }
         },
         {
             "name": "mappingAttachmentType",
             "description": "Formula to extract the MIME type of an attachment (e.g. `image/png`). Only relevant when `mappingAttachments` is set. Always use `context.mapping?.['fieldName']` form — never a bare field name.",
             "type": "formula",
-            "defaultValue": { "type": "f", "code": "context.mapping?.['type'] ?? context.mapping?.['mime']" }
+            "defaultValue": {
+                "type": "f",
+                "code": "context.mapping?.['type'] ?? context.mapping?.['mime']"
+            }
         },
         {
             "name": "mappingAttachmentSize",
             "description": "Formula to extract the attachment size in bytes. Only relevant when `mappingAttachments` is set. Always use `context.mapping?.['fieldName']` form — never a bare field name.",
             "type": "formula",
-            "defaultValue": { "type": "f", "code": "context.mapping?.['size'] ?? context.mapping?.['length']" }
+            "defaultValue": {
+                "type": "f",
+                "code": "context.mapping?.['size'] ?? context.mapping?.['length']"
+            }
         },
         {
             "name": "mappingParticipantId",
             "description": "Formula to extract the unique ID of each item in `participants`. The result is what `mappingSenderId` matches against. ONLY include when the bound data shape differs from the default `id` field. Always use `context.mapping?.['fieldName']` form — never a bare field name.",
             "type": "formula",
-            "defaultValue": { "type": "f", "code": "context.mapping?.['id'] ?? context.mapping?.['userId'] ?? context.mapping?.['_id']" }
+            "defaultValue": {
+                "type": "f",
+                "code": "context.mapping?.['id'] ?? context.mapping?.['userId'] ?? context.mapping?.['_id']"
+            }
         },
         {
             "name": "mappingParticipantName",
             "description": "Formula to extract the display name of each item in `participants`. ONLY include when the bound data shape differs from the default `name` field. Always use `context.mapping?.['fieldName']` form — never a bare field name.",
             "type": "formula",
-            "defaultValue": { "type": "f", "code": "context.mapping?.['name'] ?? context.mapping?.['userName'] ?? context.mapping?.['fullName']" }
+            "defaultValue": {
+                "type": "f",
+                "code": "context.mapping?.['name'] ?? context.mapping?.['userName'] ?? context.mapping?.['fullName']"
+            }
         },
         {
             "name": "mappingParticipantAvatar",
             "description": "Formula to extract the avatar image URL of each item in `participants`. ONLY include when the bound data shape differs from the default `avatar` field. Always use `context.mapping?.['fieldName']` form — never a bare field name.",
             "type": "formula",
-            "defaultValue": { "type": "f", "code": "context.mapping?.['avatar'] ?? context.mapping?.['avatarUrl'] ?? context.mapping?.['photo']" }
+            "defaultValue": {
+                "type": "f",
+                "code": "context.mapping?.['avatar'] ?? context.mapping?.['avatarUrl'] ?? context.mapping?.['photo']"
+            }
         },
         {
             "name": "mappingParticipantLocation",
             "description": "Formula to extract the location / subtitle line of each item in `participants`. ONLY include when the bound data shape differs from the default `location` field. Always use `context.mapping?.['fieldName']` form — never a bare field name.",
             "type": "formula",
-            "defaultValue": { "type": "f", "code": "context.mapping?.['location'] ?? context.mapping?.['subtitle']" }
+            "defaultValue": {
+                "type": "f",
+                "code": "context.mapping?.['location'] ?? context.mapping?.['subtitle']"
+            }
         },
         {
             "name": "mappingParticipantStatus",
             "description": "Formula to extract the presence status of each item in `participants`. Must resolve to one of `online | offline | away | busy`. ONLY include when the bound data shape differs from the default `status` field. Always use `context.mapping?.['fieldName']` form — never a bare field name.",
             "type": "formula",
-            "defaultValue": { "type": "f", "code": "context.mapping?.['status']" }
+            "defaultValue": {
+                "type": "f",
+                "code": "context.mapping?.['status']"
+            }
         },
         {
             "name": "mappingIsCurrentUser",
             "description": "Formula returning `true` for the participant that represents the local user (right-aligned messages). ONLY include when the bound data shape differs from the default `isCurrentUser` field. Always use `context.mapping?.['fieldName']` form — never a bare field name.",
             "type": "formula",
-            "defaultValue": { "type": "f", "code": "!!context.mapping?.['isCurrentUser']" }
+            "defaultValue": {
+                "type": "f",
+                "code": "!!context.mapping?.['isCurrentUser']"
+            }
         },
         {
             "name": "groupChatText",
@@ -164,7 +212,10 @@
             "name": "autoScrollBehavior",
             "description": "Scroll animation when new messages arrive or `scrollToBottom` fires.",
             "type": "string",
-            "options": ["smooth", "auto"],
+            "options": [
+                "smooth",
+                "auto"
+            ],
             "defaultValue": "auto"
         },
         {
@@ -219,7 +270,11 @@
             "name": "inputActionAlign",
             "description": "Vertical alignment of the action buttons (send, attachment) relative to the multi-line textarea.",
             "type": "string",
-            "options": ["start", "center", "end"],
+            "options": [
+                "start",
+                "center",
+                "end"
+            ],
             "defaultValue": "end"
         },
         {
@@ -737,7 +792,23 @@
             "actionName": "scrollToBottom",
             "description": "Scroll the messages area to the latest message.",
             "args": [
-                { "name": "smooth", "type": "boolean", "description": "Use smooth animation (ignores `autoScrollBehavior` for this call)." }
+                {
+                    "name": "smooth",
+                    "type": "boolean",
+                    "description": "Use smooth animation (ignores `autoScrollBehavior` for this call)."
+                }
+            ]
+        },
+        {
+            "label": "Add message",
+            "actionName": "addMessage",
+            "description": "Append a message to the conversation. Use for chats NOT bound to external data; for data-bound chats, update the bound messages source instead. Pass a message object.",
+            "args": [
+                {
+                    "name": "message",
+                    "type": "object",
+                    "description": "Message object, e.g. { text, senderId, userName, timestamp }. senderId should match a participants[].id to align/own correctly."
+                }
             ]
         }
     ],

@@ -189,7 +189,7 @@ export default {
             required: true,
         },
     },
-    emits: ['trigger-event'],
+    emits: ['trigger-event', 'update:content'],
     setup(props, { emit }) {
         const chatRoot = ref(null);
         const messagesContainer = ref(null);
@@ -222,6 +222,10 @@ export default {
                 utils: { messageCount: 0, isDisabled: false, allowAttachments: false, displayHeader: true },
             },
         });
+
+        // Messages added at runtime via the addMessage action (uncontrolled mode,
+        // used when no messages are bound to the element).
+        const internalMessages = ref([]);
 
         const { resolveMappingFormula } = wwLib.wwFormula.useFormula();
 
@@ -273,14 +277,15 @@ export default {
         const rawMessages = computed(() => {
             // Ensure we always have an array to work with
             const messagesContent = props.content?.messages;
+            const bound = Array.isArray(messagesContent) ? messagesContent : [];
 
-            // Check if messages is a valid array
-            if (Array.isArray(messagesContent)) {
-                return messagesContent;
+            // Append messages added at runtime via the addMessage action so a chat
+            // without bound data can still receive new messages from a workflow.
+            if (internalMessages.value.length) {
+                return [...bound, ...internalMessages.value];
             }
 
-            // Final fallback to empty array
-            return [];
+            return bound;
         });
 
         const messages = computed(() => {
@@ -579,11 +584,7 @@ export default {
                 ...message,
             };
 
-            const updatedMessages = [...(chatState.value?.messages || []), newMessageRaw];
-            setChatState({
-                ...chatState.value,
-                messages: updatedMessages,
-            });
+            internalMessages.value = [...internalMessages.value, newMessageRaw];
 
             scrollToBottom();
 
@@ -944,6 +945,13 @@ export default {
         onMounted(() => {
             // Ensure we show latest messages on mount
             scrollToBottom();
+            /* wwEditor:start */
+            // Back-fill legacy / AI-created instances that omit displayHeader so the
+            // panel toggle reflects the actual (shown) state instead of reading OFF.
+            if (props.content?.displayHeader === undefined) {
+                emit('update:content', { path: 'displayHeader', value: true });
+            }
+            /* wwEditor:end */
         });
 
         return {
@@ -1064,6 +1072,9 @@ export default {
     methods: {
         actionScrollToBottom(smooth = false) {
             this.scrollToBottom(smooth);
+        },
+        actionAddMessage(message) {
+            return this.addMessage(message || {});
         },
     },
 };

@@ -389,6 +389,17 @@ export default {
                 },
             ],
         },
+        {
+            action: 'addMessage',
+            label: { en: 'Add message' },
+            args: [
+                {
+                    name: 'message',
+                    type: 'object',
+                    label: { en: 'Message' },
+                },
+            ],
+        },
     ],
     properties: {
         // ======== APPEARANCE ========
